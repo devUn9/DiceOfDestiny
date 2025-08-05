@@ -51,127 +51,6 @@ public class PieceController : MonoBehaviour
         }
     }
 
-
-    //public void TestInput() // 이벤트로 넘기거나 할 필요가 있을듯................................하바ㅏㅏㅏㅏㅏㅏ니ㅏㄷ..............밑에관련메소드잇음................................
-    //{
-    //    if (this != PieceManager.Instance.GetCurrentPiece())
-    //        return;
-
-    //    Vector2Int moveDirection = Vector2Int.zero;
-    //    if (!isMoving)
-    //    {
-    //        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-    //            moveDirection = Vector2Int.up;
-    //        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-    //            moveDirection = Vector2Int.down;
-    //        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-    //            moveDirection = Vector2Int.left;
-    //        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-    //            moveDirection = Vector2Int.right;
-
-    //        else if (Input.GetKeyDown(KeyCode.O)) // 스테이지 시작
-    //        {
-    //            PieceFaceManager.Instance.SavePieceFaceData(0);
-    //            ToastManager.Instance.ShowToast("0번 피스 저장 !", PieceManager.Instance.currentPiece.transform);
-    //        }
-    //        else if (Input.GetKeyDown(KeyCode.P)) // 스테이지 끝
-    //        {
-    //            PieceFaceManager.Instance.RestorePieceFaceData(0);
-    //            ToastManager.Instance.ShowToast("0번 피스 복구 !", PieceManager.Instance.currentPiece.transform);
-    //        }
-    //    }
-
-    //    if (moveDirection != Vector2Int.zero)
-    //    {
-    //        Vector2Int newPosition = gridPosition + moveDirection;
-
-    //        // 이동 확정 시
-    //        // 행동력이 0이면 행동 불가
-    //        if (!GameManager.Instance.actionPointManager.TryUseAP())
-    //            return;
-
-    //        // 이동하는 곳이 보드 밖이면 return
-    //        if (!ObstacleManager.Instance.IsInsideBoard(newPosition))
-    //        {
-    //            return;
-    //        }
-
-    //        if (statusEffectController.IsStatusActive(StatusType.Stun)) // if (piece.debuff.IsStun)
-    //        {
-    //            int stunTurn = statusEffectController.GetRemainingTurn(StatusType.Stun);
-    //            Debug.Log("Piece is stunned!");
-    //            ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {stunTurn}턴간 이동할 수 없습니다.", transform);
-    //            return;
-    //        }
-
-    //        if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.currentAP < 2)
-    //        {
-    //            int DiseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
-    //            Debug.Log("Piece is diseased!");
-    //            ToastManager.Instance.ShowToast(message: $"기물이 질병에 걸렸습니다! {DiseaseTurn}턴간 행동이 제한됩니다.", transform);
-    //            return;
-    //        }
-
-    //        // 이동하는 곳에 장애물이 있으면
-    //        Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
-    //        if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None ||
-    //            BoardManager.Instance.Board[newPosition.x, newPosition.y].GetPiece() != null)
-    //        {
-    //            // 밟을 수 없다면
-    //            if (!BoardManager.Instance.Board[newPosition.x, newPosition.y].isWalkable)
-    //            {
-    //                RotateHalfBack(moveDirection); // 튕김 애니메이션
-    //                return;
-    //            }
-    //        }
-
-    //        if (newPosition.x >= 0 && newPosition.x < BoardManager.Instance.boardSize &&
-    //            newPosition.y >= 0 && newPosition.y < BoardManager.Instance.boardSize)
-    //        {
-    //            if (PieceManager.Instance == null)
-    //            {
-    //                Debug.LogError("PieceManager.Instance is null!");
-    //                return;
-    //            }
-
-    //            if (piece == null)
-    //            {
-    //                Debug.LogError("Piece is null!");
-    //                return;
-    //            }
-
-    //            GameManager.Instance.actionPointManager.PieceAction();
-
-    //            if (statusEffectController.IsStatusActive(StatusType.Disease))
-    //            {
-    //                GameManager.Instance.actionPointManager.PieceAction();
-    //            }
-
-
-    //            // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
-    //            BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
-    //            BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
-
-
-
-    //            // 마지막 이동 방향 저장
-    //            lastMoveDirection = moveDirection;
-
-    //            // 실제 이동
-    //            RotateToTopFace(moveDirection);
-    //            UpdateTopFace(moveDirection); // 윗면 업데이트
-
-
-
-    //            ObstacleManager.Instance.UpdateObstacleStep();
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning($"Invalid move to position: {newPosition}");
-    //        }
-    //    }
-    //}
-
     // 상, 하, 좌, 우 버튼 클릭 시 호출될 public 메서드
     public void MoveUp()
     {
@@ -206,6 +85,7 @@ public class PieceController : MonoBehaviour
         if (!GameManager.Instance.actionPointManager.TryUseAP())
         {
             Debug.Log("Not enough action points!");
+            ToastManager.Instance.ShowToast("행동력이 부족합니다!", transform);
             return;
         }
 
@@ -467,6 +347,8 @@ public class PieceController : MonoBehaviour
         {
             Debug.LogError("SkillManager.Instance is null!");
         }
+        // 이동 UI 켜기
+        EventManager.Instance.TriggerEvent("OnUIElement");
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
@@ -601,17 +483,6 @@ public class PieceController : MonoBehaviour
         classRenderer.sprite = piece.faces[2].classData.sprite;
         colorRenderer.color = BoardManager.Instance.tileColors[(int)piece.faces[2].color];
     }
-
-
-    //public Vector2Int GetGridPosition()
-    //{
-    //    return gridPosition;
-    //}
-
-    //public Vector2Int SetGridPosition(Vector2Int newPosition)
-    //{
-    //    gridPosition = newPosition;
-    //}
 
     public Vector2Int GetLastMoveDirection()
     {

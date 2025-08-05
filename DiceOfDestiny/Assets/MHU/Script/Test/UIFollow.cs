@@ -3,17 +3,22 @@ using UnityEngine;
 public class UIFollow : MonoBehaviour
 {
     [SerializeField] private Transform target; // 따라갈 2D 오브젝트의 Transform
-    [SerializeField] private RectTransform uiElement; // 따라갈 UI 요소의 RectTransform
+    [SerializeField] private GameObject uiElement; // 따라갈 UI 요소
     [SerializeField] private Vector2 offset; // UI 위치 오프셋 (화면 좌표 기준)
-
+    [SerializeField] private PieceController pieceController; // 이 스크립트가 부착된 피스 (Piece 컴포넌트 참조)
+  
     private Camera mainCamera;
     private Canvas canvas;
 
     void Start()
     {
-        // 메인 카메라와 캔버스 참조 가져오기
+        EventManager.Instance.AddListener("ToggleUIElement", _ => ToggleUIElement());
+        EventManager.Instance.AddListener("OnUIElement", _ => OnUIElement());
+
         mainCamera = Camera.main;
+
         canvas = uiElement.GetComponentInParent<Canvas>();
+        pieceController = GetComponentInParent<PieceController>();
     }
 
     void LateUpdate()
@@ -31,6 +36,35 @@ public class UIFollow : MonoBehaviour
         adjustedPos += offset;
 
         // UI 위치 업데이트
-        uiElement.position = adjustedPos;
+        uiElement.transform.position = adjustedPos;
+    }
+
+   public void ToggleUIElement()
+    {
+        // 현재 조종중인 말이 아니면
+        if (PieceManager.Instance.currentPiece != pieceController)
+        {
+            // UI가 활성화되어 있다면 (그러니까 다른 기물들을)
+            if (uiElement.activeSelf)
+            {
+                // UI 비활성화
+                uiElement.SetActive(false);
+            }
+          
+            return;
+        }
+
+        EventManager.Instance.TriggerEvent("OnArrowExit");
+        uiElement.gameObject.SetActive(!uiElement.gameObject.activeSelf);
+
+    }
+
+    public void OnUIElement()
+    {   // 현재 조종중인 말이 아니면
+        if (PieceManager.Instance.currentPiece != pieceController)
+        {
+            return;  
+        }
+        uiElement.SetActive(true);
     }
 }

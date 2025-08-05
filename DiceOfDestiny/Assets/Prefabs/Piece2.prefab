@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1141369664581607125
 RectTransform:
   m_ObjectHideFlags: 0
@@ -270,8 +270,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 7157527981714372214}
-  uiElement: {fileID: 1141369664581607125}
+  uiElement: {fileID: 124449794939716148}
   offset: {x: 0, y: 0}
+  pieceController: {fileID: 0}
 --- !u!1 &2300401942455410093
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,6 +921,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5676813686627647118}
+        m_TargetAssemblyTypeName: UIFollow, Assembly-CSharp
+        m_MethodName: ToggleUIElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1091989258854896649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1145,6 +1158,18 @@ MonoBehaviour:
       - m_Target: {fileID: 2171057307641424226}
         m_TargetAssemblyTypeName: PieceControlUI, Assembly-CSharp
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5676813686627647118}
+        m_TargetAssemblyTypeName: UIFollow, Assembly-CSharp
+        m_MethodName: ToggleUIElement
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1832,6 +1857,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5676813686627647118}
+        m_TargetAssemblyTypeName: UIFollow, Assembly-CSharp
+        m_MethodName: ToggleUIElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5112128972778893175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2057,6 +2094,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3598398874409699941}
         m_TargetAssemblyTypeName: PieceControlUI, Assembly-CSharp
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5676813686627647118}
+        m_TargetAssemblyTypeName: UIFollow, Assembly-CSharp
+        m_MethodName: ToggleUIElement
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

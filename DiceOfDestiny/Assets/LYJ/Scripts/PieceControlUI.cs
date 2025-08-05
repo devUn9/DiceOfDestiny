@@ -104,5 +104,13 @@ public class PieceControlUI : MonoBehaviour
                 Debug.Log("<color=#00aeff>UI에 방향 할당되지 않음</color>");
                 break;
         }
+        ResetUI();
+    }
+
+    private void ResetUI()
+    {
+        buttonImage.color = new Color(buttonImage.color.r, buttonImage.color.g, buttonImage.color.b, 0f);
+        faceClass.SetActive(false);
+        faceColor.SetActive(false);
     }
 }

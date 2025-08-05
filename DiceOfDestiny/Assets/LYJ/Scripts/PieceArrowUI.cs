@@ -9,6 +9,8 @@ public class PieceArrowUI : MonoBehaviour
 
     void Awake()
     {
+        EventManager.Instance.AddListener("OnArrowExit", _ => OnArrowExit());
+
         arrowImage.color = new Color(arrowImage.color.r, arrowImage.color.g, arrowImage.color.b, TARGET_ALPHA);
         arrowAnim.speed = 0f;
     }
