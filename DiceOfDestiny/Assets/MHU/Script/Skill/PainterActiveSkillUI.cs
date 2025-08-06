@@ -14,12 +14,14 @@ public class PainterActiveSkillUI : MonoBehaviour
     [Header("팔레트 이미지")]
     [SerializeField] private Image paletteImage;
 
-    [Header("팔레트 0,0 기준 위치")]
-    [SerializeField] private Vector2 paletteOffset = new Vector2(-424f, -460f);
-    [Header("한 칸당 움직일 거리")]
-    [SerializeField] private float paletteDistance = 77f;
+    [Header("UI 오프셋")]
+    [SerializeField] private Vector2 offset = new Vector2(0f, 50f); // 타겟 기준 UI 오프셋 (화면 좌표)
 
     private TileColor selectedColor = TileColor.None;
+
+    private Transform target; // 따라갈 타겟(마지막 클릭 타일)의 Transform
+    private Camera mainCamera;
+    private Canvas canvas;
 
     // 선택된 색상을 외부에서 가져갈 수 있는 getter
     public TileColor SelectedColor
@@ -29,6 +31,10 @@ public class PainterActiveSkillUI : MonoBehaviour
 
     void Start()
     {
+        // 카메라와 캔버스 초기화
+        mainCamera = Camera.main;
+        canvas = paletteImage.GetComponentInParent<Canvas>();
+
         AssignButtonColors();
 
         // 버튼에 리스너 추가
@@ -38,6 +44,24 @@ public class PainterActiveSkillUI : MonoBehaviour
         if (yellowButton != null) yellowButton.onClick.AddListener(OnYellowButtonClicked);
         if (purpleButton != null) purpleButton.onClick.AddListener(OnPurpleButtonClicked);
         if (grayButton != null) grayButton.onClick.AddListener(OnGrayButtonClicked);
+    }
+
+    void LateUpdate()
+    {
+        if (target == null || paletteImage == null || !paletteImage.gameObject.activeSelf) return;
+
+        // 타겟의 월드 좌표를 화면 좌표로 변환
+        Vector3 screenPos = mainCamera.WorldToScreenPoint(target.position);
+
+        // 캔버스 스케일 고려
+        Vector2 canvasScale = canvas.GetComponent<RectTransform>().localScale;
+        Vector2 adjustedPos = new Vector2(screenPos.x / canvasScale.x, screenPos.y / canvasScale.y);
+
+        // 오프셋 적용
+        adjustedPos += offset;
+
+        // UI 위치 업데이트
+        paletteImage.GetComponent<RectTransform>().position = adjustedPos;
     }
 
     private void AssignButtonColors()
@@ -58,20 +82,12 @@ public class PainterActiveSkillUI : MonoBehaviour
 
     public void ShowPalette()
     {
-        paletteImage.gameObject.SetActive(true); // UI 활성화
-
-        // 마지막으로 클릭한 타일의 위치 가져오기
+        // 마지막 클릭한 타일의 Transform을 타겟으로 설정
         Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
+        target = BoardSelectManager.Instance.GetClickedTileTransform(); // BoardManager에 타일 Transform을 반환하는 메서드 필요
+        if (target == null) return;
 
-        // 타일 위치를 기준으로 UI 위치 계산 (각 칸당 80씩 증가)
-        float posX = selectPos.x * paletteDistance + paletteOffset.x;
-        float posY = selectPos.y * paletteDistance + paletteOffset.y;
-
-        // 팔레트 이미지의 RectTransform 가져오기
-        RectTransform paletteRect = paletteImage.GetComponent<RectTransform>();
-
-        // UI 위치 설정 (anchoredPosition 사용)
-        paletteRect.anchoredPosition = new Vector2(posX, posY);
+        paletteImage.gameObject.SetActive(true); // UI 활성화
     }
 
     // 각 버튼 클릭 시 호출되는 public 함수

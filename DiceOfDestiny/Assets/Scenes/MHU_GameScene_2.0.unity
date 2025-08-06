@@ -1625,7 +1625,7 @@ Transform:
   m_GameObject: {fileID: 830614870}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.37817192, y: -0.28986263, z: -0.040680956}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1668,8 +1668,8 @@ MonoBehaviour:
   purpleButton: {fileID: 2101212407}
   grayButton: {fileID: 885577661}
   paletteImage: {fileID: 1282756431}
-  paletteOffset: {x: -424, y: -460}
-  paletteDistance: 76.9
+  target: {fileID: 830614872}
+  offset: {x: 0, y: 0}
 --- !u!114 &830614875
 MonoBehaviour:
   m_ObjectHideFlags: 0
