@@ -70,5 +70,4 @@ public class EventManager : Singletone<EventManager>
             Debug.Log($"<color=#30ffae>{currentListeners} Triggered! </color>");
         }
     }
-    
 }

@@ -101,6 +101,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f01dbf4654efa439065cb588dc7d5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileColor: 0
+  piece: {fileID: 0}
 --- !u!61 &8871831858722877987
 BoxCollider2D:
   m_ObjectHideFlags: 0

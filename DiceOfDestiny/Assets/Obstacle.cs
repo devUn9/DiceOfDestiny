@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public enum ObstacleType
 {
@@ -44,23 +45,30 @@ public class Obstacle : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    protected void GoHand(PieceController pieceController)
+    protected IEnumerator GoHand(PieceController pieceController)
     {
-        // 가방에 새로운 기물 생성
-        for (int i = 0; i < 3; i++)
-        {
-            if (!PieceManager.Instance.pieceInventory.slots[i].IsActivePiece())
-            {
-                PieceManager.Instance.pieceInventory.slots[i].AddPiece(pieceController.GetPiece());
-                EventManager.Instance.TriggerEvent("Refresh");
-                break;
-            }
-        }
+        // 약간의 연출 대기 (예: 0.2초)
+        yield return new WaitForSeconds(1.0f);
 
         // 기존 보드의 기물 제거
         Destroy(pieceController.gameObject);
 
         // 기물 선택 타일 제거
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
+
+        // 약간의 연출 대기 (예: 0.2초)
+        yield return new WaitForSeconds(0.5f);
+
+        // 가방에 새로운 기물 생성
+        for (int i = 0; i < 3; i++)
+        {
+            if (!PieceManager.Instance.pieceInventory.slots[i].IsActivePiece())
+            {
+                Debug.Log("가방에 기물 생성");
+                PieceManager.Instance.pieceInventory.slots[i].AddPiece(pieceController.GetPiece());
+                EventManager.Instance.TriggerEvent("Refresh");
+                break;
+            }
+        }
     }
 }

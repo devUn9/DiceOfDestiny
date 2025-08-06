@@ -11,7 +11,7 @@ public class PieceManager : Singletone<PieceManager>
         set
         {
             pieces = value;
-            EventManager.Instance.TriggerEvent(AllEventNames.PIECE_COUNT_CHANGED);
+            //EventManager.Instance.TriggerEvent(AllEventNames.PIECE_COUNT_CHANGED);
         }
     }
     private List<PieceState> pieceStates = new();   
@@ -30,11 +30,6 @@ public class PieceManager : Singletone<PieceManager>
     void Start()
     {
         EventManager.Instance.AddListener(AllEventNames.PIECE_COUNT_CHANGED, UpdatePieceManagerList);
-    }
-
-    void Update()
-    {
-        
     }
 
     public void DrawAllPieceUIs()
@@ -78,5 +73,4 @@ public class PieceManager : Singletone<PieceManager>
     {
         currentPiece = pieceController;
     }
-
 }

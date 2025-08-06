@@ -38,7 +38,7 @@ public class UIBackpack : MonoBehaviour
 
         // Refresh 함수 구독
         EventManager.Instance.AddListener("Refresh", _ => Refresh());
-        
+
         // 기물 선택 UI의 기물 윗면 새로고침
         Refresh();
     }
@@ -47,7 +47,12 @@ public class UIBackpack : MonoBehaviour
     {
         for (int i = 0; i < ChoicePieceImageColorImage.Length; i++)
         {
+            Debug.Log("Enter Refresh");
+
             currentPiece = PieceManager.Instance.pieceInventory.slots[i].GetPiece();
+            if (currentPiece == null)
+                return;
+            Debug.Log("piece no null");
             ChoicePieceImageColorImage[i].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
             ChoicePieceClassImage[i].sprite = currentPiece.faces[2].classData.sprite;
         }
@@ -64,6 +69,14 @@ public class UIBackpack : MonoBehaviour
     public void onClickPieceAppearButton(int index)
     {
         Debug.Log(index + "번 피스 선택");
+
+        // 같은 피스를 다시 클릭한 경우 창을 닫음
+        if (currentIndex == index && ChoiceTopFaceWindow.activeSelf)
+        {
+            ChoiceTopFaceWindow.SetActive(false);
+            return;
+        }
+
         currentIndex = index;
 
         // 선택 피스 저장
@@ -75,6 +88,9 @@ public class UIBackpack : MonoBehaviour
 
         currentPiece = PieceManager.Instance.pieceInventory.selectedSlot.GetPiece();
 
+        if (currentPiece == null)
+            return;
+
         // 기물 선택 UI의 기물 윗면 새로고침
         ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
         ChoicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
@@ -84,22 +100,30 @@ public class UIBackpack : MonoBehaviour
         SpawnPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
     }
 
-    IEnumerator SpawnPiece(int index)
+    IEnumerator SpawnPiece()
     {
         // 타일 선택 이미지 띄우기
-        BoardSelectManager.Instance.HighlightTiles();
+        BoardSelectManager.Instance.StartHighlightTiles();
 
         // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
+        // =====================[ 생성 시작 ]=====================
+
         // 위치 불러오기
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
+        if (gridPos.y > 0)
+        {
+            Debug.Log("기물은 첫번째 줄에만 배치 가능합니다.");
+            yield break;
+        }
+
         // 피스 생성
-        GameObject piece = Instantiate(PieceManager.Instance.piecePrefabs[index],
-            new Vector2(BoardManager.Instance.boardTransform.position.x + gridPos.x,
-                        BoardManager.Instance.boardTransform.position.y + gridPos.y),
-            Quaternion.identity);
+        GameObject piece = Instantiate(PieceManager.Instance.piecePrefabs[currentIndex],
+        new Vector2(BoardManager.Instance.boardTransform.position.x + gridPos.x,
+                    BoardManager.Instance.boardTransform.position.y + gridPos.y),
+        Quaternion.identity);
 
         ChoiceTopFaceWindow.SetActive(false);
 
@@ -121,9 +145,16 @@ public class UIBackpack : MonoBehaviour
         // 현재 선택 피스
         PieceManager.Instance.SetCurrentPiece(currentPieceController);
 
+        // 피스 선택 테두리 생성
+        BoardSelectManager.Instance.PieceHighlightTiles(currentPieceController.gridPosition);
+
+        // =====================[ 생성 종료 ]=====================
+
+        ChoicePieceClassImage[currentIndex].sprite = null;
+
         // 슬롯에 있는 피스 제거
-        Debug.Log(index + "번 피스 제거");
-        PieceManager.Instance.pieceInventory.slots[index].RemovePiece();
+        Debug.Log(currentIndex + "번 피스 제거");
+        PieceManager.Instance.pieceInventory.slots[currentIndex].RemovePiece();
     }
 
 
@@ -138,7 +169,7 @@ public class UIBackpack : MonoBehaviour
         }
 
         // 피스 스폰
-        StartCoroutine(SpawnPiece(currentIndex));
+        StartCoroutine(SpawnPiece());
     }
 
     public void onClickUpdateTopFace(int dir)

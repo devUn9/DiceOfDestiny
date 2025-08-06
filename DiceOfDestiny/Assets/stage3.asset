@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b2505132fde72345af474f8fca00a1a, type: 3}
+  m_Name: stage3
+  m_EditorClassIdentifier: 
+  <StageName>k__BackingField: "3\uD0C4"
+  minimumColorEnsure: 0
+  weightPower: 10
+  redWeight: 1
+  greenWeight: 1
+  blueWeight: 1
+  yellowWeight: 1
+  purpleWeight: 1
+  orangeWeight: 1
+  availableObstacle:
+  - type: 0
+    weight: 4
+  - type: 2
+    weight: 6
+  - type: 3
+    weight: 5
+  - type: 4
+    weight: 15
+  obstacleDensity: 0.2
+  stageNumber: 3
+  stageTitle: STAGE 3

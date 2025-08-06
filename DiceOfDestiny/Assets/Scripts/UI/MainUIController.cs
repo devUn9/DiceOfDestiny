@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 public class MainUIController : MonoBehaviour
 {
+    private const string KeySaveExists = "SaveExists";
+    private const string KeyLastScene = "LastScene";
+    private const string DefaultScene = "GameScene_2.0";
+
     [SerializeField] private Button continueButton;
     [SerializeField] private Button newGameButton;
     [SerializeField] private Button settingsButton;
@@ -19,28 +23,33 @@ public class MainUIController : MonoBehaviour
         bool hasSave = PlayerPrefs.GetInt("SaveExists", 0) == 1;
         continueButton.interactable = hasSave;
 
+        UpdateContinueButtonState();
         AudioManager.Instance.PlayBGM("MainBGM");
     }
-
+    private void UpdateContinueButtonState()
+    {
+        bool hasSave = PlayerPrefs.GetInt(KeySaveExists, 0) == 1;
+        continueButton.interactable = hasSave;
+    }
 
     private void OnContinueClicked()
     {
-        string lastScene = PlayerPrefs.GetString("LastScene", "GH_GameScene");
+        string lastScene = PlayerPrefs.GetString(KeyLastScene, DefaultScene);
         SceneManager.LoadScene(lastScene);
     }
 
     private void OnNewGameClicked()
     {
-        PlayerPrefs.SetString("LastScene", "GH_GameScene");
-        PlayerPrefs.SetInt("SaveExists", 1);
-        SceneManager.LoadScene("GH_GameScene");
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetInt(KeySaveExists, 1);
+        PlayerPrefs.SetString(KeyLastScene, DefaultScene);
+        PlayerPrefs.Save();
+
+        SceneManager.LoadScene(DefaultScene);
     }
     private void OnSettingsClicked()
     {
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.ToggleSettings(true);
-        }
+        UIManager.Instance?.ToggleSettings(true);
     }
 
     private void OnExitClicked()

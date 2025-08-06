@@ -13,7 +13,6 @@ public class PauseMenuController : MonoBehaviour
         pauseMenu = transform.Find("PauseMenu")?.gameObject
             ?? GetComponentInChildren<Canvas>(true)?.transform.Find("PauseMenu")?.gameObject;
 
-        // (버튼들도 마찬가지로 직접 찾아서 연결)
         resumeButton = pauseMenu.transform.Find("ResumeButton").GetComponent<Button>();
         settingsButton = pauseMenu.transform.Find("SettingsButton").GetComponent<Button>();
         mainMenuButton = pauseMenu.transform.Find("MainMenuButton").GetComponent<Button>();

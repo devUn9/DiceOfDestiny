@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : Singletone<UIManager>
 {
+    [SerializeField] private StageNameDisplay stageNameDisplay;
+
     [Header("UI Prefabs")]
     [SerializeField] private GameObject mainUI;
     [SerializeField] private GameObject gameUI;
@@ -89,8 +91,10 @@ public class UIManager : Singletone<UIManager>
             case "Main":
                 currentUIRoot = Instantiate(mainUI, currentCanvas.transform, false);
                 break;
-
             case "MHU_GameScene_2.0":
+                currentUIRoot = Instantiate(gameUI, currentCanvas.transform, false);
+                break;
+            case "GameScene_2.0":
                 currentUIRoot = Instantiate(gameUI, currentCanvas.transform, false);
                 break;
             default:

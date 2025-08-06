@@ -36,7 +36,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
 
         for (int x = 0; x < boardManager.boardSize; x++)
         {
-            for (int y = 0; y < boardManager.boardSize; y++)
+            for (int y = 1; y < boardManager.boardSize + 1; y++)
             {
                 Vector2Int position = new Vector2Int(x, y);
                 Tile tile = boardManager.GetTile(position);
@@ -65,7 +65,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
 
         for (int x = 0; x < boardManager.boardSize; x++)
         {
-            for (int y = 0; y < boardManager.boardSize; y++)
+            for (int y = 1; y < boardManager.boardSize + 1; y++)
             {
                 Vector2Int position = new Vector2Int(x, y);
                 Tile tile = boardManager.GetTile(position);
@@ -85,7 +85,35 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
             }
         }
     }
+    public void StartHighlightTiles()
+    {
+        ClearAllEffects(); // 기존 이펙트 제거
+        restrictObstacle = true; // 장애물 타일 클릭 제한
 
+        for (int x = 0; x < boardManager.boardSize; x++)
+        {
+            for (int y = 0; y < 1; y++)
+            {
+                Vector2Int position = new Vector2Int(x, y);
+                Tile tile = boardManager.GetTile(position);
+                if (tile != null)
+                {
+                    // 하이라이트, 낫하이라이트 이미지 띄우기
+                    GameObject effectPrefab = boardManager.IsEmptyTile(position) ? highlight : notHighlight;
+                    // 이펙트 프리팹 인스턴스화
+                    GameObject effect = Instantiate(effectPrefab,
+                        new Vector3(boardManager.boardTransform.position.x + x,
+                                  boardManager.boardTransform.position.y + y,
+                                  -1), // z=-1로 타일 위에 렌더링
+                        Quaternion.identity,
+                        boardManager.boardTransform);
+                    activeEffects.Add(position, effect);
+                }
+            }
+        }
+    }
+
+    // 피스 선택 타일 테두리 생성
     public void PieceHighlightTiles(Vector2Int pos)
     {
         DestroyPieceHighlightTile();

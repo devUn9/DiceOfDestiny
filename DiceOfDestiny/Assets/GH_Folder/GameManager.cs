@@ -25,5 +25,4 @@ public class GameManager : Singletone<GameManager>
         historyManager = GetComponent<HistoryManager>();
         if (historyManager == null) Debug.LogWarning("[GameManager] HistoryManager가 붙어있지 않습니다.");
     }
-
 }

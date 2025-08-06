@@ -9,11 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 129c59443c3d3ad4fb4de8550b8f5e1a
   - enabled: 1
-    path: Assets/Scenes/GameScene.unity
-    guid: 9109b2155f38be74f89574d1a465c1fd
-  - enabled: 1
-    path: Assets/Scenes/GH_GameScene.unity
-    guid: 7716d1e0be37c3344a0e42e1f51688d7
+    path: Assets/Scenes/GameScene_2.0.unity
+    guid: d7efb173a0932c44bb0cd10ce1994d8b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

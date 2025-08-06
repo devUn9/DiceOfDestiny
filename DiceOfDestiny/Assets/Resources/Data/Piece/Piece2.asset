@@ -12,17 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675178a9476353c42882c46a90e39f45, type: 3}
   m_Name: Piece2
   m_EditorClassIdentifier: 
-  pieceNumber: 2
-  sprite: {fileID: 21300000, guid: fe5308c37896fb14eb13145634ac3e96, type: 3}
+  PieceNumber: 0
   faces:
-  - classData: {fileID: 11400000, guid: 2126fa894a0a68e44918428e1bfd819c, type: 2}
-    color: 5
-  - classData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
-    color: 4
-  - classData: {fileID: 11400000, guid: 6e7c4891a27f85a4fbc9a095d863d071, type: 2}
-    color: 2
   - classData: {fileID: 11400000, guid: 2d6146874d908d64c9510daae785a67b, type: 2}
     color: 0
+  - classData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
+    color: 4
+  - classData: {fileID: 11400000, guid: c46d4b0574e7b9b42a12e7262c15b141, type: 2}
+    color: 2
+  - classData: {fileID: 11400000, guid: 2126fa894a0a68e44918428e1bfd819c, type: 2}
+    color: 5
   - classData: {fileID: 11400000, guid: 384c756a026c75446866dfb53aa3372d, type: 2}
     color: 3
   - classData: {fileID: 11400000, guid: ba1dd072c7a6dc44e8c1b1993c1736b1, type: 2}
