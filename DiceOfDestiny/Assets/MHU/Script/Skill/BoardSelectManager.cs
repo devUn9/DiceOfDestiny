@@ -181,4 +181,25 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
         ClearAllEffects();
     }
 
+    // 현재 클릭된 타일의 transform 위치를 반환
+    public Transform GetClickedTileTransform()
+    {
+        if (lastClickedPosition == Vector2Int.zero)
+        {
+            Debug.LogWarning("클릭된 타일 위치가 설정되지 않았습니다.");
+            return null;
+        }
+        Tile clickedTile = boardManager.GetTile(lastClickedPosition);
+        if (clickedTile != null)
+        {
+            return clickedTile.transform;
+        }
+        else
+        {
+            Debug.LogWarning($"클릭된 타일({lastClickedPosition})이 존재하지 않습니다.");
+            return null;
+        }
+    }
+
+
 }

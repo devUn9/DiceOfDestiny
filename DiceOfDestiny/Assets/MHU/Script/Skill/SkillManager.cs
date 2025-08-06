@@ -161,7 +161,7 @@ public class SkillManager : Singletone<SkillManager>
 
             case "Thief":
                 // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
-
+                //StartCoroutine(activeSkill.MoveForward(currentPiece, currentPiece.GetLastMoveDirection()));
                 ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", currentPiece.transform);
 
                 break;
