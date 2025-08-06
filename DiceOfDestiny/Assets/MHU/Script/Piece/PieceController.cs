@@ -24,7 +24,7 @@ public class PieceController : MonoBehaviour
     [SerializeField] private SpriteRenderer classRenderer;
     [SerializeField] public SpriteRenderer colorRenderer;
 
-   
+
     bool isMoving = false; // 이동 중인지 여부
 
     public StatusEffectController statusEffectController;
@@ -106,7 +106,7 @@ public class PieceController : MonoBehaviour
         }
 
         // 상태 효과 체크 (질병)
-        if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.currentAP < 2)
+        if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.CurrentAP < 2)
         {
             int diseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
             Debug.Log("Piece is diseased!");
@@ -136,76 +136,94 @@ public class PieceController : MonoBehaviour
             }
 
             // 행동력 소모
-            
+            GameManager.Instance.actionPointManager.PieceAction();
             if (statusEffectController.IsStatusActive(StatusType.Disease))
             {
                 GameManager.Instance.actionPointManager.PieceAction();
-            if (statusEffectController.IsStatusActive(StatusType.Stun))
-            {
-                int stunTurn = statusEffectController.GetRemainingTurn(StatusType.Stun);
-                Debug.Log("Piece is stunned!");
-                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {stunTurn}턴간 이동할 수 없습니다.", transform);
-                return;
-            }
-
-            if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.CurrentAP < 2)
-            {
-                int DiseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
-                Debug.Log("Piece is diseased!");
-                ToastManager.Instance.ShowToast(message: $"기물이 질병에 걸렸습니다! {DiseaseTurn}턴간 행동이 제한됩니다.", transform);
-                return;
-            }
-
-            // 이동하는 곳에 장애물이 있으면
-            Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
-            if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None ||
-                BoardManager.Instance.Board[newPosition.x, newPosition.y].GetPiece() != null)
-            {
-                // 밟을 수 없다면
-                if (!BoardManager.Instance.Board[newPosition.x, newPosition.y].isWalkable)
+                if (statusEffectController.IsStatusActive(StatusType.Stun))
                 {
-                    RotateHalfBack(moveDirection); // 튕김 애니메이션
-                    return;
-                }
-            }
-
-            if (newPosition.x >= 0 && newPosition.x < BoardManager.Instance.boardSize &&
-                newPosition.y >= 0 && newPosition.y < BoardManager.Instance.boardSizeY)
-            {
-                if (PieceManager.Instance == null)
-                {
-                    Debug.LogError("PieceManager.Instance is null!");
+                    int stunTurn = statusEffectController.GetRemainingTurn(StatusType.Stun);
+                    Debug.Log("Piece is stunned!");
+                    ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {stunTurn}턴간 이동할 수 없습니다.", transform);
                     return;
                 }
 
-                if (piece == null)
+                if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.CurrentAP < 2)
                 {
-                    Debug.LogError("Piece is null!");
+                    int DiseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
+                    Debug.Log("Piece is diseased!");
+                    ToastManager.Instance.ShowToast(message: $"기물이 질병에 걸렸습니다! {DiseaseTurn}턴간 행동이 제한됩니다.", transform);
                     return;
                 }
 
-                GameManager.Instance.actionPointManager.PieceAction();
-
-                if (statusEffectController.IsStatusActive(StatusType.Disease))
+                // 이동하는 곳에 장애물이 있으면
+                Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
+                if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None ||
+                    BoardManager.Instance.Board[newPosition.x, newPosition.y].GetPiece() != null)
                 {
+                    // 밟을 수 없다면
+                    if (!BoardManager.Instance.Board[newPosition.x, newPosition.y].isWalkable)
+                    {
+                        RotateHalfBack(moveDirection); // 튕김 애니메이션
+                        return;
+                    }
+                }
+
+                if (newPosition.x >= 0 && newPosition.x < BoardManager.Instance.boardSize &&
+                    newPosition.y >= 0 && newPosition.y < BoardManager.Instance.boardSizeY)
+                {
+                    if (PieceManager.Instance == null)
+                    {
+                        Debug.LogError("PieceManager.Instance is null!");
+                        return;
+                    }
+
+                    if (piece == null)
+                    {
+                        Debug.LogError("Piece is null!");
+                        return;
+                    }
+
                     GameManager.Instance.actionPointManager.PieceAction();
+
+                    if (statusEffectController.IsStatusActive(StatusType.Disease))
+                    {
+                        GameManager.Instance.actionPointManager.PieceAction();
+                    }
+
+
+                    // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
+                    BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
+                    BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
+
+
+
+                    // 마지막 이동 방향 저장
+                    lastMoveDirection = moveDirection;
+
+                    // 실제 이동
+                    RotateToTopFace(moveDirection);
+                    UpdateTopFace(moveDirection); // 윗면 업데이트
+
+                    StartCoroutine(CheckStageClearAfterMove(newPosition));
+
+                    ObstacleManager.Instance.UpdateObstacleStep();
+                }
+                else
+                {
+                    Debug.LogWarning($"Invalid move to position: {newPosition}");
                 }
 
-
-                // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
+                // 보드 정보 업데이트
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
                 BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
-
-
 
                 // 마지막 이동 방향 저장
                 lastMoveDirection = moveDirection;
 
-                // 실제 이동
+                // 실제 이동 및 애니메이션
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
-
-                StartCoroutine(CheckStageClearAfterMove(newPosition));
 
                 ObstacleManager.Instance.UpdateObstacleStep();
             }
@@ -213,23 +231,6 @@ public class PieceController : MonoBehaviour
             {
                 Debug.LogWarning($"Invalid move to position: {newPosition}");
             }
-
-            // 보드 정보 업데이트
-            BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
-            BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
-
-            // 마지막 이동 방향 저장
-            lastMoveDirection = moveDirection;
-
-            // 실제 이동 및 애니메이션
-            RotateToTopFace(moveDirection);
-            UpdateTopFace(moveDirection); // 윗면 업데이트
-
-            ObstacleManager.Instance.UpdateObstacleStep();
-        }
-        else
-        {
-            Debug.LogWarning($"Invalid move to position: {newPosition}");
         }
     }
 
