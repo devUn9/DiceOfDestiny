@@ -109,7 +109,10 @@ public class PieceController : MonoBehaviour
             // 이동 확정 시
             // 행동력이 0이면 행동 불가
             if (!GameManager.Instance.actionPointManager.TryUseAP())
+            {
+                ToastManager.Instance.ShowToast("행동력이 부족합니다.", transform);
                 return;
+            }
 
             // 이동하는 곳이 보드 밖이면 return
             if (!ObstacleManager.Instance.IsInsideBoard(newPosition))

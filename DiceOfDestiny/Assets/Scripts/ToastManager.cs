@@ -1,12 +1,17 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.WSA;
 
 public class ToastManager : Singletone<ToastManager>
 {
+    [Header("Prefabs & Canvas")]
     [SerializeField] private GameObject toastPrefab;
     [SerializeField] private Canvas uiCanvas;
+
+    [Header("Toast Settings")]
     [SerializeField] private float toastDuration = 2f; 
     [SerializeField] private float worldYOffset = 0f; 
     [SerializeField] private float pixelYOffset = 20f;
@@ -37,36 +42,47 @@ public class ToastManager : Singletone<ToastManager>
         StartCoroutine(ShowToastRoutine(message, targetPiece, delay));
     }
 
-    private System.Collections.IEnumerator ShowToastRoutine(string message, Transform targetPiece, float delay)
+    private IEnumerator ShowToastRoutine(string message, Transform targetPiece, float delay)
     {
         if (delay > 0f)
             yield return new WaitForSeconds(delay);
 
         GameObject toastInstance = Instantiate(toastPrefab, uiCanvas.transform);
         RectTransform toastRect = toastInstance.GetComponent<RectTransform>();
-        toastInstance.SetActive(true);
         toastRect.pivot = new Vector2(0.5f, 0f);
+        toastInstance.GetComponentInChildren<TextMeshProUGUI>().text = message;
+
+        toastInstance.SetActive(true);
 
         activeToasts.Add(toastRect);
-        int index = activeToasts.Count - 1;        
+        int orderIndex = activeToasts.Count - 1;
 
-        Vector3 worldPos = targetPiece.position + Vector3.up * worldYOffset;
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+        float elapsed = 0f;
+        while (elapsed < toastDuration)
+        {
+            if (targetPiece == null) break;
 
-        RectTransform canvasRect = uiCanvas.GetComponent<RectTransform>();
+            Vector3 worldPos = targetPiece.position + Vector3.up * worldYOffset;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
 
-        Camera cam = uiCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : uiCanvas.worldCamera;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRect, screenPos,cam, out Vector2 localPoint
-        );
+            RectTransform canvasRect = uiCanvas.GetComponent<RectTransform>();
 
-        float uiYOff = ((pixelYOffset + 20) * index) / uiCanvas.scaleFactor;
-        toastRect.anchoredPosition = new Vector2(localPoint.x, localPoint.y + uiYOff);
+            Camera cam = uiCanvas.renderMode == RenderMode.ScreenSpaceOverlay
+                         ? null
+                         : uiCanvas.worldCamera;
 
-        var textComponent = toastInstance.GetComponentInChildren<TextMeshProUGUI>();
-        textComponent.text = message;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect, screenPos, cam, out Vector2 localPoint);
 
-        yield return new WaitForSeconds(toastDuration);
+            float yStackOffset = ((pixelYOffset + 20) * orderIndex) / uiCanvas.scaleFactor;
+            toastRect.anchoredPosition = new Vector2(localPoint.x, localPoint.y + yStackOffset);
+
+            var textComponent = toastInstance.GetComponentInChildren<TextMeshProUGUI>();
+            textComponent.text = message;
+
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;               // 다음 프레임
+        }
         activeToasts.Remove(toastRect);
         Destroy(toastInstance);
     }

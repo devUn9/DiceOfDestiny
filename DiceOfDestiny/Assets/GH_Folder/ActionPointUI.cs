@@ -1,7 +1,8 @@
+using System;
+using TMPro;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 
 public class ActionPointUI : MonoBehaviour
 {
@@ -14,18 +15,23 @@ public class ActionPointUI : MonoBehaviour
 
     private void Start()
     {
+        var apm = GameManager.Instance.actionPointManager;
+
         EndTurnButton.onClick.AddListener(onClickEndTurnButton);
         DiceRollButton.onClick.AddListener(onClickDiceRollButton);
-    }
-    private void Update()
-    {
-        Refresh();
+
+        apm.OnActionPointChanged += _ => Refresh();
+        apm.OnValueChanged += Refresh;
+
+        Refresh();   // 초기 출력
     }
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
-            GameManager.Instance.actionPointManager.OnValueChanged -= Refresh;
+        if (GameManager.Instance == null) return;
+        var apm = GameManager.Instance.actionPointManager;
+        apm.OnActionPointChanged -= _ => Refresh();
+        apm.OnValueChanged -= Refresh;
     }
     private void onClickDiceRollButton()
     {

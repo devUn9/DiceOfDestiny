@@ -62,11 +62,9 @@ public class ActionPointManager : MonoBehaviour
         }
     }
 
-    private int GetCurrentAP() => CurrentAP;
-
-    private void SetAP(int value, int currentAP)
+    private void SetAP(int value)
     {
-        currentAP = value;
+        actionPoint = new ActionPoint(value);
         OnValueChanged?.Invoke();
     }
 
@@ -80,7 +78,7 @@ public class ActionPointManager : MonoBehaviour
     {
         GameState = GameState.Dice;
         CurrentDiceValue = 0;
-        SetAP(0,0);
+        SetAP(0);
         NotifyChange();
     }
 
@@ -108,11 +106,17 @@ public class ActionPointManager : MonoBehaviour
 
     public void RollDice()
     {
-        int idx = UnityEngine.Random.Range(0, diceFaces.Length);
-        CurrentDiceValue = diceFaces[idx];
-        AddAP(CurrentDiceValue);
-        Debug.Log($"주사위를 굴려서 {CurrentDiceValue}가 나왔습니다.");
-        GameManager.Instance.actionPointManager.GameState = GameState.Action;
+        GameState = GameState.Action;
+        if (DiceRollManager.Instance == null) return;
+        if (!DiceRollManager.Instance.TryRoll(OnDiceResult)) return;
+    }
+
+    private void OnDiceResult(int value)
+    {
+        CurrentDiceValue = value;
+        AddAP(value);
+        Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
+        GameState = GameState.Action;
     }
 
     public void PieceAction()
@@ -122,6 +126,7 @@ public class ActionPointManager : MonoBehaviour
         if (!TryUseAP())
         {
             GameState = GameState.EndTurn;
+            NotifyChange();
         }
     }
 

@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class ApDiceController : MonoBehaviour
 {
     [Header("Sprite Renderers")]
-    public SpriteRenderer expandRenderer; 
-    public SpriteRenderer contractRenderer; 
-    public SpriteRenderer nextRenderer; 
+    [SerializeField] private SpriteRenderer expandRenderer;
+    [SerializeField] private SpriteRenderer contractRenderer;
+    [SerializeField] private SpriteRenderer nextRenderer;
 
     [Header("Dice Sides")]
-    public DiceFace[] diceFaces;
+    [SerializeField] private DiceFace[] diceFaces;
 
     [Header("Roll Settings")]
     [SerializeField] private int rollCountMin = 3;
@@ -27,14 +30,31 @@ public class ApDiceController : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 endPosition;
 
-    bool isRolling = false;
+    private bool isRolling = false;
 
-    private void Update()
+    public event Action<int> OnRollEnded;   // 굴림 종료 시 값 전달
+
+    #region LifeCycle
+    private void OnEnable()
     {
-        if (Input.GetMouseButtonDown(0) && !isRolling)
+        // 재사용 시 초기 상태 리셋
+        isRolling = false;
+        transform.localScale = Vector3.one * 3.5f;
+        foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
         {
-            DiceRoll();
+            var c = sr.color;
+            sr.color = new Color(c.r, c.g, c.b, 1f);
         }
+    }
+    #endregion
+
+    public void PlayRoll()
+    {
+        if (!gameObject.activeInHierarchy)
+            gameObject.SetActive(true);
+
+        if (isRolling) return;
+        DiceRoll();
     }
 
     void DiceRoll()
@@ -222,7 +242,9 @@ public class ApDiceController : MonoBehaviour
 
         // 마지막 사이드 설정
         isRolling = false;
-        Debug.Log($"Dice rolled: {diceFaces[nextIndex].value}");
+        int finalValue = diceFaces[nextIndex].value;
+        OnRollEnded?.Invoke(finalValue);
+        Debug.Log($"Dice rolled: {finalValue}");
     }
 
     private void RollCycleStep(float t, SpriteRenderer expand, SpriteRenderer contract)
@@ -246,6 +268,7 @@ public class ApDiceController : MonoBehaviour
     }
 
     int GetNextIndex(int index) => (index + 1) % diceFaces.Length;
+
 }
 
 
