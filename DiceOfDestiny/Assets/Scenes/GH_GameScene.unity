@@ -3542,7 +3542,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knightPassiveEffect: {fileID: 4995246630371947538, guid: 4bba21ca3d140ae47913b0d87a6f606f, type: 3}
-  knightPassiveEffectDuration: 0.5
+  demonPassiveEffect: {fileID: 0}
+  fanaticPassiveEffect: {fileID: 0}
+  priestPassiveEffect: {fileID: 0}
 --- !u!114 &1029121204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3579,6 +3581,8 @@ MonoBehaviour:
   knightSkillEffect: {fileID: 2847281042695623499, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
   demonSkillEffect: {fileID: 8546471297454802166, guid: 6cf9d3419d8d3e14989491b6e6491ce4, type: 3}
   painterSkillEffect: {fileID: 846397696588369162, guid: f7df4b42d5b448747a1db5e3181794da, type: 3}
+  fanaticSkillEffect: {fileID: 0}
+  priestSkillEffect: {fileID: 0}
   painterActiveSkillUI: {fileID: 1029121204}
 --- !u!114 &1029121206
 MonoBehaviour:
@@ -6628,6 +6632,8 @@ MonoBehaviour:
   knightSkillEffect: {fileID: 5787608323475247453, guid: cab6e3fb3ba5eb944b235d2eab030fe1, type: 3}
   demonSkillEffect: {fileID: 0}
   painterSkillEffect: {fileID: 0}
+  fanaticSkillEffect: {fileID: 0}
+  priestSkillEffect: {fileID: 0}
   painterActiveSkillUI: {fileID: 0}
 --- !u!1 &2123524230
 GameObject:
