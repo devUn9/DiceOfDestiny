@@ -72,6 +72,7 @@ public class PieceControlUI : MonoBehaviour
                 Debug.Log("위버튼눌림");
                 // 매니저에서 지우기 요청
                 // 피스 컨트롤러에서 위로가는거
+                PieceManager.Instance.currentPiece.MoveUp();
                 // 피스매니저에서 이동함 플래그 세우기
                 // 매니저에서 그리기 요청
                 break;
@@ -79,6 +80,7 @@ public class PieceControlUI : MonoBehaviour
                 Debug.Log("밑버튼눌림");
                 // 매니저에서 지우기 요청
                 // 피스 컨트롤러에서 밑으로가는거
+                PieceManager.Instance.currentPiece.MoveDown();
                 // 피스매니저에서 이동함 플래그 세우기
                 // 매니저에서 그리기 요청
                 break;
@@ -86,6 +88,7 @@ public class PieceControlUI : MonoBehaviour
                 Debug.Log("왼버튼눌림");
                 // 매니저에서 지우기 요청
                 // 피스 컨트롤러에서 왼쪽으로가는거
+                PieceManager.Instance.currentPiece.MoveLeft();
                 // 피스매니저에서 이동함 플래그 세우기
                 // 매니저에서 그리기 요청
                 break;
@@ -93,6 +96,7 @@ public class PieceControlUI : MonoBehaviour
                 Debug.Log("오른버튼눌림");
                 // 매니저에서 지우기 요청
                 // 피스 컨트롤러에서 오른쪽으로가는거
+                PieceManager.Instance.currentPiece.MoveRight();
                 // 피스매니저에서 이동함 플래그 세우기
                 // 매니저에서 그리기 요청
                 break;
@@ -100,5 +104,13 @@ public class PieceControlUI : MonoBehaviour
                 Debug.Log("<color=#00aeff>UI에 방향 할당되지 않음</color>");
                 break;
         }
+        ResetUI();
+    }
+
+    private void ResetUI()
+    {
+        buttonImage.color = new Color(buttonImage.color.r, buttonImage.color.g, buttonImage.color.b, 0f);
+        faceClass.SetActive(false);
+        faceColor.SetActive(false);
     }
 }

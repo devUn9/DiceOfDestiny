@@ -17,7 +17,7 @@ public class DebugManager : MonoBehaviour
 
     public void onClickReColorBoardButton()
     {
-        StageManger.Instance.StartStage();
+        StageManager.Instance.StartStage();
     }
 
     //public void onClickNextStepButton()

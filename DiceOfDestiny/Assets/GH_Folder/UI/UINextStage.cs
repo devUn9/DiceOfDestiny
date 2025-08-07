@@ -6,7 +6,7 @@ public class UINextStage : MonoBehaviour
     public void NextStageButton()
     {
         // 다음 스테이지 보드판
-        StageManger.Instance.NextStage();
+        StageManager.Instance.TryLoadNextStage();
 
         // 게임 재개
         TempManager.Instance.ResumeGame();

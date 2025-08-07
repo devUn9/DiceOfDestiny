@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 675178a9476353c42882c46a90e39f45, type: 3}
+  m_Name: Piece 5
+  m_EditorClassIdentifier: 
+  isAvailable: 0
+  faces:
+  - classData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
+    color: 0
+  - classData: {fileID: 11400000, guid: 384c756a026c75446866dfb53aa3372d, type: 2}
+    color: 1
+  - classData: {fileID: 11400000, guid: 2d6146874d908d64c9510daae785a67b, type: 2}
+    color: 2
+  - classData: {fileID: 11400000, guid: ba1dd072c7a6dc44e8c1b1993c1736b1, type: 2}
+    color: 3
+  - classData: {fileID: 11400000, guid: c46d4b0574e7b9b42a12e7262c15b141, type: 2}
+    color: 4
+  - classData: {fileID: 11400000, guid: 6e7c4891a27f85a4fbc9a095d863d071, type: 2}
+    color: 5

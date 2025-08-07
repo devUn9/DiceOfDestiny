@@ -69,6 +69,14 @@ public class UIBackpack : MonoBehaviour
     public void onClickPieceAppearButton(int index)
     {
         Debug.Log(index + "번 피스 선택");
+
+        // 같은 피스를 다시 클릭한 경우 창을 닫음
+        if (currentIndex == index && ChoiceTopFaceWindow.activeSelf)
+        {
+            ChoiceTopFaceWindow.SetActive(false);
+            return;
+        }
+
         currentIndex = index;
 
         // 선택 피스 저장

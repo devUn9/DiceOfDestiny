@@ -4,6 +4,35 @@ public class TempManager : Singletone<TempManager>
 {
     [SerializeField] private GameObject NextStageUI;
     [SerializeField] private GameObject mainCanvasGroup;
+    [SerializeField] private StageBannerManager bannerManager;
+
+    private StageData currentStage = null;
+    private Coroutine bannerRoutine;
+    private void Awake()
+    {
+        // 인스펙터에서 빼먹었을 때 자동으로 찾기
+        if (bannerManager == null)
+        {
+            bannerManager = FindAnyObjectByType<StageBannerManager>();
+            if (bannerManager == null)
+            {
+                Debug.LogError("[TempManager] StageBannerManager를 찾지 못했습니다.");
+            }
+        }
+    }
+    private void OnEnable()
+    {
+        StageManager.StageLoaded += UpdateCurrentStage;
+    }
+    private void OnDisable()
+    {
+        StageManager.StageLoaded -= UpdateCurrentStage;
+    }
+
+    private void UpdateCurrentStage(StageData stage)
+    {
+        currentStage = stage;
+    }
 
     void Update()
     {
@@ -40,8 +69,8 @@ public class TempManager : Singletone<TempManager>
     {
         Time.timeScale = 1f;
 
-        mainCanvasGroup.SetActive(true);
         NextStageUI.SetActive(false);
+        mainCanvasGroup.SetActive(true);
 
         // 행동력, 턴 상태 초기화
         GameManager.Instance.actionPointManager.Reset();
@@ -51,5 +80,8 @@ public class TempManager : Singletone<TempManager>
 
         // 기물 인벤토리 UI 새로고침
         EventManager.Instance.TriggerEvent("Refresh");
+
+        bannerManager?.ShowBanner(currentStage.stageNumber,
+                                  currentStage.stageTitle);
     }
 }

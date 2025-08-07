@@ -79,7 +79,7 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
-    public void SetBoard(StageDifficultyProfile profile)
+    public void SetBoard(StageData profile)
     {
         // 가중치에 맞게 색을 설정하는 부분
         colorIndices = new List<int>();
@@ -745,6 +745,19 @@ public class BoardManager : Singletone<BoardManager>
         else
         {
             return Board[position.x, position.y];
+        }
+    }
+
+    public Color GetColor(TileColor tileColor)
+    {
+        if ((int)tileColor < 0 || (int)tileColor >= tileColors.Length)
+        {
+            Debug.LogError($"Invalid TileColor: {tileColor}");
+            return Color.white; // 기본 색상 반환
+        }
+        else
+        {
+            return tileColors[(int)tileColor];
         }
     }
 }

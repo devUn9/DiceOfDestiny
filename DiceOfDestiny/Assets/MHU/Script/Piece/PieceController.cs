@@ -24,7 +24,7 @@ public class PieceController : MonoBehaviour
     [SerializeField] private SpriteRenderer classRenderer;
     [SerializeField] public SpriteRenderer colorRenderer;
 
-   
+
     bool isMoving = false; // 이동 중인지 여부
 
     public StatusEffectController statusEffectController;
@@ -37,6 +37,33 @@ public class PieceController : MonoBehaviour
     void Update()
     {
         TestInput();
+    }
+
+
+    // 상, 하, 좌, 우 버튼 클릭 시 호출될 public 메서드
+    public void MoveUp()
+    {
+        if (this != PieceManager.Instance.GetCurrentPiece() || isMoving) return;
+        MoveToDirection(Vector2Int.up);
+        Debug.Log("호출함");
+    }
+
+    public void MoveDown()
+    {
+        if (this != PieceManager.Instance.GetCurrentPiece() || isMoving) return;
+        MoveToDirection(Vector2Int.down);
+    }
+
+    public void MoveLeft()
+    {
+        if (this != PieceManager.Instance.GetCurrentPiece() || isMoving) return;
+        MoveToDirection(Vector2Int.left);
+    }
+
+    public void MoveRight()
+    {
+        if (this != PieceManager.Instance.GetCurrentPiece() || isMoving) return;
+        MoveToDirection(Vector2Int.right);
     }
 
 
@@ -68,7 +95,13 @@ public class PieceController : MonoBehaviour
                 ToastManager.Instance.ShowToast("0번 피스 복구 !", PieceManager.Instance.currentPiece.transform);
             }
         }
+        MoveToDirection(moveDirection);
 
+
+    }
+
+    public void MoveToDirection(Vector2Int moveDirection)
+    {
         if (moveDirection != Vector2Int.zero)
         {
             Vector2Int newPosition = gridPosition + moveDirection;
@@ -92,7 +125,7 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
-            if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.currentAP < 2)
+            if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.CurrentAP < 2)
             {
                 int DiseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
                 Debug.Log("Piece is diseased!");
@@ -159,7 +192,6 @@ public class PieceController : MonoBehaviour
             }
         }
     }
-
     public Face GetTopFace()
     {
         return piece.faces[2];

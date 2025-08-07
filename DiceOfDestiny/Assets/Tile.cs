@@ -59,6 +59,7 @@ public class Tile : MonoBehaviour
         {
             PieceManager.Instance.currentPiece = piece;
             BoardSelectManager.Instance.PieceHighlightTiles(position);
+            EventManager.Instance.TriggerEvent("ToggleUIElement");
         }
         BoardSelectManager.Instance.SetClickedTilePosition(position);
         BoardSelectManager.Instance.ClearAllEffects();

@@ -1,118 +1,118 @@
+using System;
 using UnityEngine;
 
-public enum TestGameState
+public enum GameState
 {
     Dice,
     Action,
-    TurnOff
+    EndTurn
 }
 
+/// <summary>
+/// 행동력(AP) 로직만 담당하며, 시각적 토큰 UI와는 분리되어 있습니다.
+/// Token UI는 ActionPointDisplay가 OnActionPointChanged 이벤트를 구독하여 처리합니다.
+/// </summary>
 public class ActionPointManager : MonoBehaviour
 {
-    // 현재 행동력 주사위의 면 배열
-    private int[] diceFaces = new int[] { 1, 1, 2, 2, 3, 3 };
+    [Header("Dice Settings")]
+    [SerializeField] private int[] diceFaces = new int[] { 1, 1, 2, 2, 3, 3 };
 
-    // 플레이어 상태
-    public TestGameState testGameState { get; private set; }
-    // 턴 정보
-    public int currentTurnNum { get; private set; } = 1;
-    // 주사위 정보
-    public int currentDiceNum { get; private set; } = 0;
-    // 행동력 정보
-    public int currentAP { get; private set; } = 0;
+    private ActionPoint actionPoint;
 
-    void Start()
+    public event Action<int> OnActionPointChanged;
+    public event Action OnValueChanged;
+
+    public GameState GameState { get; private set; } = GameState.Dice;
+    public int CurrentTurn { get; private set; } = 1;
+    public int CurrentDiceValue { get; private set; }
+
+    public int CurrentAP => actionPoint.Value;
+
+    private void Awake()
     {
-        Init();
+        actionPoint = new ActionPoint();
+        NotifyChange();
     }
 
-    void Update()
+    private void Update()
     {
-        if (testGameState == TestGameState.Dice)
+        switch (GameState)
         {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                RollingDice();
+            case GameState.Dice:
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    RollDice();
+                    GameState = GameState.Action;
+                }
+                break;
 
-                testGameState = TestGameState.Action;
-                GameManager.Instance.actionPointUI.Refresh();
-            }
-        }
-        if (testGameState == TestGameState.Action)
-        {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                TurnOff();
-                GameManager.Instance.actionPointUI.Refresh();
-            }
-        }
-        if (testGameState == TestGameState.TurnOff)
-        {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                TurnOff();
-                GameManager.Instance.actionPointUI.Refresh();
-            }
+            case GameState.Action:
+                if (Input.GetKeyDown(KeyCode.T))
+                {
+                    EndTurn();
+                }
+                break;
+
+            case GameState.EndTurn:
+                if (Input.GetKeyDown(KeyCode.T))
+                {
+                    EndTurn();
+                }
+                break;
         }
     }
 
-    public void Init()
+    private int GetCurrentAP() => CurrentAP;
+
+    private void SetAP(int value, int currentAP)
     {
-        testGameState = TestGameState.Dice;
-        currentDiceNum = 0;
-        currentAP = 0;
-        GameManager.Instance.actionPointUI.Refresh();
+        currentAP = value;
+        OnValueChanged?.Invoke();
     }
 
     public void Reset()
     {
-        currentTurnNum = 1;
+        CurrentTurn = 1;
         
         Init();
+    }
+    public void Init()
+    {
+        GameState = GameState.Dice;
+        CurrentDiceValue = 0;
+        SetAP(0,0);
+        NotifyChange();
     }
 
     public void AddAP(int _plusAP)
     {
-        currentAP += _plusAP;
-
-        // UI Refresh
-        GameManager.Instance.actionPointUI.Refresh();
+        actionPoint.Add(_plusAP);
+        NotifyChange();
     }
-    public void RemoveAP(int _minusAP)
+
+    public void RemoveAP(int amount)
     {
-        if (currentAP <= 0)
+        if (!actionPoint.CanUse(amount))
         {
-            ToastManager.Instance.ShowToast("행동력이 없습니다.", transform);
+            Debug.Log("행동력이 없습니다.");
+            if (ToastManager.Instance != null)
+                ToastManager.Instance.ShowToast("행동력이 없습니다.", transform);
             return;
         }
-        currentAP -= _minusAP;
 
-        // UI Refresh
-        GameManager.Instance.actionPointUI.Refresh();
-    }
-    public bool TryUseAP()
-    {
-        if (currentAP <= 0)
-            return false;
-
-        return true;
+        actionPoint.Remove(amount);
+        NotifyChange();
     }
 
-    public void SetDiceFaces(int[] _diceNums)
+    public bool TryUseAP() => actionPoint.CanUse(1);
+
+    public void RollDice()
     {
-        for (int i = 0; i < diceFaces.Length; i++)
-        {
-            diceFaces[i] = _diceNums[i];
-        }
-    }
-
-    public void RollingDice()
-    {
-        int randomNum = Random.Range(0, diceFaces.Length);
-
-        currentDiceNum = diceFaces[randomNum];
-
-        AddAP(currentDiceNum);
+        int idx = UnityEngine.Random.Range(0, diceFaces.Length);
+        CurrentDiceValue = diceFaces[idx];
+        AddAP(CurrentDiceValue);
+        Debug.Log($"주사위를 굴려서 {CurrentDiceValue}가 나왔습니다.");
+        GameManager.Instance.actionPointManager.GameState = GameState.Action;
     }
 
     public void PieceAction()
@@ -121,24 +121,39 @@ public class ActionPointManager : MonoBehaviour
 
         if (!TryUseAP())
         {
-            testGameState = TestGameState.TurnOff;
-            GameManager.Instance.actionPointUI.Refresh();
+            GameState = GameState.EndTurn;
         }
     }
 
-    public void TurnOff()
+    public void EndTurn()
     {
-        if (testGameState == TestGameState.Dice)
+        if (GameState == GameState.Dice)
         {
             Debug.Log("먼저 주사위를 굴리세요.");
-            ToastManager.Instance.ShowToast("먼저 주사위를 굴리세요.", transform);
+            if (ToastManager.Instance != null)
+                ToastManager.Instance.ShowToast("먼저 주사위를 굴리세요.", transform);
             return;
         }
 
-        PieceManager.Instance.DecreaseDebuffAllPieces();
+        if (PieceManager.Instance != null)
+            PieceManager.Instance.DecreaseDebuffAllPieces();
 
-        currentTurnNum++;
-
-        Init();
+        CurrentTurn++;
+        ResetTurn();
     }
+
+    private void ResetTurn()
+    {
+        actionPoint.Reset();
+        GameState = GameState.Dice;
+        NotifyChange();
+    }
+
+    public void SetDiceFaces(int[] newFaces)
+    {
+        if (newFaces == null || newFaces.Length != diceFaces.Length) return;
+        Array.Copy(newFaces, diceFaces, diceFaces.Length);
+    }
+
+    private void NotifyChange() => OnActionPointChanged?.Invoke(actionPoint.Value);
 }
