@@ -25,7 +25,8 @@ public class DiceRollManager : Singletone<DiceRollManager>
             dice.OnRollEnded -= OnEnd;
             isRolling = false;
             OnRollEnded?.Invoke(value);
-            dice.gameObject.SetActive(false);
+            dice.StartCoroutine(dice.ZoomIn());
+            //dice.gameObject.SetActive(false);
         }
 
         dice.PlayRoll();

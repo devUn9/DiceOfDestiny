@@ -3,58 +3,87 @@ using TMPro;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Hardware.DevDeviceList;
 
 public class ActionPointUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI currentState;
     [SerializeField] private TextMeshProUGUI currentTurn;
-    [SerializeField] private TextMeshProUGUI Dice;
-    [SerializeField] private TextMeshProUGUI AP;
+    [SerializeField] private TextMeshProUGUI currentDice;
+    [SerializeField] private TextMeshProUGUI currentAP;
     [SerializeField] private Button DiceRollButton;
     [SerializeField] private Button EndTurnButton;
 
+    private Action<int> onAPChangedHandler;
+    private Action onValueChangedHandler;
+    private ActionPointManager apm;
+
     private void Start()
     {
-        var apm = GameManager.Instance.actionPointManager;
+        apm = GameManager.Instance != null ? GameManager.Instance.actionPointManager : null;
+
 
         EndTurnButton.onClick.AddListener(onClickEndTurnButton);
         DiceRollButton.onClick.AddListener(onClickDiceRollButton);
 
-        apm.OnActionPointChanged += _ => Refresh();
-        apm.OnValueChanged += Refresh;
+        // 이벤트 구독
+        if (apm != null)
+        {
+            onAPChangedHandler = _ => Refresh();
+            onValueChangedHandler = Refresh;
 
-        Refresh();   // 초기 출력
+            apm.OnActionPointChanged += onAPChangedHandler;
+            apm.OnValueChanged += onValueChangedHandler;
+
+            Refresh();
+        }
     }
 
     private void OnDestroy()
     {
-        if (GameManager.Instance == null) return;
-        var apm = GameManager.Instance.actionPointManager;
-        apm.OnActionPointChanged -= _ => Refresh();
-        apm.OnValueChanged -= Refresh;
+        // 이벤트 구독 해제
+        if (apm != null)
+        {
+            if (onAPChangedHandler != null) apm.OnActionPointChanged -= onAPChangedHandler;
+            if (onValueChangedHandler != null) apm.OnValueChanged -= onValueChangedHandler;
+        }
+
+        // 버튼 리스너 제거
+        if (DiceRollButton != null) DiceRollButton.onClick.RemoveListener(onClickDiceRollButton);
+        if (EndTurnButton != null) EndTurnButton.onClick.RemoveListener(onClickEndTurnButton);
+
+        onAPChangedHandler = null;
+        onValueChangedHandler = null;
+        apm = null;
     }
+
     private void onClickDiceRollButton()
     {
-        if (GameManager.Instance.actionPointManager.GameState == GameState.Dice)
+        if (GameManager.Instance == null) return;
+        var apm = GameManager.Instance.actionPointManager;
+        if (apm == null) return;
+
+        if (apm.GameState == GameState.Dice)
         {
-            GameManager.Instance.actionPointManager.RollDice();
+            apm.RollDice();
             return;
         }        
     }
 
     public void onClickEndTurnButton()
     {
-        ObstacleManager.Instance.UpdateObstacleStep();
-
+        if (GameManager.Instance == null) return;
         GameManager.Instance.actionPointManager.EndTurn();
     }
     public void Refresh()
     {
+        if (GameManager.Instance == null) return;
         var apm = GameManager.Instance.actionPointManager;
+        if (apm == null) return;
 
+        currentTurn.text = $"Turn   : {apm.CurrentTurn}";
+        currentAP.text = $"AP    : {apm.CurrentAP}";
         currentState.text = $"State : {apm.GameState}";
-        currentTurn.text = $"Turn  : {apm.CurrentTurn}";
-        Dice.text = $"Dice  : {apm.CurrentDiceValue}";
-        AP.text = $"AP    : {apm.CurrentAP}";
+        currentDice.text = $"Dice  : {apm.CurrentDiceValue}";
     }
 }

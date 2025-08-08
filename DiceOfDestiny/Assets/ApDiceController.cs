@@ -269,6 +269,57 @@ public class ApDiceController : MonoBehaviour
 
     int GetNextIndex(int index) => (index + 1) % diceFaces.Length;
 
+    public IEnumerator ZoomIn()
+    {        
+        float elapsed;
+        float duration;    
+
+        // 1단계: 중앙 이동 및 회전 보정
+        Camera cam = Camera.main;
+        Vector3 screenCenter = new Vector3((Screen.width / 2f) + 100f, Screen.height / 2f, cam.nearClipPlane);
+        Vector3 targetPosition = cam.ScreenToWorldPoint(screenCenter);
+        targetPosition.z = 0f;
+        
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, 0f);
+        
+        elapsed = 0f;
+        duration = 1f;
+        
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            float smoothT = Mathf.SmoothStep(0f, 1f, t);
+            
+            transform.position = Vector3.Lerp(startPosition, targetPosition, smoothT);
+            transform.rotation = Quaternion.Lerp(startRotation, targetRotation, smoothT);
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 2단계: 크기 확대
+        elapsed = 0f;
+        duration = 0.7f;
+
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            float scaleValue = Mathf.Lerp(1f, 2.5f, t);
+            transform.localScale = Vector3.one * scaleValue;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.localScale = Vector3.one * 2.5f;
+
+        transform.position = targetPosition;
+        transform.rotation = targetRotation;
+
+        // 3단계: 대기 후 비활성화
+        yield return new WaitForSecondsRealtime(0.5f);
+        gameObject.SetActive(false);
+    }
 }
 
 
