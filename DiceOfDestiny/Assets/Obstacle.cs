@@ -62,10 +62,10 @@ public class Obstacle : MonoBehaviour
         // 가방에 새로운 기물 생성
         for (int i = 0; i < 3; i++)
         {
-            if (!PieceManager.Instance.pieceInventory.slots[i].IsActivePiece())
+            if (PieceManager.Instance.pieceDatas[i] == null) // 슬롯이 비어 있는 경우
             {
                 Debug.Log("가방에 기물 생성");
-                PieceManager.Instance.pieceInventory.slots[i].AddPiece(pieceController.GetPiece());
+                PieceManager.Instance.pieceDatas[i] = pieceController.GetPiece();
                 EventManager.Instance.TriggerEvent("Refresh");
                 break;
             }

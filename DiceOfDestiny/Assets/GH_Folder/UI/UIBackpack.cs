@@ -10,8 +10,11 @@ public class UIBackpack : MonoBehaviour
 
     [Header("Choice Top Face")]
     [SerializeField] private GameObject ChoiceTopFaceWindow;
+
     [SerializeField] private Image SpawnPieceColorImage;
     [SerializeField] private GameObject SpawnPieceObject;
+    [SerializeField] private Image nextSpawnPieceImage;
+    [SerializeField] private GameObject nextSpwanPieceObject;
 
 
     [SerializeField] private Image[] ChoicePieceImageColorImage;
@@ -33,7 +36,6 @@ public class UIBackpack : MonoBehaviour
     private void Start()
     {
         BackpackOpenCloseButton.onClick.AddListener(onClickBackpackOpenCloseButton);
-
         SpawnPieceObject.GetComponent<Button>().onClick.AddListener(onClickSpawnPieceButton);
 
         // Refresh 함수 구독
@@ -49,7 +51,7 @@ public class UIBackpack : MonoBehaviour
         {
             Debug.Log("Enter Refresh");
 
-            currentPiece = PieceManager.Instance.pieceInventory.slots[i].GetPiece();
+            currentPiece = PieceManager.Instance.pieceDatas[i];
             if (currentPiece == null)
                 return;
             Debug.Log("piece no null");
@@ -69,6 +71,9 @@ public class UIBackpack : MonoBehaviour
     public void onClickPieceAppearButton(int index)
     {
         Debug.Log(index + "번 피스 선택");
+        currentPiece = PieceManager.Instance.pieceDatas[currentIndex];
+        if (currentPiece == null)
+            return;
 
         // 같은 피스를 다시 클릭한 경우 창을 닫음
         if (currentIndex == index && ChoiceTopFaceWindow.activeSelf)
@@ -76,20 +81,11 @@ public class UIBackpack : MonoBehaviour
             ChoiceTopFaceWindow.SetActive(false);
             return;
         }
-
         currentIndex = index;
-
-        // 선택 피스 저장
-        PieceManager.Instance.pieceInventory.selectedSlot = PieceManager.Instance.pieceInventory.slots[currentIndex];
 
         // 윗면 선택창 On
         if (!ChoiceTopFaceWindow.activeSelf)
             ChoiceTopFaceWindow.SetActive(true);
-
-        currentPiece = PieceManager.Instance.pieceInventory.selectedSlot.GetPiece();
-
-        if (currentPiece == null)
-            return;
 
         // 기물 선택 UI의 기물 윗면 새로고침
         ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
@@ -154,7 +150,7 @@ public class UIBackpack : MonoBehaviour
 
         // 슬롯에 있는 피스 제거
         Debug.Log(currentIndex + "번 피스 제거");
-        PieceManager.Instance.pieceInventory.slots[currentIndex].RemovePiece();
+        PieceManager.Instance.pieceDatas[currentIndex] = null;
     }
 
 
@@ -162,7 +158,7 @@ public class UIBackpack : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if (!PieceManager.Instance.pieceInventory.slots[currentIndex].IsActivePiece())
+        if (PieceManager.Instance.pieceDatas[currentIndex] == null)
         {
             Debug.Log("해당 슬롯에 기물이 존재하지 않습니다.");
             return;

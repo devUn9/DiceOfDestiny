@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,15 +17,21 @@ public class PieceManager : Singletone<PieceManager>
     }
     private List<PieceState> pieceStates = new();   
     public GameObject[] piecePrefabs;
+
     [SerializeField] public PieceController currentPiece; // 현재 내가 조종중인 말
 
-    public PieceInventory pieceInventory;
+    public Piece[] pieceDatas = new Piece[3]; // 이번 게임동안 내가 가져온 말
 
     void Awake()
     {
         UpdatePieceManagerList();
 
-        pieceInventory = GetComponent<PieceInventory>();
+        InitializePieceDatas();
+    }
+
+    private void InitializePieceDatas()
+    {
+        pieceDatas = GameManager.Instance.selectedPieces;
     }
 
     void Start()

@@ -24,14 +24,14 @@ public class Singletone<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (_instance == null)
         {
             _instance = this as T;
             DontDestroyOnLoad(gameObject);
         }
-        else if (_instance != null && _instance != this)
+        else if (_instance != this)
         {
             Destroy(this.gameObject);
         }

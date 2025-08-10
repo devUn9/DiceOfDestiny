@@ -65,6 +65,7 @@ public class TempManager : Singletone<TempManager>
         NextStageUI.SetActive(true);
     }
 
+    /*
     public void ResumeGame()
     {
         Time.timeScale = 1f;
@@ -75,7 +76,7 @@ public class TempManager : Singletone<TempManager>
         // 행동력, 턴 상태 초기화
         GameManager.Instance.actionPointManager.Reset();
 
-        // 기물 인벤토리 초기화
+        // 기물 인벤토리 초기화 ?? 
         PieceManager.Instance.pieceInventory.ResetSlot();
 
         // 기물 인벤토리 UI 새로고침
@@ -84,4 +85,5 @@ public class TempManager : Singletone<TempManager>
         bannerManager?.ShowBanner(currentStage.stageNumber,
                                   currentStage.stageTitle);
     }
+    */
 }

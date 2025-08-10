@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum TileColor
 {
@@ -45,9 +47,20 @@ public class BoardManager : Singletone<BoardManager>
 
     void Start()
     {
-        boardSizeY = boardSize + 2;
+               
+    }
 
-        GenerateBoard();
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(SceneManager.GetActiveScene().name == "GameScene_2.0.1")
+        {
+            boardSizeY = boardSize + 2;
+            GenerateBoard();
+        }
     }
 
     private void Update()
