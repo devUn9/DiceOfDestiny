@@ -56,6 +56,8 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     public void InitializePiecesCaruselUI()
     {
+        Debug.Log(InventoryManager.Instance);
+        Debug.Log(InventoryManager.Instance.pieces);
         for (int i = 0; i < InventoryManager.Instance.pieces.Count; i++)
         {
             Piece piece = InventoryManager.Instance.pieces[i];
