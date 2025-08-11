@@ -62,7 +62,7 @@ public class PieceManager_LYJ : Singletone<PieceManager_LYJ>
         Piece targetData = null;
         if (pieceNumber < allPieceDatas.Count)
         {
-            targetData = allPieceDatas.Find(data => data.PieceNumber == pieceNumber);
+            // targetData = allPieceDatas.Find(data => data.PieceNumber == pieceNumber);
         }
         if (targetData == null)
         {

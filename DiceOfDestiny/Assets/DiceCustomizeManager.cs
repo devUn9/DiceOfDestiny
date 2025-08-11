@@ -2,16 +2,19 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 {
+    [Header("UI Panels")]
     [SerializeField] private GameObject cutomizePanel;
     [SerializeField] private GameObject carouselUIPanel;
 
     [SerializeField] private GameObject pieceCarouselUI;
     [SerializeField] private GameObject pieceNetCarouselUI;
 
+    [Header("Piece Preview UI")]
     [SerializeField] private GameObject piecesContent;
     [SerializeField] private GameObject piecePreviewButtonPrefab;
 
@@ -22,11 +25,14 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     List<PieceNetPreviewButton> pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
 
+    [Header("Sticker Drawer")]
     public GameObject stickerDrawer;
-
     public GameObject stickerSourcePrefab;
 
-    public CustomizePieceController customizePieceContoller;
+    [Header("Customize Controller")]
+    public CustomizePieceController customizePieceContoller;    
+
+    public GameObject backToMainButton;
 
     public bool isFolded;
 
@@ -56,6 +62,8 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     public void InitializePiecesCaruselUI()
     {
+        Debug.Log(InventoryManager.Instance);
+        Debug.Log(InventoryManager.Instance.pieces);
         for (int i = 0; i < InventoryManager.Instance.pieces.Count; i++)
         {
             Piece piece = InventoryManager.Instance.pieces[i];
@@ -138,5 +146,10 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     {
         cutomizePanel.SetActive(false);
         carouselUIPanel.SetActive(true);
+    }
+
+    public void OnClickBackToMainButton()
+    {
+        SceneManager.LoadScene("Main");
     }
 }

@@ -16,8 +16,9 @@ public class InventoryManager : Singletone<InventoryManager>
     public ClassData preistClassData;
     public ClassData painterClassData;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         TestInitialize();
     }
 
