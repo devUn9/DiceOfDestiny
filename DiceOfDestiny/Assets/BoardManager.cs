@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum TileColor
 {
@@ -45,9 +47,20 @@ public class BoardManager : Singletone<BoardManager>
 
     void Start()
     {
-        boardSizeY = boardSize + 2;
+               
+    }
 
-        GenerateBoard();
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(SceneManager.GetActiveScene().name == "GameScene_2.0.1")
+        {
+            boardSizeY = boardSize + 2;
+            GenerateBoard();
+        }
     }
 
     private void Update()
@@ -131,7 +144,7 @@ public class BoardManager : Singletone<BoardManager>
         int idx = 0;
         for (int x = 0; x < boardSize; x++)
         {
-            for (int y = 1; y < boardSize+1; y++)
+            for (int y = 1; y < boardSize + 1; y++)
             {
                 Board[x, y].SetTileColor(tileColors[colorIndices[idx]]);
                 switch (colorIndices[idx])
@@ -193,7 +206,7 @@ public class BoardManager : Singletone<BoardManager>
         idx = 0;
         for (int x = 0; x < boardSize; x++)
         {
-            for (int y = 1; y < boardSize+1; y++)
+            for (int y = 1; y < boardSize + 1; y++)
             {
                 Board[x, y].Obstacle = obstacleIndices[idx];
                 // 장애물 생성
@@ -244,6 +257,11 @@ public class BoardManager : Singletone<BoardManager>
         }
         return Board[position.x, position.y].Obstacle == ObstacleType.None;
     }
+    public bool IsInsideBoard(Vector2Int pos)
+    {
+        return pos.x >= 0 && pos.x < Board.GetLength(0)
+            && pos.y >= 0 && pos.y < Board.GetLength(1);
+    }
 
     public void MoveObstacle(Obstacle obstacle, Vector2Int nextPos)
     {
@@ -255,7 +273,7 @@ public class BoardManager : Singletone<BoardManager>
     }
 
     // 주변 8칸 중 윗면과 같은 색이 몇개인지 카운팅하는 함수
-    public int CountMatchingColors(Vector2Int position, TileColor targetColor)
+    public int CountMatchingColors(Vector2Int position, TileColor targetColor, ref bool isDdongBlind)
     {
         int matchCount = 0;
         Vector2Int[] directions = new Vector2Int[]
@@ -281,6 +299,10 @@ public class BoardManager : Singletone<BoardManager>
                 {
                     // 체크된게 어느 타일인지 보여주면 굿.
                     matchCount++;
+                }
+                if (Board[checkPos.x, checkPos.y].Obstacle == ObstacleType.SlimeDdong)
+                {
+                    isDdongBlind = true;
                 }
             }
         }
@@ -412,7 +434,7 @@ public class BoardManager : Singletone<BoardManager>
     /// <returns></returns>
     // 좌표값을 입력받아 좌표값 리스트를 반환하는 함수
 
-    
+
 
     public List<Vector2Int> GetTilePositions(DirectionType directionType, Vector2Int gridPosition)
     {
@@ -547,7 +569,11 @@ public class BoardManager : Singletone<BoardManager>
             Obstacle obstacle = ReturnObstacleByPosition(position);
             if (obstacle != null)
             {
-                ObstacleManager.Instance.RemoveSingleObstacle(obstacle.gameObject);
+                if (ObstacleManager.Instance.currentObstacles.Contains(obstacle.gameObject))
+                {
+                    ObstacleManager.Instance.currentObstacles.Remove(obstacle.gameObject);
+                    Destroy(obstacle.gameObject);
+                }
                 tile.Obstacle = ObstacleType.None;
             }
         }
@@ -562,7 +588,11 @@ public class BoardManager : Singletone<BoardManager>
         {
             if (obstacle != null)
             {
-                ObstacleManager.Instance.RemoveSingleObstacle(obstacle.gameObject);
+                if (ObstacleManager.Instance.currentObstacles.Contains(obstacle.gameObject))
+                {
+                    ObstacleManager.Instance.currentObstacles.Remove(obstacle.gameObject);
+                    Destroy(obstacle.gameObject);
+                }
                 tile.Obstacle = ObstacleType.None;
             }
         }
@@ -685,6 +715,11 @@ public class BoardManager : Singletone<BoardManager>
             }
         }
         return false;
+    }
+
+    public bool IsMovementArea(Vector2Int position)
+    {
+        return position.y < boardSizeY - 1 && position.y > 0;
     }
 
     public void SetTileColor(Vector2Int position, TileColor targetColor)

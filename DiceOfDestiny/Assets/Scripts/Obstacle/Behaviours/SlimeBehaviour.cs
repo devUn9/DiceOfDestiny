@@ -40,6 +40,9 @@ public class SlimeBehaviour : Obstacle, IObstacleBehaviour
             return;
         }
 
+        if (!BoardManager.Instance.IsMovementArea(nextPosition))
+            return;
+
         if (nextTile.Obstacle == ObstacleType.None && nextTile.GetPiece() == null)
         {
             Vector2Int beforePosition = obstaclePosition;
@@ -48,6 +51,8 @@ public class SlimeBehaviour : Obstacle, IObstacleBehaviour
             AnimateObstacleMove(nextStep);
 
             BoardManager.Instance.CreateObstacle(beforePosition, ObstacleType.SlimeDdong);
+
+            RuleEvents.TriggerRule("Slime_Move");
         }
         else
         {

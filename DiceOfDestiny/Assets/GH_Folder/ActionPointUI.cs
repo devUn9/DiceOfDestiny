@@ -81,6 +81,7 @@ public class ActionPointUI : MonoBehaviour
         var apm = GameManager.Instance.actionPointManager;
         if (apm == null) return;
 
+        Debug.Log(apm);
         currentTurn.text = $"Turn   : {apm.CurrentTurn}";
         currentAP.text = $"AP    : {apm.CurrentAP}";
         currentState.text = $"State : {apm.GameState}";
