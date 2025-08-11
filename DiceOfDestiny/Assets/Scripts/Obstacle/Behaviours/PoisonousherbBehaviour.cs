@@ -33,9 +33,7 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
 
             if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
             {
-                GameManager.Instance.actionPointManager.RemoveAP(point);
                 Debug.Log("아기는 너무 작아서 밟아도 독초가 안 없어집니다.");
-                ToastManager.Instance.ShowToast($"독초를 밟아 {point} 행동력을 잃었습니다.", currentTile.GetPiece().transform, 1f);
                 return;
             }
 

@@ -19,14 +19,9 @@ public class UIManager : Singletone<UIManager>
     public bool IsSettingUIOpen() => settingUI != null && settingUI.activeSelf;
     public bool IsUIReady { get; private set; }
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        DontDestroyOnLoad(gameObject);
+    protected override void Awake()
+    { 
+        base.Awake();
 
         CreateCanvas();
         SceneManager.sceneLoaded += OnSceneLoaded;

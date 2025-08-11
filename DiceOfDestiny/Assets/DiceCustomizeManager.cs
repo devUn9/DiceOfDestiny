@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
@@ -140,5 +141,10 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     {
         cutomizePanel.SetActive(false);
         carouselUIPanel.SetActive(true);
+    }
+
+    public void OnClickBackToMainButton()
+    {
+        SceneManager.LoadScene("Main");
     }
 }
