@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b2505132fde72345af474f8fca00a1a, type: 3}
-  m_Name: stage2
+  m_Name: Stage_04_RiversideField
   m_EditorClassIdentifier: 
-  <StageName>k__BackingField: "2\uD0C4"
+  <StageName>k__BackingField: "\uAC15 \uADFC\uCC98\uC758 \uACF5\uD130"
+  mission: 0
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1
@@ -22,12 +23,20 @@ MonoBehaviour:
   purpleWeight: 1
   orangeWeight: 1
   availableObstacle:
-  - type: 0
-    weight: 0
+  - type: 7
+    weight: 3
   - type: 1
-    weight: 17
+    weight: 3
+  - type: 8
+    weight: 3
+  - type: 2
+    weight: 10
+  - type: 4
+    weight: 20
+  - type: 0
+    weight: 3
   - type: 10
-    weight: 8
+    weight: 3
   obstacleDensity: 0.2
-  stageNumber: 2
-  stageTitle: STAGE 2
+  stageNumber: 4
+  stageTitle: "\uAC15 \uADFC\uCC98\uC758 \uACF5\uD130"

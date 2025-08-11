@@ -97,7 +97,6 @@ public class PieceController : MonoBehaviour
         }
         MoveToDirection(moveDirection);
 
-
     }
 
     public void MoveToDirection(Vector2Int moveDirection)
@@ -112,7 +111,7 @@ public class PieceController : MonoBehaviour
                 return;
 
             // 이동하는 곳이 보드 밖이면 return
-            if (!ObstacleManager.Instance.IsInsideBoard(newPosition))
+            if (!BoardManager.Instance.IsInsideBoard(newPosition))
             {
                 return;
             }
@@ -499,7 +498,7 @@ public class PieceController : MonoBehaviour
         if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
         {
             BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(null);
-            TempManager.Instance.StageClear();
+            StageManager.Instance.StageClear();
 
             Destroy(this.gameObject);
         }

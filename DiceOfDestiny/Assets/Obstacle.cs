@@ -9,8 +9,6 @@ public enum ObstacleType
     Lion,
     Puddle,
     Chest,
-    ManaSpring,
-    Goblin,
     PoisonousHerb,
     Grass,
     Slime,

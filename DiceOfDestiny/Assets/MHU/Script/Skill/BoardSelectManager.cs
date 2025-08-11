@@ -12,8 +12,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     [Header("클릭된 타일")]
     [SerializeField] public Vector2Int lastClickedPosition; // 마지막 클릭된 타일 위치
 
-    private bool isWaitingForClick = false; // 클릭 대기 상태, 타일 클릭 비동기적 반환
-
+    public bool isWaitingForClick { get; set; } = false; // 클릭 대기 상태, 타일 클릭 비동기적 반환
 
     // 장애물 타일 클릭 제한 여부 (true면 장애물 타일 클릭 불가, false면 가능)
     public bool restrictObstacle = true;
@@ -21,6 +20,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     private Dictionary<Vector2Int, GameObject> activeEffects; // 활성화된 이펙트 저장
     private GameObject activePieceEffect;
     private BoardManager boardManager;
+
 
     private void Awake()
     {
@@ -52,7 +52,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
                         Quaternion.identity,
                         boardManager.boardTransform);
                     activeEffects.Add(position, effect);
-                } 
+                }
             }
         }
     }
@@ -171,7 +171,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
         {
             Debug.Log($"장애물이 있는 타일({position})은 클릭할 수 없습니다.");
             // UI 피드백 호출
-            
+
             return;
         }
 

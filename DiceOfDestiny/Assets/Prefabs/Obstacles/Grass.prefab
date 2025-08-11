@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1181a018c305334bbfeff6963cf00cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleType: 9
+  obstacleType: 7
   nextStep: 4
   obstaclePosition: {x: 0, y: 0}
   isWalkable: 1

@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b2505132fde72345af474f8fca00a1a, type: 3}
-  m_Name: stage3
+  m_Name: Stage_05_DeepForest
   m_EditorClassIdentifier: 
-  <StageName>k__BackingField: "3\uD0C4"
+  <StageName>k__BackingField: "\uAE4A\uC740 \uC232\uC18D"
+  mission: 0
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1
@@ -22,14 +23,18 @@ MonoBehaviour:
   purpleWeight: 1
   orangeWeight: 1
   availableObstacle:
+  - type: 7
+    weight: 3
+  - type: 1
+    weight: 10
+  - type: 8
+    weight: 10
+  - type: 5
+    weight: 5
   - type: 0
     weight: 4
-  - type: 2
-    weight: 6
-  - type: 3
-    weight: 5
-  - type: 4
-    weight: 15
+  - type: 10
+    weight: 4
   obstacleDensity: 0.2
-  stageNumber: 3
-  stageTitle: STAGE 3
+  stageNumber: 5
+  stageTitle: "\uAE4A\uC740 \uC232\uC18D"

@@ -29,6 +29,7 @@ public class UIBackpack : MonoBehaviour
     private readonly int[] rightRotateTransition = new int[] { 0, 4, 2, 5, 3, 1 }; // 오른쪽으로 회전
 
     private bool isMove = false;
+    private bool isChoice = false;
 
     private void Start()
     {
@@ -47,12 +48,14 @@ public class UIBackpack : MonoBehaviour
     {
         for (int i = 0; i < ChoicePieceImageColorImage.Length; i++)
         {
-            Debug.Log("Enter Refresh");
-
             currentPiece = PieceManager.Instance.pieceInventory.slots[i].GetPiece();
             if (currentPiece == null)
-                return;
-            Debug.Log("piece no null");
+            {
+                SpawnPieceColorImage.color = Color.white;
+                SpawnPieceObject.GetComponent<Image>().sprite = null;
+                continue;
+            }
+                
             ChoicePieceImageColorImage[i].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
             ChoicePieceClassImage[i].sprite = currentPiece.faces[2].classData.sprite;
         }
@@ -87,9 +90,11 @@ public class UIBackpack : MonoBehaviour
             ChoiceTopFaceWindow.SetActive(true);
 
         currentPiece = PieceManager.Instance.pieceInventory.selectedSlot.GetPiece();
-
         if (currentPiece == null)
+        {
+            Refresh();
             return;
+        }
 
         // 기물 선택 UI의 기물 윗면 새로고침
         ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
@@ -168,12 +173,23 @@ public class UIBackpack : MonoBehaviour
             return;
         }
 
+        if(BoardSelectManager.Instance.isWaitingForClick)
+        {
+            Debug.Log("클릭 대기 종료");
+            BoardSelectManager.Instance.ClearAllEffects();
+            BoardSelectManager.Instance.isWaitingForClick = false;
+            return;
+        }
+
         // 피스 스폰
         StartCoroutine(SpawnPiece());
     }
 
     public void onClickUpdateTopFace(int dir)
     {
+        if (currentPiece == null)
+            return;
+
         Face[] newFaces = new Face[6];
 
         // 이동 방향에 따라 faces 배열 재배치

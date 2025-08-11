@@ -15,8 +15,6 @@ MonoBehaviour:
   ruleDescription: "\uAD11\uC2E0\uB3C4: \uD574\uB2F9 \uC2A4\uD14C\uC774\uC9C0 \uB3D9\uC548
     \uC8FC\uC704 8\uCE78\uC5D0 \uC788\uB294 \uC0AC\uC81C\uB97C \uAD11\uC2E0\uB3C4\uB85C
     \uBCC0\uD654\uC2DC\uD0A8\uB2E4."
-  displayPriority: 10
+  displayPriority: 17
   category: 0
   triggerCount: 3
-  currentTriggerCount: 0
-  isDiscovered: 0

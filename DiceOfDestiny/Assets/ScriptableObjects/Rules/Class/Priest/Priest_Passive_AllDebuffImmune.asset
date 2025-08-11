@@ -14,8 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ruleDescription: "\uC0AC\uC81C\uB294 \uBAA8\uB4E0 \uB514\uBC84\uD504\uC5D0 \uB300\uD574
     \uBA74\uC5ED\uC774\uB2E4."
-  displayPriority: 30
+  displayPriority: 31
   category: 0
   triggerCount: 3
-  currentTriggerCount: 0
-  isDiscovered: 0

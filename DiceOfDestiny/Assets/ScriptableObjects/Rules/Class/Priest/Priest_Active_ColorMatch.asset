@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Priest_Active_ColorMatch
   m_EditorClassIdentifier: 
   ruleDescription: "\uC0AC\uC81C: \uD589\uB3D9\uB825\uC744 1 \uD68C\uBCF5\uD55C\uB2E4."
-  displayPriority: 10
+  displayPriority: 13
   category: 0
   triggerCount: 3
-  currentTriggerCount: 0
-  isDiscovered: 0

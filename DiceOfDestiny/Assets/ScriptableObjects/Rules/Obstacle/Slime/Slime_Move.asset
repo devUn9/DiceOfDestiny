@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d9f41b650ce96d4b8ff706e9f924cc8, type: 3}
   m_Name: Slime_Move
   m_EditorClassIdentifier: 
-  ruleDescription: "\uC2AC\uB77C\uC784\uC740 1\uD134\uC5D0 1\uCE78\uC529 \uC7A5\uC560\uBB3C\uACFC
-    \uAE30\uBB3C\uC774 \uC5C6\uB294 \uBC29\uD5A5\uC73C\uB85C \uC6C0\uC9C1\uC778\uB2E4."
-  displayPriority: 10
+  ruleDescription: "\uC2AC\uB77C\uC784\uC740 1\uD589\uB3D9\uB825\uC5D0 1\uCE78\uC529
+    \uC7A5\uC560\uBB3C\uACFC \uAE30\uBB3C\uC774 \uC5C6\uB294 \uBC29\uD5A5\uC73C\uB85C
+    \uC6C0\uC9C1\uC778\uB2E4."
+  displayPriority: 21
   category: 1
-  triggerCount: 3
-  currentTriggerCount: 0
-  isDiscovered: 0
+  triggerCount: 10

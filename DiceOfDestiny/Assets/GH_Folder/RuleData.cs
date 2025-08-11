@@ -17,9 +17,4 @@ public class RuleData : ScriptableObject
     public RuleCategory category;
 
     public int triggerCount = 3;
-
-    [HideInInspector]
-    public int currentTriggerCount = 0;
-
-    public bool isDiscovered = false; // 규칙이 발견되었나
 }

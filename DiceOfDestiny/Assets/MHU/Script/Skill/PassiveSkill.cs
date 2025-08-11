@@ -33,7 +33,7 @@ public class PassiveSkill : MonoBehaviour
                 break;
             }
         }
-
+        
         if (hasTarget)
         {
             List<GameObject> skillEffects = new List<GameObject>();
@@ -58,12 +58,14 @@ public class PassiveSkill : MonoBehaviour
                     rotation
                 );
                 skillEffects.Add(skillEffect);
+
                 var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(targetPos);
                 if (targetObstacle != null &&
                     (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie))
                 {
                     BoardManager.Instance.RemoveObstacleAtPosition(targetPos);
-                   
+
+                    RuleEvents.TriggerRule("Knight_Active_ObstacleMove");
                 }
             }
 
@@ -149,6 +151,8 @@ public class PassiveSkill : MonoBehaviour
                 {
                     BoardManager.Instance.RemoveObstacleAtPosition(pos);
                     Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
+
+                    RuleEvents.TriggerRule("Demon_Active_ObstacleMove");
                 }
             }
 
@@ -193,7 +197,7 @@ public class PassiveSkill : MonoBehaviour
                 break;
             }
         }
-
+        
         if (hasTarget)
         {
             List<GameObject> skillEffects = new List<GameObject>();
@@ -213,7 +217,7 @@ public class PassiveSkill : MonoBehaviour
                 Vector3 effectPos = pos + new Vector2(-5.5f, -5f); // 타일 중앙 위치
 
                 Vector2Int dir = pos - pieceController.gridPosition;
-                
+
                 Quaternion rotation = Quaternion.Euler(0f, 0f, 0f);
                 GameObject skillEffect = Instantiate(
                     fanaticPassiveEffect,
@@ -227,6 +231,8 @@ public class PassiveSkill : MonoBehaviour
                 {
                     BoardManager.Instance.RemoveObstacleAtPosition(pos);
                     Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
+                    
+                    RuleEvents.TriggerRule("Fanatic_Active_ObstacleMove");
                 }
             }
 
@@ -251,7 +257,7 @@ public class PassiveSkill : MonoBehaviour
         SkillManager.Instance.DelayTime = 2f;
         yield return new WaitForSeconds(0.8f); // 기물이 굴러가는 시간
 
-        ToastManager.Instance.ShowToast("사제가 독초의 저주를 무시합니다.", PieceManager.Instance.currentPiece.transform);
+        //ToastManager.Instance.ShowToast("사제가 독초의 저주를 무시합니다.", PieceManager.Instance.currentPiece.transform);
 
         if (priestPassiveEffect != null)
         {

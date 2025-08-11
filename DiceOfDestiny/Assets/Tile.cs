@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private PieceController piece;
     public bool isWalkable { get; set; }
 
-    SpriteRenderer sr;
+    private SpriteRenderer sr;
 
     public TileColor TileColor
     {

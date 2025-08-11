@@ -26,5 +26,11 @@ public class SlimeDdongBehaviour : Obstacle, IObstacleBehaviour
         }
 
         this.spriteRenderer.sprite = smallDdong[remainingTurn];
+
+        Tile currentTile = BoardManager.Instance.GetTile(this.obstaclePosition);
+        var piece = currentTile.GetPiece();
+        if (piece == null) return;
+
+        RuleEvents.TriggerRule("Slime_Move_Ddong");
     }
 }
