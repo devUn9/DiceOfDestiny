@@ -1,25 +1,34 @@
 fileFormatVersion: 2
-guid: 55f732d10aec3f44a82bb11b349be7ac
+guid: e62a5051c5bc91849b7bee23c406f0b1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7962845895547127945
-    second: Demon_Attack_0
+      213: 4834030907632882460
+    second: Thief_Passive_0
   - first:
-      213: 932084870662487027
-    second: Demon_Attack_1
+      213: -7746015700797645301
+    second: Thief_Passive_1
   - first:
-      213: -825947837058108974
-    second: Demon_Attack_2
+      213: -1551215556176402892
+    second: Thief_Passive_2
   - first:
-      213: 5456427084477666185
-    second: Demon_Attack_3
+      213: -5216373540174561257
+    second: Thief_Passive_3
   - first:
-      213: 1762926472750483513
-    second: Demon_Attack_4
+      213: 328811744681176364
+    second: Thief_Passive_4
   - first:
-      213: 6067676839321744109
-    second: Demon_Attack_5
+      213: -6424955113950405913
+    second: Thief_Passive_5
+  - first:
+      213: 7184420072824734717
+    second: Thief_Passive_6
+  - first:
+      213: -971972222054198116
+    second: Thief_Passive_7
+  - first:
+      213: 6688273256269340658
+    second: Thief_Passive_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -154,7 +163,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Demon_Attack_0
+      name: Thief_Passive_0
       rect:
         serializedVersion: 2
         x: 0
@@ -169,14 +178,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 988834d2726b18e60800000000000000
-      internalID: 7962845895547127945
+      spriteID: c1397baaf7de51340800000000000000
+      internalID: 4834030907632882460
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Demon_Attack_1
+      name: Thief_Passive_1
       rect:
         serializedVersion: 2
         x: 32
@@ -191,14 +200,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3fb7a50604e6fec00800000000000000
-      internalID: 932084870662487027
+      spriteID: b0e9b51a2cf908490800000000000000
+      internalID: -7746015700797645301
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Demon_Attack_2
+      name: Thief_Passive_2
       rect:
         serializedVersion: 2
         x: 64
@@ -213,14 +222,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2d1362971d4a984f0800000000000000
-      internalID: -825947837058108974
+      spriteID: 436ab0c9ba9f87ae0800000000000000
+      internalID: -1551215556176402892
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Demon_Attack_3
+      name: Thief_Passive_3
       rect:
         serializedVersion: 2
         x: 96
@@ -235,14 +244,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9839c11268f19bb40800000000000000
-      internalID: 5456427084477666185
+      spriteID: 710062a17e7bb97b0800000000000000
+      internalID: -5216373540174561257
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Demon_Attack_4
+      name: Thief_Passive_4
       rect:
         serializedVersion: 2
         x: 128
@@ -257,14 +266,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 938cc6d594c277810800000000000000
-      internalID: 1762926472750483513
+      spriteID: c2da2b72a8c209400800000000000000
+      internalID: 328811744681176364
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Demon_Attack_5
+      name: Thief_Passive_5
       rect:
         serializedVersion: 2
         x: 160
@@ -279,8 +288,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: de233abffe7b43450800000000000000
-      internalID: 6067676839321744109
+      spriteID: 7ea182f5d59f5d6a0800000000000000
+      internalID: -6424955113950405913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Thief_Passive_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df387e5ddff24b360800000000000000
+      internalID: 7184420072824734717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Thief_Passive_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9499ece96cd282f0800000000000000
+      internalID: -971972222054198116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Thief_Passive_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1409e21ec519c7499e56a8861d8714b
+      internalID: 6688273256269340658
       vertices: []
       indices: 
       edges: []
@@ -289,7 +364,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 6e1a662bbd55df243b73dfce72b37c7e
+    spriteID: 0bcf73b763674e447a75c8c70d694a51
     internalID: 0
     vertices: []
     indices: 
@@ -299,12 +374,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Demon_Attack_0: 7962845895547127945
-      Demon_Attack_1: 932084870662487027
-      Demon_Attack_2: -825947837058108974
-      Demon_Attack_3: 5456427084477666185
-      Demon_Attack_4: 1762926472750483513
-      Demon_Attack_5: 6067676839321744109
+      Thief_Passive_0: 4834030907632882460
+      Thief_Passive_1: -7746015700797645301
+      Thief_Passive_2: -1551215556176402892
+      Thief_Passive_3: -5216373540174561257
+      Thief_Passive_4: 328811744681176364
+      Thief_Passive_5: -6424955113950405913
+      Thief_Passive_6: 7184420072824734717
+      Thief_Passive_7: -971972222054198116
+      Thief_Passive_8: 6688273256269340658
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

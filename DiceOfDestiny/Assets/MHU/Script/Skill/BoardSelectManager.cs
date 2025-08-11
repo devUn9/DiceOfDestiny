@@ -19,7 +19,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     public bool restrictObstacle = true;
 
     private Dictionary<Vector2Int, GameObject> activeEffects; // 활성화된 이펙트 저장
-    private GameObject activePieceEffect;
+    private List<GameObject> activePieceEffects = new List<GameObject>();
     private BoardManager boardManager;
 
     private void Awake()
@@ -85,6 +85,37 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
             }
         }
     }
+
+    // 한 타일의 주변 8칸을 하이라이트, 장애물 타일은 낫하이라이트 표시 (아기 전용)
+    public void HighlightSurroundingTiles(Vector2Int centerPosition)
+    {
+        ClearAllEffects(); // 기존 이펙트 제거
+        restrictObstacle = true; // 장애물 타일 클릭 제한
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0) continue; // 중심 타일은 제외
+                Vector2Int position = centerPosition + new Vector2Int(x, y);
+                Tile tile = boardManager.GetTile(position);
+                if (tile != null)
+                {
+                    // 하이라이트, 낫하이라이트 이미지 띄우기
+                    GameObject effectPrefab = boardManager.IsEmptyTile(position) ? highlight : notHighlight;
+                    // 이펙트 프리팹 인스턴스화
+                    GameObject effect = Instantiate(effectPrefab,
+                        new Vector3(boardManager.boardTransform.position.x + position.x,
+                                    boardManager.boardTransform.position.y + position.y,
+                                    -1), // z=-1로 타일 위에 렌더링
+                        Quaternion.identity,
+                        boardManager.boardTransform);
+                    activeEffects.Add(position, effect);
+                }
+            }
+        }
+    }
+
+
     public void StartHighlightTiles()
     {
         ClearAllEffects(); // 기존 이펙트 제거
@@ -120,15 +151,32 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
 
         GameObject pieceEffectPrefab = pieceHighlight;
 
-        activePieceEffect = Instantiate(pieceEffectPrefab, new Vector3(boardManager.boardTransform.position.x + pos.x,
+        // 하이라이트 타일 생성 및 리스트에 추가
+        GameObject effect = Instantiate(pieceEffectPrefab, new Vector3(boardManager.boardTransform.position.x + pos.x,
             boardManager.boardTransform.position.y + pos.y, -1),
             Quaternion.identity, boardManager.boardTransform);
+        activePieceEffects.Add(effect);
     }
 
+    // 다중 피스 선택 타일 테두리 생성
+    public void PieceHighLightTilesMulty(Vector2Int pos)
+    {
+        GameObject pieceEffectPrefab = pieceHighlight;
+
+        // 하이라이트 타일 생성 및 리스트에 추가
+        GameObject effect = Instantiate(pieceEffectPrefab, new Vector3(boardManager.boardTransform.position.x + pos.x,
+            boardManager.boardTransform.position.y + pos.y, -1),
+            Quaternion.identity, boardManager.boardTransform);
+        activePieceEffects.Add(effect);
+    }
     public void DestroyPieceHighlightTile()
     {
-        if (activePieceEffect != null)
-            Destroy(activePieceEffect);
+        foreach (var effect in activePieceEffects)
+        {
+            if (effect != null)
+                Destroy(effect);
+        }
+        activePieceEffects.Clear(); // 리스트 초기화
     }
 
     // 모든 이펙트 제거

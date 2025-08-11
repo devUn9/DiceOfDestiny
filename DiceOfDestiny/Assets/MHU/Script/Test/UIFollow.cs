@@ -5,20 +5,30 @@ public class UIFollow : MonoBehaviour
     [SerializeField] private Transform target; // 따라갈 2D 오브젝트의 Transform
     [SerializeField] private GameObject uiElement; // 따라갈 UI 요소
     [SerializeField] private Vector2 offset; // UI 위치 오프셋 (화면 좌표 기준)
-    [SerializeField] private PieceController pieceController; // 이 스크립트가 부착된 피스 (Piece 컴포넌트 참조)
-  
+    [SerializeField] private PieceController pieceController; // 이 스크립트가 부착된 피스
+    
+    private CameraController cameraController;
     private Camera mainCamera;
     private Canvas canvas;
+    private Vector3 baseUIScale;
 
-    void Start()
+
+    private void Awake()
     {
-        EventManager.Instance.AddListener("ToggleUIElement", _ => ToggleUIElement());
-        EventManager.Instance.AddListener("OnUIElement", _ => OnUIElement());
-
         mainCamera = Camera.main;
 
         canvas = uiElement.GetComponentInParent<Canvas>();
         pieceController = GetComponentInParent<PieceController>();
+        cameraController = mainCamera.GetComponent<CameraController>();
+    }
+    void Start()
+    {
+        EventManager.Instance.AddListener("ToggleUIElement", _ => ToggleUIElement());
+        EventManager.Instance.AddListener("OnUIElement", _ => OnUIElement());
+        
+
+        // UI 요소의 기본 스케일 저장
+        baseUIScale = uiElement.transform.localScale;
     }
 
     void LateUpdate()
@@ -37,33 +47,44 @@ public class UIFollow : MonoBehaviour
 
         // UI 위치 업데이트
         uiElement.transform.position = adjustedPos;
+
+        // UI 스케일 업데이트
+        UpdateUIScale();
     }
 
-   public void ToggleUIElement()
+    private void UpdateUIScale()
     {
-        // 현재 조종중인 말이 아니면
+        if (cameraController == null) return;
+
+        // 카메라의 현재 orthographicSize를 기준으로 스케일 계산
+        float baseZoom = cameraController.GetZoomLevels()[0]; // 기본 줌 레벨 (예: 7f)
+        float currentZoom = mainCamera.orthographicSize; // 현재 줌 레벨
+        float scaleFactor = baseZoom / currentZoom; // 기본 줌 대비 스케일 비율
+
+        // UI 요소의 스케일 조정
+        uiElement.transform.localScale = baseUIScale * scaleFactor;
+    }
+
+    public void ToggleUIElement()
+    {
         if (PieceManager.Instance.currentPiece != pieceController)
         {
-            // UI가 활성화되어 있다면 (그러니까 다른 기물들을)
-            if (uiElement.activeSelf)
+            if (uiElement != null && uiElement.activeSelf)
             {
-                // UI 비활성화
                 uiElement.SetActive(false);
             }
-          
             return;
         }
 
         EventManager.Instance.TriggerEvent("OnArrowExit");
         uiElement.gameObject.SetActive(!uiElement.gameObject.activeSelf);
-
     }
 
     public void OnUIElement()
-    {   // 현재 조종중인 말이 아니면
+    {
         if (PieceManager.Instance.currentPiece != pieceController)
         {
-            return;  
+            return;
         }
         uiElement.SetActive(true);
     }
