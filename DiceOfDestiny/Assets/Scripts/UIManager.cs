@@ -91,7 +91,7 @@ public class UIManager : Singletone<UIManager>
             case "Main":
                 currentUIRoot = Instantiate(mainUI, currentCanvas.transform, false);
                 break;
-            case "GameScene_2.0.1_HU":
+            case "GameScene_2.0.1":
                 currentUIRoot = Instantiate(gameUI, currentCanvas.transform, false);
                 break;
             case "GameScene_2.0":

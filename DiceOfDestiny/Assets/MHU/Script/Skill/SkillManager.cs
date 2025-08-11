@@ -38,13 +38,6 @@ public class SkillManager : Singletone<SkillManager>
         yield return StartCoroutine(TryActiveSkillCoroutine(position, piece));
     }
 
-    public void PriestPassive()
-    {
-        StartCoroutine(passiveSkill.Halo());
-        RuleEvents.TriggerRule("Priest_Passive_AllDebuffImmune");
-    }
-
-    
     // 패시브 (공격) 코루틴
     private IEnumerator TryPassiveSkillCoroutine(Vector2Int position, PieceController piece)
     {
@@ -96,6 +89,7 @@ public class SkillManager : Singletone<SkillManager>
     public void PriestPassive()
     {
         StartCoroutine(passiveSkill.Halo());
+        RuleEvents.TriggerRule("Priest_Passive_AllDebuffImmune");
     }
 
     public void ThiefPassive()

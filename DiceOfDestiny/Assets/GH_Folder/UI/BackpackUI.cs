@@ -96,14 +96,6 @@ public class BackpackUI : MonoBehaviour
         if (!ChoiceTopFaceWindow.activeSelf)
             ChoiceTopFaceWindow.SetActive(true);
 
-        // 충돌 지점
-        currentPiece = PieceManager.Instance.pieceInventory.selectedSlot.GetPiece();
-        if (currentPiece == null)
-        {
-            Refresh();
-            return;
-        }
-
         // 기물 선택 UI의 기물 윗면 새로고침
         ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
         ChoicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;

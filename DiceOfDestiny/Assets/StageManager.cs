@@ -132,7 +132,6 @@ public sealed class StageManager : Singletone<StageManager>
         GameManager.Instance.actionPointManager.Reset();
 
         // 기물 인벤토리 초기화
-        PieceManager.Instance.pieceInventory.ResetSlot();
 
         // 기물 인벤토리 UI 새로고침
         EventManager.Instance.TriggerEvent("Refresh");
