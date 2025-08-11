@@ -62,23 +62,25 @@ public class ActionPointManager : MonoBehaviour
         }
     }
 
-    private void SetAP(int value)
+    private int GetCurrentAP() => CurrentAP;
+
+    private void SetAP(int value, int currentAP)
     {
-        actionPoint = new ActionPoint(value);
+        currentAP = value;
         OnValueChanged?.Invoke();
     }
 
     public void Reset()
     {
         CurrentTurn = 1;
-        
+
         Init();
     }
     public void Init()
     {
         GameState = GameState.Dice;
         CurrentDiceValue = 0;
-        SetAP(0);
+        SetAP(0, 0);
         NotifyChange();
     }
 
@@ -106,17 +108,21 @@ public class ActionPointManager : MonoBehaviour
 
     public void RollDice()
     {
-        GameState = GameState.Action;
+        if (GameState != GameState.Dice) return;
         if (DiceRollManager.Instance == null) return;
-        if (!DiceRollManager.Instance.TryRoll(OnDiceResult)) return;
-    }
-
-    private void OnDiceResult(int value)
-    {
-        CurrentDiceValue = value;
-        AddAP(value);
-        Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
-        GameState = GameState.Action;
+        bool started = DiceRollManager.Instance.TryRoll((value) =>
+        {
+            CurrentDiceValue = value;
+            AddAP(value);
+            Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
+            GameManager.Instance.actionPointManager.GameState = GameState.Action;
+            OnValueChanged?.Invoke();
+        });
+        if (!started)
+        {
+            // 굴림 시작 실패 시에도 UI를 한 번 갱신해 버튼 상태를 안정화
+            OnValueChanged?.Invoke();
+        }
     }
 
     public void PieceAction()
@@ -126,7 +132,6 @@ public class ActionPointManager : MonoBehaviour
         if (!TryUseAP())
         {
             GameState = GameState.EndTurn;
-            NotifyChange();
         }
     }
 

@@ -21,6 +21,9 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     [SerializeField] private GameObject pieceNetPreviewButtonPrefab;
     [SerializeField] private GameObject pieceNetContent;
 
+    [Header("BackButton")]
+    [SerializeField] private GameObject backToMainButton;
+
     List<PiecePreviewButton> piecePreviewButtonList = new List<PiecePreviewButton>();
 
     List<PieceNetPreviewButton> pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
@@ -32,7 +35,6 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     [Header("Customize Controller")]
     public CustomizePieceController customizePieceContoller;    
 
-    public GameObject backToMainButton;
 
     public bool isFolded;
 
@@ -122,6 +124,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     {
         cutomizePanel.SetActive(true);
         carouselUIPanel.SetActive(false);
+        backToMainButton.SetActive(false);
     }
 
     public void OnClickPieceCaruselUIButton()
@@ -146,6 +149,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     {
         cutomizePanel.SetActive(false);
         carouselUIPanel.SetActive(true);
+        backToMainButton.SetActive(true);
     }
 
     public void OnClickBackToMainButton()
