@@ -339,10 +339,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: {fileID: 7260365435555438351}
   currentTurn: {fileID: 1056844544007088008}
-  currentDice: {fileID: 1070373611726949235}
-  currentAP: {fileID: 14024357247508536}
-  diceRollButton: {fileID: 2771145886820942199}
-  endTurnButton: {fileID: 3661737339501134008}
+  Dice: {fileID: 1070373611726949235}
+  AP: {fileID: 14024357247508536}
+  DiceRollButton: {fileID: 2771145886820942199}
+  EndTurnButton: {fileID: 3661737339501134008}
 --- !u!1 &2557207476440511285
 GameObject:
   m_ObjectHideFlags: 0

@@ -2279,18 +2279,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1056844544007088008, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
+      propertyPath: m_fontSize
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 1056844544007088008, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 1902015867770646705, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
       propertyPath: m_Name
       value: ActionPointUI
       objectReference: {fileID: 0}
-    - target: {fileID: 5010362569493428408, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
-      propertyPath: EndTurnButton
-      value: 
-      objectReference: {fileID: 5753993187475180391}
-    - target: {fileID: 5010362569493428408, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
-      propertyPath: DiceRollButton
-      value: 
-      objectReference: {fileID: 6592784302821952168}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2310,28 +2310,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c16fdf1bb19ef6409f457b60f5af1f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5753993187475180391 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3661737339501134008, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
-  m_PrefabInstance: {fileID: 9010384423136660447}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6592784302821952168 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2771145886820942199, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
-  m_PrefabInstance: {fileID: 9010384423136660447}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &8177226717378978277 stripped

@@ -8,25 +8,30 @@ public enum GameState
     EndTurn
 }
 
-public sealed class ActionPointManager : MonoBehaviour
+/// <summary>
+/// 행동력(AP) 로직만 담당하며, 시각적 토큰 UI와는 분리되어 있습니다.
+/// Token UI는 ActionPointDisplay가 OnActionPointChanged 이벤트를 구독하여 처리합니다.
+/// </summary>
+public class ActionPointManager : MonoBehaviour
 {
     [Header("Dice Settings")]
     [SerializeField] private int[] diceFaces = new int[] { 1, 1, 2, 2, 3, 3 };
 
     private ActionPoint actionPoint;
 
-    public event Action<int> OnActionPointChanged; // AP 수치 변경
-    public event Action OnValueChanged;            // 상태/턴/주사위 등 기타 변경
+    public event Action<int> OnActionPointChanged;
+    public event Action OnValueChanged;
 
     public GameState GameState { get; private set; } = GameState.Dice;
     public int CurrentTurn { get; private set; } = 1;
     public int CurrentDiceValue { get; private set; }
+
     public int CurrentAP => actionPoint.Value;
 
     private void Awake()
     {
         actionPoint = new ActionPoint();
-        NotifyEverything();
+        NotifyChange();
     }
 
     private void Update()
@@ -57,42 +62,32 @@ public sealed class ActionPointManager : MonoBehaviour
         }
     }
 
-    private void SetState(GameState next)
-    {
-        if (GameState == next) return;
-        GameState = next;
-        OnValueChanged?.Invoke();
-    }
+    private int GetCurrentAP() => CurrentAP;
 
-    private void SetAP(int value)
+    private void SetAP(int value, int currentAP)
     {
-        actionPoint = new ActionPoint(value);
-        NotifyEverything();
-    }
-
-    private void NotifyEverything()
-    {
-        OnActionPointChanged?.Invoke(actionPoint.Value);
+        currentAP = value;
         OnValueChanged?.Invoke();
     }
 
     public void Reset()
     {
         CurrentTurn = 1;
+
         Init();
     }
-
     public void Init()
     {
-        SetState(GameState.Dice);
+        GameState = GameState.Dice;
         CurrentDiceValue = 0;
-        SetAP(0);
+        SetAP(0, 0);
+        NotifyChange();
     }
 
-    public void AddAP(int plus)
+    public void AddAP(int _plusAP)
     {
-        actionPoint.Add(plus);
-        NotifyEverything();
+        actionPoint.Add(_plusAP);
+        NotifyChange();
     }
 
     public void RemoveAP(int amount)
@@ -102,40 +97,32 @@ public sealed class ActionPointManager : MonoBehaviour
             Debug.Log("행동력이 없습니다.");
             if (ToastManager.Instance != null)
                 ToastManager.Instance.ShowToast("행동력이 없습니다.", transform);
-
-            OnValueChanged?.Invoke(); // 실패 상황도 UI 재표시 보장
             return;
         }
 
         actionPoint.Remove(amount);
-        NotifyEverything();
+        NotifyChange();
     }
 
     public bool TryUseAP() => actionPoint.CanUse(1);
 
     public void RollDice()
     {
-        SetState(GameState.Action);
-
-        if (DiceRollManager.Instance == null)
+        if (GameState != GameState.Dice) return;
+        if (DiceRollManager.Instance == null) return;
+        bool started = DiceRollManager.Instance.TryRoll((value) =>
         {
-            SetState(GameState.Dice);
-            return;
-        }
-
-        if (!DiceRollManager.Instance.TryRoll(OnDiceResult))
+            CurrentDiceValue = value;
+            AddAP(value);
+            Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
+            GameManager.Instance.actionPointManager.GameState = GameState.Action;
+            OnValueChanged?.Invoke();
+        });
+        if (!started)
         {
-            SetState(GameState.Dice);
-            return;
+            // 굴림 시작 실패 시에도 UI를 한 번 갱신해 버튼 상태를 안정화
+            OnValueChanged?.Invoke();
         }
-    }
-
-    private void OnDiceResult(int value)
-    {
-        CurrentDiceValue = value;
-        AddAP(value);
-        Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
-        SetState(GameState.Action);
     }
 
     public void PieceAction()
@@ -144,7 +131,7 @@ public sealed class ActionPointManager : MonoBehaviour
 
         if (!TryUseAP())
         {
-            SetState(GameState.EndTurn);
+            GameState = GameState.EndTurn;
         }
     }
 
@@ -155,8 +142,6 @@ public sealed class ActionPointManager : MonoBehaviour
             Debug.Log("먼저 주사위를 굴리세요.");
             if (ToastManager.Instance != null)
                 ToastManager.Instance.ShowToast("먼저 주사위를 굴리세요.", transform);
-
-            OnValueChanged?.Invoke();
             return;
         }
 
@@ -170,15 +155,15 @@ public sealed class ActionPointManager : MonoBehaviour
     private void ResetTurn()
     {
         actionPoint.Reset();
-        CurrentDiceValue = 0;
-        SetState(GameState.Dice);
-        NotifyEverything();
+        GameState = GameState.Dice;
+        NotifyChange();
     }
 
     public void SetDiceFaces(int[] newFaces)
     {
         if (newFaces == null || newFaces.Length != diceFaces.Length) return;
         Array.Copy(newFaces, diceFaces, diceFaces.Length);
-        OnValueChanged?.Invoke();
     }
+
+    private void NotifyChange() => OnActionPointChanged?.Invoke(actionPoint.Value);
 }
