@@ -23,19 +23,7 @@ public class LionBehaviour : Obstacle, IObstacleBehaviour
 
     private void Attack(PieceController pieceController)
     {
-        // 가방에 새로운 기물 생성
-        for (int i = 0; i < 3; i++)
-        {
-            if (!PieceManager.Instance.pieceInventory.slots[i].IsActivePiece())
-            {
-                PieceManager.Instance.pieceInventory.slots[i].AddPiece(pieceController.GetPiece());
-                EventManager.Instance.TriggerEvent("Refresh");
-                break;
-            }
-        }
-
-        // 기존 보드의 기물 제거
-        Destroy(pieceController.gameObject);
+        StartCoroutine(GoHand(pieceController));
 
         // 공격 대기 초기화
         standByAttack = 0;

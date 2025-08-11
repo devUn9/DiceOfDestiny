@@ -1,64 +1,63 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 
 [System.Serializable]
 public class PieceInventory : MonoBehaviour
 {
-    [System.Serializable]
-    public class Slot
+    public PieceSlot[] pieceSlots = new PieceSlot[3];
+    public PieceSlot currentSlot;
+
+
+   public void InitializeInventory()
     {
-        [SerializeField] private int pieceNumber;
-        [SerializeField] private Piece piece;
-
-        public void AddPiece(Piece _piece)
+        // Initialize the inventory with default pieces
+        for (int i = 0; i < pieceSlots.Length; i++)
         {
-            this.pieceNumber = _piece.PieceNumber;
-            this.piece = _piece;
+            Piece piece = PieceManager.Instance.piecePrefabs[i].GetComponent<PieceController>().GetPiece();
+            pieceSlots[i] = new PieceSlot { piece = piece };
         }
+    }
 
-        public void RemovePiece()
+    public void ResetSlot()
+    {
+        for (int i = 0; i < pieceSlots.Length; i++)
         {
-            pieceNumber = 0;
-            piece = null;
-        }
+            Piece piece = PieceManager.Instance.piecePrefabs[i].GetComponent<PieceController>().GetPiece();
 
-        public bool IsActivePiece()
-        {
-            return piece != null;
+            AddSlot(piece);
         }
+    }
+
+    public void AddSlot(Piece piece)
+    {
+        for(int i = 0; i < pieceSlots.Length; i++)
+        {
+            if (pieceSlots[i] == null || pieceSlots[i].GetPiece() == null)
+            {
+                pieceSlots[i] = new PieceSlot{ piece = piece }; // Add the piece to the slot
+                return;
+            }
+        }
+    }
+
+    public void RemoveSlot(int index)
+    {
+        pieceSlots[index] = null; // Remove the piece from the slot
+    }
+
+    [System.Serializable]
+    public class PieceSlot
+    {
+        [SerializeField] public Piece piece;
 
         public Piece GetPiece()
         {
             return piece;
         }
-
-        public void SetSlot(Piece _piece, int _pieceNumber)
-        {
-            this.piece = _piece;
-            this.pieceNumber = _pieceNumber;
-        }
     }
 
-    public List<Slot> slots = new List<Slot>();
-    public Slot selectedSlot = null;
 
-    private void Awake()
-    {
-        // for (int i = 0; i < 3; i++)
-        // {
-        //     Slot slot = new Slot();
-        //     slots.Add(slot);
-        // }
-    }
 
-    public void ResetSlot()
-    {
-        for (int i = 0; i < slots.Count; i++)
-        {
-            Piece piece = PieceManager.Instance.piecePrefabs[i].GetComponent<PieceController>().GetPiece();
-
-            slots[i].SetSlot(piece, i);
-        }
-    }
 }

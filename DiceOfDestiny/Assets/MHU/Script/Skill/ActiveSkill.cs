@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ActiveSkill : MonoBehaviour
@@ -13,9 +11,11 @@ public class ActiveSkill : MonoBehaviour
     [SerializeField] private GameObject priestSkillEffect;
 
     [SerializeField] private PainterActiveSkillUI painterActiveSkillUI;
+    [SerializeField] private MoveSkillUI moveSkillUI;
+    [SerializeField] private PieceSelectUI pieceSelectUI;
 
     // 기사 스킬: 앞으로 이동
-    public IEnumerator MoveForward(PieceController pieceController, Vector2Int moveDirection)
+    public IEnumerator KnightMoveForward(PieceController pieceController, Vector2Int moveDirection)
     {
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -99,6 +99,8 @@ public class ActiveSkill : MonoBehaviour
         {
             Destroy(skillEffect, 0.5f);
         }
+
+        BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
     }
 
     // 악마 스킬: 독초 심기
@@ -265,9 +267,143 @@ public class ActiveSkill : MonoBehaviour
         }
     }
 
-
-    public IEnumerator MoveToBaby(PieceController piece)
+    // 도적 스킬 : 이동 UI 띄우기
+    public IEnumerator FastMove(PieceController piece)
     {
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+        moveSkillUI.Initialize(piece); // 추가
+        yield return moveSkillUI.WaitForArrowClick();
+    }
+
+    // 도적 스킬 : 앞으로 이동
+    public IEnumerator MoveForward(PieceController pieceController, Vector2Int moveDirection)
+    {
+        if (moveDirection != Vector2Int.up && moveDirection != Vector2Int.down &&
+           moveDirection != Vector2Int.right && moveDirection != Vector2Int.left)
+        {
+            Debug.LogWarning($"Invalid move direction: {moveDirection}");
+            yield break;
+        }
+
+        Vector3 moveVec = new Vector3(moveDirection.x, moveDirection.y, 0);
+        float moveDuration = 0.4f;
+        float time = 0f;
+
+        Vector3 startPos = pieceController.transform.position;
+        Vector3 endPos = startPos + moveVec;
+
+        while (time < moveDuration)
+        {
+            float t = time / moveDuration;
+            float ease = Mathf.SmoothStep(0f, 1f, t);
+            pieceController.transform.position = Vector3.Lerp(startPos, endPos, ease);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        pieceController.transform.position = endPos;
+        Vector2Int gridPos = pieceController.gridPosition;
+        gridPos += moveDirection;
+        pieceController.gridPosition = gridPos;
+
+        Vector2Int PiecePosition = PieceManager.Instance.currentPiece.gridPosition;
+        Vector2Int lastPosition = PieceManager.Instance.currentPiece.gridPosition - moveDirection;
+        BoardManager.Instance.Board[lastPosition.x, lastPosition.y].SetPiece(null);
+        //Vector2Int newPosition2 = PieceManager.Instance.currentPiece.gridPosition + moveDirection;
+        BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
+
+
+        bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
+
+        if (!hasObstacle)
+        {
+            BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
+        }
+
+        if (SkillManager.Instance != null)
+        {
+            SkillManager.Instance.TrySkill(gridPos, pieceController);
+        }
+        else
+        {
+            Debug.LogError("SkillManager.Instance is null!");
+        }
+
+
+        BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
+
+        ObstacleManager.Instance.UpdateObstacleStep();
+
+    }
+
+    // 아기 스킬 : 다른 기물 이동
+    public IEnumerator HelpBaby(PieceController pieceController)
+    {
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        // 본인을 제외한 기물들 중 이동 가능한 타일이 있는지 확인
+        bool hasMovablePiece = false;
+        foreach (PieceController targetPiece in PieceManager.Instance.Pieces)
+        {
+            if (targetPiece == null || targetPiece == pieceController) // 본인 또는 null 기물 제외
+                continue;
+
+            // 기물의 상하좌우 또는 대각선 타일 확인
+            List<Vector2Int> movableTiles = BoardManager.Instance.GetTilePositions(DirectionType.Diagonal, targetPiece.gridPosition);
+            bool canMove = false;
+
+            // 이동 가능한 타일이 있는지 확인
+            foreach (Vector2Int tile in movableTiles)
+            {
+                if (BoardManager.Instance.IsEmptyTile(tile))
+                {
+                    canMove = true;
+                    break; // 빈 타일이 있으면 더 이상 확인할 필요 없음
+                }
+            }
+
+            if (canMove)
+            {
+                hasMovablePiece = true;
+                break; // 이동 가능한 기물이 하나라도 있으면 루프 종료
+            }
+        }
+
+        // 이동 가능한 기물이 없으면 코루틴 종료
+        if (!hasMovablePiece)
+        {
+            Debug.Log("No movable pieces available. Stopping HelpBaby coroutine.");
+            yield break;
+        }
+
+        // 기존 하이라이트 타일 제거
+        BoardSelectManager.Instance.DestroyPieceHighlightTile();
+
+        // 본인을 제외한 기물 위치에 하이라이트 타일 생성
+        foreach (PieceController piece in PieceManager.Instance.Pieces)
+        {
+            if (piece == null || piece == PieceManager.Instance.currentPiece)
+                continue;
+
+            // 하이라이트 타일 생성
+            BoardSelectManager.Instance.PieceHighLightTilesMulty(piece.gridPosition);
+        }
+
+        // 기물 선택 UI 생성
+        pieceSelectUI.CreateButtonsForPieces();
+        SkillManager.Instance.IsSelectingProgress = true;
+
+        // 화살표 클릭 대기
+        yield return moveSkillUI.WaitForArrowClick();
+
+        // 기물 선택 UI 종료
+        pieceSelectUI.ClearButtons();
+
+        // 하이라이트 타일 제거 및 현재 기물 위치 하이라이트
+        BoardSelectManager.Instance.DestroyPieceHighlightTile();
+        PieceManager.Instance.currentPiece = pieceController;
+        BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
+
+        SkillManager.Instance.IsSelectingProgress = false;
     }
 }
