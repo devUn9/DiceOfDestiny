@@ -32,6 +32,10 @@ public class PieceManager : Singletone<PieceManager>
     private void InitializePieceDatas()
     {
         pieceDatas = GameManager.Instance.selectedPieces;
+        for (int i = 0; i < pieceDatas.Length; i++)
+        {
+            piecePrefabs[i].GetComponent<PieceController>().SetPiece(pieceDatas[i]);
+        }
     }
 
     void Start()

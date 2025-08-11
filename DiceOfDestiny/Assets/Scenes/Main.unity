@@ -228,9 +228,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedPieces:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 415a8b24e9575d542845ce328401ac29, type: 2}
+  - {fileID: 11400000, guid: 9408ac26625379a4ab9aef5264d10b4a, type: 2}
+  - {fileID: 11400000, guid: 4d42cda828767ba4e909423991567f60, type: 2}
 --- !u!4 &867981804
 Transform:
   m_ObjectHideFlags: 0

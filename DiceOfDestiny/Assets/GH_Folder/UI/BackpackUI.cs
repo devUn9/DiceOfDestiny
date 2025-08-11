@@ -1,8 +1,9 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
-public class UIBackpack : MonoBehaviour
+public class BackpackUI : MonoBehaviour
 {
     [Header("Choice Piece")]
     [SerializeField] private Button BackpackOpenCloseButton;
@@ -70,10 +71,11 @@ public class UIBackpack : MonoBehaviour
 
     public void onClickPieceAppearButton(int index)
     {
-        Debug.Log(index + "번 피스 선택");
-        currentPiece = PieceManager.Instance.pieceDatas[currentIndex];
-        if (currentPiece == null)
+        if (PieceManager.Instance.pieceDatas[currentIndex] == null)
+        {
+            Debug.Log("해당 슬롯에 기물이 존재하지 않습니다.");
             return;
+        }
 
         // 같은 피스를 다시 클릭한 경우 창을 닫음
         if (currentIndex == index && ChoiceTopFaceWindow.activeSelf)
@@ -81,18 +83,16 @@ public class UIBackpack : MonoBehaviour
             ChoiceTopFaceWindow.SetActive(false);
             return;
         }
+
         currentIndex = index;
+        currentPiece = PieceManager.Instance.pieceDatas[currentIndex];
 
         // 윗면 선택창 On
         if (!ChoiceTopFaceWindow.activeSelf)
             ChoiceTopFaceWindow.SetActive(true);
 
-        // 기물 선택 UI의 기물 윗면 새로고침
-        ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
-        ChoicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
-
         // 기물 윗면 선택 UI 의 기물 윗면 초기화
-        SpawnPieceColorImage.color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
+        SpawnPieceColorImage.color = BoardManager.Instance.GetColor(currentPiece.faces[2].color);
         SpawnPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
     }
 
@@ -170,6 +170,9 @@ public class UIBackpack : MonoBehaviour
 
     public void onClickUpdateTopFace(int dir)
     {
+        if (isMove)
+            return;
+
         Face[] newFaces = new Face[6];
 
         // 이동 방향에 따라 faces 배열 재배치
@@ -177,24 +180,28 @@ public class UIBackpack : MonoBehaviour
         {
             for (int i = 0; i < 6; i++)
                 newFaces[i] = currentPiece.faces[upTransition[i]];
+            currentPiece.faces = newFaces;
             RotateToTopFace(Vector2Int.up);
         }
         else if (dir == 1)
         {
             for (int i = 0; i < 6; i++)
                 newFaces[i] = currentPiece.faces[downTransition[i]];
+            currentPiece.faces = newFaces;
             RotateToTopFace(Vector2Int.down);
         }
         else if (dir == 2)
         {
             for (int i = 0; i < 6; i++)
                 newFaces[i] = currentPiece.faces[leftTransition[i]];
+            currentPiece.faces = newFaces;
             RotateToTopFace(Vector2Int.left);
         }
         else if (dir == 3)
         {
             for (int i = 0; i < 6; i++)
                 newFaces[i] = currentPiece.faces[rightTransition[i]];
+            currentPiece.faces = newFaces;
             RotateToTopFace(Vector2Int.right);
         }
         else if (dir == 4)
@@ -213,67 +220,105 @@ public class UIBackpack : MonoBehaviour
             return;
         }
 
-        currentPiece.faces = newFaces;
 
-        // 기물 선택 UI의 기물 윗면 새로고침
-        ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
-        ChoicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
-
-        // 기물 윗면 선택 UI 의 기물 윗면 초기화
-        SpawnPieceColorImage.color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
-        SpawnPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
     }
 
     public void RotateToTopFace(Vector2Int moveDirection)
     {
-        StartCoroutine(RotateToTopFaceCoroutine(moveDirection, SpawnPieceObject.GetComponent<Image>()));
+        StartCoroutine(RotateToTopFaceCoroutine(moveDirection));
     }
 
-    IEnumerator RotateToTopFaceCoroutine(Vector2Int moveDirection, Image pieceImage)
+    IEnumerator RotateToTopFaceCoroutine(Vector2Int moveDirection)
     {
-        if (isMove)
-            yield break;
-
+        if (isMove) yield break;
         isMove = true;
 
-        // 1. 이동 방향에 따라 faces 배열 재배치
-        int[] transition = null;
-        if (moveDirection == Vector2Int.up) transition = upTransition;
-        else if (moveDirection == Vector2Int.down) transition = downTransition;
-        else if (moveDirection == Vector2Int.left) transition = leftTransition;
-        else if (moveDirection == Vector2Int.right) transition = rightTransition;
-        else yield break;
+        // 2. 방향 및 기본 변수 설정
+        bool isHorizontalMove = (moveDirection == Vector2Int.left || moveDirection == Vector2Int.right);
+        Vector3 moveDir = new Vector3(-moveDirection.x, -moveDirection.y, 0f);
 
-        Face[] newFaces = new Face[6];
-        for (int i = 0; i < 6; i++)
-            newFaces[i] = currentPiece.faces[transition[i]];
-        currentPiece.faces = newFaces;
+        Transform parentTransform = SpawnPieceColorImage.transform.parent;
+        Vector3 parentStartPos = parentTransform.localPosition;
 
-        // 2. 애니메이션 (스케일/위치 변화)
-        RectTransform rect = pieceImage.rectTransform;
-        Vector2 startPos = rect.anchoredPosition;
-        Vector2 moveVec = moveDirection * 20; // 픽셀 단위, 필요시 조정
+        Vector3 contractStartPos = SpawnPieceColorImage.transform.localPosition;
+        Vector3 expandStartPos = nextSpawnPieceImage.transform.localPosition;
+
+        // 3. 다음 면 스프라이트 & 색상 세팅 (expand 쪽)        
+        nextSpawnPieceImage.color = BoardManager.Instance.GetColor(currentPiece.faces[2].color);
+        nextSpwanPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
+
+        // 4. 초기 스케일 설정
+        SpawnPieceColorImage.transform.localScale = Vector3.one;
+        nextSpawnPieceImage.transform.localScale = isHorizontalMove ? new Vector3(0f, 1f, 1f) : new Vector3(1f, 0f, 1f);
+
         float duration = 0.3f;
         float time = 0f;
+        float inflatedamount = 0.2f;
 
         while (time < duration)
         {
             float t = time / duration;
-            float ease = Mathf.SmoothStep(0f, 1f, t);
 
-            // 위치와 스케일 변화
-            rect.anchoredPosition = Vector2.Lerp(startPos, startPos + moveVec, ease);
-            float inflate = Mathf.Sin(ease * Mathf.PI) * 0.2f;
-            rect.localScale = Vector3.one * (1f + inflate);
+            float totalScale = 1f + inflatedamount * Mathf.Sin(t * Mathf.PI); // 1 ~ 1.2 ~ 1 사이 변동
 
-            time += Time.unscaledDeltaTime;
+            float scaleContract = Mathf.Lerp(1f, 0f, t);
+            float scaleExpand = totalScale - scaleContract;
+
+            // 5. 스케일 적용
+            if (isHorizontalMove)
+            {
+                nextSpawnPieceImage.transform.localScale = new Vector3(scaleExpand, 1f, 1f);
+                SpawnPieceColorImage.transform.localScale = new Vector3(scaleContract, 1f, 1f);
+            }
+            else
+            {
+                nextSpawnPieceImage.transform.localScale = new Vector3(1f, scaleExpand, 1f);
+                SpawnPieceColorImage.transform.localScale = new Vector3(1f, scaleContract, 1f);
+            }
+
+            // 6. 각 면 크기 반영한 반지름 계산
+            float expandHalfSize = (isHorizontalMove
+                ? nextSpawnPieceImage.rectTransform.rect.width
+                : nextSpawnPieceImage.rectTransform.rect.height) * 0.5f * scaleExpand;
+
+            float contractHalfSize = (isHorizontalMove
+                ? SpawnPieceColorImage.rectTransform.rect.width
+                : SpawnPieceColorImage.rectTransform.rect.height) * 0.5f * scaleContract;
+
+            // 7. 두 면 중심 간격
+            float separation = expandHalfSize + contractHalfSize;
+
+            // 8. 면 위치 조정 — contract는 moveDir 반대 방향으로, expand는 moveDir 방향으로 이동
+            nextSpawnPieceImage.transform.localPosition = expandStartPos + moveDir * separation * 0.5f;
+            SpawnPieceColorImage.transform.localPosition = contractStartPos - moveDir * separation * 0.5f;
+
+            // 9. 부모는 반대 방향으로 이동해 전체 제자리 회전 효과
+            Vector3 targetParentPos = parentStartPos - moveDir; // 이동 목표 위치
+            parentTransform.localPosition = Vector3.Lerp(parentStartPos, targetParentPos, t);
+
+            time += Time.deltaTime;
             yield return null;
         }
 
-        // 3. 최종 위치/스케일/이미지 적용
-        rect.anchoredPosition = startPos;
-        rect.localScale = Vector3.one;
-        pieceImage.sprite = currentPiece.faces[2].classData.sprite;
+        // 10. 최종 상태 정리
+        nextSpawnPieceImage.transform.localScale = Vector3.one;
+        nextSpawnPieceImage.transform.localPosition = expandStartPos;
+
+        SpawnPieceColorImage.transform.localScale = isHorizontalMove ? new Vector3(0f, 1f, 1f) : new Vector3(1f, 0f, 1f);
+        SpawnPieceColorImage.transform.localPosition = contractStartPos;
+
+        parentTransform.localPosition = parentStartPos;
+
+        SpawnPieceObject.GetComponent<Image>().sprite = nextSpwanPieceObject.GetComponent<Image>().sprite;
+        SpawnPieceColorImage.color = nextSpawnPieceImage.color;
+        SpawnPieceColorImage.transform.localPosition = nextSpawnPieceImage.transform.localPosition;
+        SpawnPieceColorImage.transform.localScale = nextSpawnPieceImage.transform.localScale;
+
+        nextSpawnPieceImage.transform.localScale = Vector3.zero;
+
+        // 기물 선택 UI의 기물 윗면 새로고침
+        ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
+        ChoicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
 
         isMove = false;
     }

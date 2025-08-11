@@ -79,7 +79,8 @@ public class GameManager : Singletone<GameManager>
                 Debug.LogError($"[GameManager] SetPieces: pieces[{i}]는 null입니다.");
                 return;
             }
-            selectedPieces[i] = pieces[i];
+            selectedPieces[i].isAvailable = pieces[i].isAvailable;
+            selectedPieces[i].faces = pieces[i].faces;
         }
     }
 }
