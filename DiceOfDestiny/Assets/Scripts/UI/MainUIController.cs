@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,18 +9,26 @@ public class MainUIController : MonoBehaviour
     private const string KeySaveExists = "SaveExists";
     private const string KeyLastScene = "LastScene";
     private const string DefaultScene = "GameScene_2.0.1";
+    private const string CustomizeScene = "CustomizeScene";
 
     [SerializeField] private Button continueButton;
     [SerializeField] private Button newGameButton;
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button exitButton;
+    [SerializeField] private Button customizeButton;
+
+    [Header("Piece Select")]
+    [SerializeField] GameObject pieceSelectPanel;
 
     void Start()
     {
         continueButton.onClick.AddListener(OnContinueClicked);
         newGameButton.onClick.AddListener(OnNewGameClicked);
         settingsButton.onClick.AddListener(OnSettingsClicked);
+        
         exitButton.onClick.AddListener(() => Application.Quit());
+        customizeButton.onClick.AddListener(OnCustomizeClicked);
+
 
         bool hasSave = PlayerPrefs.GetInt("SaveExists", 0) == 1;
         continueButton.interactable = hasSave;
@@ -40,16 +50,29 @@ public class MainUIController : MonoBehaviour
 
     private void OnNewGameClicked()
     {
+        /*
         PlayerPrefs.DeleteAll();
         PlayerPrefs.SetInt(KeySaveExists, 1);
         PlayerPrefs.SetString(KeyLastScene, DefaultScene);
         PlayerPrefs.Save();
+        */
 
-        SceneManager.LoadScene(DefaultScene);
+        ShowPieceSelectPanel();
     }
+
+    private void ShowPieceSelectPanel()
+    {
+        pieceSelectPanel.SetActive(true);
+        pieceSelectPanel.GetComponent<PieceSelectPanelUI>().Intitialize(() => SceneManager.LoadScene(DefaultScene));
+    }
+
     private void OnSettingsClicked()
     {
         UIManager.Instance?.ToggleSettings(true);
+    }
+    private void OnCustomizeClicked()
+    {
+        SceneManager.LoadScene(CustomizeScene);
     }
 
     private void OnExitClicked()

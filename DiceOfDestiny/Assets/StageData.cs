@@ -6,6 +6,9 @@ public class StageData : ScriptableObject
 {
     [field: SerializeField] public string StageName { get; private set; }
 
+    [Header("Stage Mission")]
+    public bool mission;
+
     [Header("ColorSetting")]
     public int minimumColorEnsure;
     public int weightPower = 10; // 높을수록 가중치가 강하게 반영됨. 

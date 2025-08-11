@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -11,23 +10,30 @@ public class CameraController : MonoBehaviour
 
     [Header("Drag Settings")]
     [SerializeField] private float dragSpeed = 1.0f;
-    // 드래그 이동 활성 여부
     private bool canDrag = false;
 
     private Vector3 lastMousePosition;
+    private Vector2 minBounds;
+    private Vector2 maxBounds;
 
-    private Vector2 minBounds; // 최초 화면 좌하단 월드 좌표
-    private Vector2 maxBounds; // 최초 화면 우상단 월드 좌표
+    // 보드판 중심 (타겟) - 필요에 따라 에디터에서 설정 가능
+    [SerializeField] private Vector2 boardCenter = Vector2.zero;
+
+    public float[] GetZoomLevels()
+    {
+        return zoomLevels;
+    }
 
     void Start()
     {
-
         mainCamera = Camera.main;
-
-        // 초기 카메라 크기 세팅
         mainCamera.orthographicSize = zoomLevels[currentZoomLevel];
         SetInitialBounds();
+
+        // 초기 카메라 위치를 보드판 중심으로 설정
+        mainCamera.transform.position = new Vector3(boardCenter.x, boardCenter.y, -10f);
     }
+
     void Update()
     {
         HandleZoom();
@@ -50,9 +56,12 @@ public class CameraController : MonoBehaviour
 
         if (scroll != 0f)
         {
-            Vector3 mouseWorldPosBefore = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            // 현재 카메라 위치와 타겟(보드판 중심)의 상대적 위치 계산
+            Vector3 currentCamPos = mainCamera.transform.position;
+            Vector2 targetPos = boardCenter;
+            Vector2 relativePos = new Vector2(currentCamPos.x, currentCamPos.y) - targetPos;
 
-            if (scroll > 0f) // 위로 올릴 경우 확대
+            if (scroll > 0f) // 확대
             {
                 if (currentZoomLevel < zoomLevels.Length - 1)
                 {
@@ -60,7 +69,7 @@ public class CameraController : MonoBehaviour
                     mainCamera.orthographicSize = zoomLevels[currentZoomLevel];
                 }
             }
-            else if (scroll < 0f) // 아래로 내릴 경우 축소
+            else if (scroll < 0f) // 축소
             {
                 if (currentZoomLevel > 0)
                 {
@@ -69,20 +78,26 @@ public class CameraController : MonoBehaviour
                 }
             }
 
-            if (currentZoomLevel == 0) // 가장 큰 줌일 경우
+            if (currentZoomLevel == 0) // 가장 큰 줌 레벨일 경우
             {
-                mainCamera.transform.position = new Vector3(0, 0, -10);
+                mainCamera.transform.position = new Vector3(boardCenter.x, boardCenter.y, -10f);
             }
-            else // 아닐 경우
+            else // 다른 줌 레벨에서는 타겟을 기준으로 위치 조정
             {
-                Vector3 mouseWorldPosAfter = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-                Vector3 diff = mouseWorldPosBefore - mouseWorldPosAfter;
-                mainCamera.transform.position += diff;
+                // 줌 레벨에 따라 상대적 위치를 스케일링
+                float zoomFactor = zoomLevels[0] / zoomLevels[currentZoomLevel];
+                Vector2 newRelativePos = relativePos * zoomFactor;
+                Vector3 newCamPos = new Vector3(
+                    targetPos.x + newRelativePos.x,
+                    targetPos.y + newRelativePos.y,
+                    -10f
+                );
 
+                mainCamera.transform.position = newCamPos;
                 ClampCameraPosition();
             }
 
-            canDrag = currentZoomLevel > 0; // 가장 큰 줌 레벨에서는 드래그 비활성화
+            canDrag = currentZoomLevel > 0;
         }
     }
 
@@ -102,10 +117,10 @@ public class CameraController : MonoBehaviour
             mainCamera.transform.position += move;
 
             lastMousePosition = Input.mousePosition;
-
             ClampCameraPosition();
         }
     }
+
     void ClampCameraPosition()
     {
         Vector3 pos = mainCamera.transform.position;
@@ -113,7 +128,7 @@ public class CameraController : MonoBehaviour
         float camHeight = mainCamera.orthographicSize * 2f;
         float camWidth = camHeight * mainCamera.aspect;
 
-        float paddingRatio = 0.1f; // 전체 width 대비 10% 여백
+        float paddingRatio = 0.1f;
         float zoomFactor = zoomLevels[0] / mainCamera.orthographicSize;
         float paddingX = camWidth * paddingRatio * zoomFactor;
 

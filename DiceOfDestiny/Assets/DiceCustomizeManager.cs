@@ -7,12 +7,14 @@ using UnityEngine.UI;
 
 public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 {
+    [Header("UI Panels")]
     [SerializeField] private GameObject cutomizePanel;
     [SerializeField] private GameObject carouselUIPanel;
 
     [SerializeField] private GameObject pieceCarouselUI;
     [SerializeField] private GameObject pieceNetCarouselUI;
 
+    [Header("Piece Preview UI")]
     [SerializeField] private GameObject piecesContent;
     [SerializeField] private GameObject piecePreviewButtonPrefab;
 
@@ -23,11 +25,14 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     List<PieceNetPreviewButton> pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
 
+    [Header("Sticker Drawer")]
     public GameObject stickerDrawer;
-
     public GameObject stickerSourcePrefab;
 
-    public CustomizePieceController customizePieceContoller;
+    [Header("Customize Controller")]
+    public CustomizePieceController customizePieceContoller;    
+
+    public GameObject backToMainButton;
 
     public bool isFolded;
 

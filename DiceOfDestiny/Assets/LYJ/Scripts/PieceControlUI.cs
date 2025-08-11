@@ -19,6 +19,7 @@ public class PieceControlUI : MonoBehaviour
         faceColor.SetActive(false);
     }
 
+    // 버튼에 마우스가 올라갔을 때, 기물의 예상되는 이미지 보여주기
     public void OnButtonEnter()
     {
         buttonImage.color = new Color(buttonImage.color.r, buttonImage.color.g, buttonImage.color.b, 1f);
@@ -53,6 +54,27 @@ public class PieceControlUI : MonoBehaviour
         Face gettedFace = GetComponentInParent<PieceController>().GetFace(faceIndex);
         faceClassImage.sprite = gettedFace.classData.sprite;
         Color gettedColor = BoardManager.Instance.tileColors[(int)(gettedFace.color)];
+        faceColorImage.color = gettedColor;
+    }
+
+    // Move Skill UI용 (도둑, 아기)
+    public void OnButtonEnterUI()
+    {
+        //buttonImage.color = new Color(buttonImage.color.r, buttonImage.color.g, buttonImage.color.b, 1f);
+
+        faceClass.SetActive(true);
+        faceColor.SetActive(true);
+
+        Image faceClassImage = faceClass.GetComponent<Image>();
+        Image faceColorImage = faceColor.GetComponent<Image>();
+
+        int faceIndex = 2;
+
+        PieceController currentPiece = PieceManager.Instance.currentPiece;
+
+        Face gettedFace = currentPiece.GetFace(faceIndex);
+        faceClassImage.sprite = gettedFace.classData.sprite;
+        Color gettedColor = BoardManager.Instance.tileColors[(int)currentPiece.GetFace(faceIndex).color];
         faceColorImage.color = gettedColor;
     }
 

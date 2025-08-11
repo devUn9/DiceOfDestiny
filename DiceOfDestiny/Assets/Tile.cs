@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private PieceController piece;
     public bool isWalkable { get; set; }
 
-    SpriteRenderer sr;
+    private SpriteRenderer sr;
 
     public TileColor TileColor
     {
@@ -43,7 +43,7 @@ public class Tile : MonoBehaviour
     }
 
     // 타일 눌렀을 때 호출, BoardSelectManager에 저장
-    private void OnMouseDown()
+    private void OnMouseUp()
     {
         if (SkillManager.Instance.IsSelectingProgress)
             return; // 스킬 진행 중이면 클릭 무시

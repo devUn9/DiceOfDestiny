@@ -9,6 +9,6 @@ public class UINextStage : MonoBehaviour
         StageManager.Instance.TryLoadNextStage();
 
         // 게임 재개
-        TempManager.Instance.ResumeGame();
+        StageManager.Instance.ResumeGame();
     }
 }

@@ -14,6 +14,11 @@ public class ChestBehaviour : Obstacle, IObstacleBehaviour
             if (className == "Thief")
             {
                 Debug.Log("도둑이 상자를 엽니다.");
+                RuleEvents.TriggerRule("Thief_Passive_OpenBox");
+
+                SkillManager.Instance.ThiefPassive();
+                BoardManager.Instance.RemoveObstacle(this);
+
                 return;
             }
 
