@@ -13,6 +13,7 @@ public class ChestBehaviour : Obstacle, IObstacleBehaviour
 
             if (className == "Thief")
             {
+                SkillManager.Instance.ThiefPassive();
                 Debug.Log("도둑이 상자를 엽니다.");
                 return;
             }

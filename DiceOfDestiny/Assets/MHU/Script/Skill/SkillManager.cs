@@ -29,8 +29,6 @@ public class SkillManager : Singletone<SkillManager>
     }
     private IEnumerator TrySkillSequence(Vector2Int position, PieceController piece)
     {
-        
-
         // 1. 패시브 스킬 실행 및 완료 대기
         yield return StartCoroutine(TryPassiveSkillCoroutine(position, piece));
 
@@ -39,12 +37,8 @@ public class SkillManager : Singletone<SkillManager>
         // 2. 패시브 스킬 완료 후 액티브 스킬 실행
         yield return StartCoroutine(TryActiveSkillCoroutine(position, piece));
     }
-
-    public void PriestPassive()
-    {
-        StartCoroutine(passiveSkill.Halo());
-    }
-
+    
+    // 패시브 (공격) 코루틴
     private IEnumerator TryPassiveSkillCoroutine(Vector2Int position, PieceController piece)
     {
         ClassData classData = piece.GetTopFace().classData;
@@ -92,6 +86,17 @@ public class SkillManager : Singletone<SkillManager>
         yield return null;
     }
 
+    public void PriestPassive()
+    {
+        StartCoroutine(passiveSkill.Halo());
+    }
+
+    public void ThiefPassive()
+    {
+        StartCoroutine(passiveSkill.Steal());
+    }
+
+    // 스킬 사용 가능한지 판단하는 코루틴
     public IEnumerator TryActiveSkillCoroutine(Vector2Int position, PieceController piece)
     {
         yield return new WaitForSeconds(0.1f); // 패시브 스킬이 완료될 때까지 잠시 대기
@@ -111,6 +116,7 @@ public class SkillManager : Singletone<SkillManager>
         }
     }
 
+    // 스킬 발동
     private void DoActiveSkill(ClassData classData)
     {
         currentPiece = PieceManager.Instance.currentPiece;
@@ -119,7 +125,7 @@ public class SkillManager : Singletone<SkillManager>
         {
             case "Baby":
                 // 아기 스킬 : 원하는 말 한 칸 이동
-
+                StartCoroutine(activeSkill.HelpBaby(currentPiece));
 
                 ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말 한 칸 이동합니다.", currentPiece.transform); // 나중에 스킬 메서드 생기면 그리로 이동
 
@@ -145,8 +151,13 @@ public class SkillManager : Singletone<SkillManager>
                 // 기사 스킬 : 진행했던 방향으로 1칸 움직임, 다 부숨
 
                 Vector2Int lastDirection = currentPiece.GetLastMoveDirection();
-                StartCoroutine(activeSkill.MoveForward(currentPiece, lastDirection));
+
+                StartCoroutine(activeSkill.KnightMoveForward(currentPiece, lastDirection));
                 ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", currentPiece.transform);
+
+                BoardManager.Instance.Board[currentPiece.gridPosition.x, currentPiece.gridPosition.y].SetPiece(null);
+                Vector2Int newPosition = currentPiece.gridPosition + lastDirection;
+                BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(currentPiece);
 
                 break;
 
@@ -161,7 +172,7 @@ public class SkillManager : Singletone<SkillManager>
 
             case "Thief":
                 // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
-                //StartCoroutine(activeSkill.MoveForward(currentPiece, currentPiece.GetLastMoveDirection()));
+                StartCoroutine(activeSkill.FastMove(currentPiece));
                 ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", currentPiece.transform);
 
                 break;
@@ -172,6 +183,10 @@ public class SkillManager : Singletone<SkillManager>
                 StartCoroutine(activeSkill.Paint(currentPiece));
                 ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", currentPiece.transform);
 
+                break;
+
+            case "Miner":
+                // 광부 스킬 : 다른 기물 주변 8칸으로 땅굴파서 이동하기?
 
                 break;
 

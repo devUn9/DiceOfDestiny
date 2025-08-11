@@ -28,7 +28,7 @@ MonoBehaviour:
     weight: 9
   - type: 2
     weight: 10
-  - type: 3
+  - type: 5
     weight: 2
   - type: 4
     weight: 4

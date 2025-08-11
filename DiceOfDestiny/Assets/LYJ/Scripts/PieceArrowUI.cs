@@ -27,4 +27,9 @@ public class PieceArrowUI : MonoBehaviour
         arrowAnim.speed = 0f;
         arrowAnim.Play("Animation", 0, 0f);
     }
+
+    public void OnDisable()
+    {
+        OnArrowExit();
+    }
 }
