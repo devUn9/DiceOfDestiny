@@ -11,7 +11,7 @@ public class PassiveSkill : MonoBehaviour
     [SerializeField] private GameObject thiefPassiveEffect;
 
 
-    // 기사 패시브 스킬 : 전방 3칸에 슬라임과 좀비 장애물 제거
+    // 기사 공격 스킬
     public IEnumerator KnightAttack(PieceController pieceController)
     {
         if (pieceController == null || knightPassiveEffect == null)
@@ -20,6 +20,7 @@ public class PassiveSkill : MonoBehaviour
             yield break;
         }
 
+        //상하좌우 칸에 있는 슬라임과 좀비 장애물 제거
         List<Vector2Int> cardinalList = BoardManager.Instance.GetTilePositions(DirectionType.Four, PieceManager.Instance.GetCurrentPiece().gridPosition);
 
         bool hasTarget = false;
@@ -117,7 +118,7 @@ public class PassiveSkill : MonoBehaviour
             foreach (var pos in forwardList)
             {
                 // 그리드 위치를 월드 위치로 변환 (pieceController.transform.position 사용 유지)
-                Vector3 effectPos = pos + new Vector2(-5.5f, -5.5f); // 타일 중앙 위치
+                Vector3 effectPos = pos + new Vector2(-5.5f, -6f); // 타일 중앙 위치
 
                 // 타일의 인덱스를 기준으로 회전 각도 설정
                 int index = forwardList.IndexOf(pos);
@@ -211,7 +212,7 @@ public class PassiveSkill : MonoBehaviour
             foreach (var pos in diagonalList)
             {
                 // 그리드 위치를 월드 위치로 변환
-                Vector3 effectPos = pos + new Vector2(-5.5f, -5f); // 타일 중앙 위치
+                Vector3 effectPos = pos + new Vector2(-5.5f, -6f); // 타일 중앙 위치
 
                 Vector2Int dir = pos - pieceController.gridPosition;
 

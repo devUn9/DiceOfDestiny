@@ -6,21 +6,26 @@ public class UIFollow : MonoBehaviour
     [SerializeField] private GameObject uiElement; // 따라갈 UI 요소
     [SerializeField] private Vector2 offset; // UI 위치 오프셋 (화면 좌표 기준)
     [SerializeField] private PieceController pieceController; // 이 스크립트가 부착된 피스
-    [SerializeField] private CameraController cameraController; // CameraController 참조
-
+    
+    private CameraController cameraController;
     private Camera mainCamera;
     private Canvas canvas;
-    private Vector3 baseUIScale; // UI 요소의 기본 스케일
+    private Vector3 baseUIScale;
 
+
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+
+        canvas = uiElement.GetComponentInParent<Canvas>();
+        pieceController = GetComponentInParent<PieceController>();
+        cameraController = mainCamera.GetComponent<CameraController>();
+    }
     void Start()
     {
         EventManager.Instance.AddListener("ToggleUIElement", _ => ToggleUIElement());
         EventManager.Instance.AddListener("OnUIElement", _ => OnUIElement());
-
-        mainCamera = Camera.main;
-        canvas = uiElement.GetComponentInParent<Canvas>();
-        pieceController = GetComponentInParent<PieceController>();
-        cameraController = mainCamera.GetComponent<CameraController>();
+        
 
         // UI 요소의 기본 스케일 저장
         baseUIScale = uiElement.transform.localScale;

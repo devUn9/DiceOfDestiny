@@ -146,6 +146,61 @@ public class PieceController : MonoBehaviour
                 }
             }
 
+            // 다음 윗면의 인덱스 계산
+            int nextFaceIndex = -1;
+            if (moveDirection == Vector2Int.up)
+                nextFaceIndex = upTransition[2];
+            else if (moveDirection == Vector2Int.down)
+                nextFaceIndex = downTransition[2];
+            else if (moveDirection == Vector2Int.left)
+                nextFaceIndex = leftTransition[2];
+            else if (moveDirection == Vector2Int.right)
+                nextFaceIndex = rightTransition[2];
+
+            // 다음 윗면이 악마인 경우 사제와의 제약 조건 확인
+            if (nextFaceIndex >= 0 && piece.faces[nextFaceIndex].classData.className == "Demon")
+            {
+                foreach (PieceController targetPiece in PieceManager.Instance.Pieces)
+                {
+                    if (targetPiece == null || targetPiece == this) continue;
+
+                    Face targetFace = targetPiece.GetTopFace();
+                    if (targetFace.classData.className == "Priest")
+                    {
+                        List<Vector2Int> surroundList = BoardManager.Instance.GetTilePositions(DirectionType.Eight, targetPiece.gridPosition);
+                        if (surroundList.Contains(newPosition))
+                        {
+                            Debug.Log("Cannot move to a position near a Priest due to Demon face!");
+                            ToastManager.Instance.ShowToast(message: "악마와 사제는 공존할 수 없습니다!", transform);
+                            RotateHalfBack(moveDirection);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // 다음 윗면이 사제인 경우 악마와의 제약 조건 확인
+            if (nextFaceIndex >= 0 && piece.faces[nextFaceIndex].classData.className == "Priest")
+            {
+                foreach (PieceController targetPiece in PieceManager.Instance.Pieces)
+                {
+                    if (targetPiece == null || targetPiece == this) continue; // 널이거나 본인 제외
+
+                    Face targetFace = targetPiece.GetTopFace();
+                    if (targetFace.classData.className == "Demon")
+                    {
+                        List<Vector2Int> surroundList = BoardManager.Instance.GetTilePositions(DirectionType.Eight, targetPiece.gridPosition);
+                        if (surroundList.Contains(newPosition))
+                        {
+                            Debug.Log("Cannot move to a position near a Priest due to Demon face!");
+                            ToastManager.Instance.ShowToast(message: "악마와 사제는 공존할 수 없습니다!", transform);
+                            RotateHalfBack(moveDirection);
+                            return;
+                        }
+                    }
+                }
+            }
+
             if (newPosition.x >= 0 && newPosition.x < BoardManager.Instance.boardSize &&
                 newPosition.y >= 0 && newPosition.y < BoardManager.Instance.boardSizeY)
             {
@@ -192,6 +247,26 @@ public class PieceController : MonoBehaviour
             }
         }
     }
+
+    // 기물 눌렀을 때 호출, BoardSelectManager에 저장
+    private void OnMouseUp()
+    {
+        if (SkillManager.Instance.IsSelectingProgress)
+            return; // 스킬 진행 중이면 클릭 무시
+
+        Vector2Int position = new Vector2Int(
+        Mathf.RoundToInt(transform.position.x - BoardManager.Instance.boardTransform.position.x),
+        Mathf.RoundToInt(transform.position.y - BoardManager.Instance.boardTransform.position.y));
+
+        if (piece != null)
+        {
+            BoardSelectManager.Instance.PieceHighlightTiles(position);
+            EventManager.Instance.TriggerEvent("ToggleUIElement");
+        }
+        //BoardSelectManager.Instance.SetClickedTilePosition(position);
+        BoardSelectManager.Instance.ClearAllEffects();
+    }
+
     public Face GetTopFace()
     {
         return piece.faces[2];

@@ -267,21 +267,12 @@ public class ActiveSkill : MonoBehaviour
         }
     }
 
-
-    public IEnumerator MoveToBaby(PieceController piece)
-    {
-        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
-    }
-
     // 도적 스킬 : 이동 UI 띄우기
     public IEnumerator FastMove(PieceController piece)
     {
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
         moveSkillUI.Initialize(piece); // 추가
         yield return moveSkillUI.WaitForArrowClick();
-
-
-
     }
 
     // 도적 스킬 : 앞으로 이동
@@ -344,41 +335,75 @@ public class ActiveSkill : MonoBehaviour
         ObstacleManager.Instance.UpdateObstacleStep();
 
     }
-    
-    // 아기 스킬 : 원하는 말 하나를 한 칸 이동함
+
+    // 아기 스킬 : 다른 기물 이동
     public IEnumerator HelpBaby(PieceController pieceController)
     {
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
+        // 본인을 제외한 기물들 중 이동 가능한 타일이 있는지 확인
+        bool hasMovablePiece = false;
+        foreach (PieceController targetPiece in PieceManager.Instance.Pieces)
+        {
+            if (targetPiece == null || targetPiece == pieceController) // 본인 또는 null 기물 제외
+                continue;
+
+            // 기물의 상하좌우 또는 대각선 타일 확인
+            List<Vector2Int> movableTiles = BoardManager.Instance.GetTilePositions(DirectionType.Diagonal, targetPiece.gridPosition);
+            bool canMove = false;
+
+            // 이동 가능한 타일이 있는지 확인
+            foreach (Vector2Int tile in movableTiles)
+            {
+                if (BoardManager.Instance.IsEmptyTile(tile))
+                {
+                    canMove = true;
+                    break; // 빈 타일이 있으면 더 이상 확인할 필요 없음
+                }
+            }
+
+            if (canMove)
+            {
+                hasMovablePiece = true;
+                break; // 이동 가능한 기물이 하나라도 있으면 루프 종료
+            }
+        }
+
+        // 이동 가능한 기물이 없으면 코루틴 종료
+        if (!hasMovablePiece)
+        {
+            Debug.Log("No movable pieces available. Stopping HelpBaby coroutine.");
+            yield break;
+        }
+
+        // 기존 하이라이트 타일 제거
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
 
-        //본인을 제외한 기물 위치에 하이라이트 타일
-        for (int i = 0; i < PieceManager.Instance.Pieces.Count ; i++)
+        // 본인을 제외한 기물 위치에 하이라이트 타일 생성
+        foreach (PieceController piece in PieceManager.Instance.Pieces)
         {
-           // 본인이면 생략
-            if(PieceManager.Instance.Pieces[i] == PieceManager.Instance.currentPiece)
+            if (piece == null || piece == PieceManager.Instance.currentPiece)
                 continue;
 
             // 하이라이트 타일 생성
-            BoardSelectManager.Instance.PieceHighLightTilesMulty(PieceManager.Instance.Pieces[i].gridPosition);
+            BoardSelectManager.Instance.PieceHighLightTilesMulty(piece.gridPosition);
         }
 
+        // 기물 선택 UI 생성
         pieceSelectUI.CreateButtonsForPieces();
         SkillManager.Instance.IsSelectingProgress = true;
 
+        // 화살표 클릭 대기
         yield return moveSkillUI.WaitForArrowClick();
+
         // 기물 선택 UI 종료
         pieceSelectUI.ClearButtons();
 
+        // 하이라이트 타일 제거 및 현재 기물 위치 하이라이트
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
+        PieceManager.Instance.currentPiece = pieceController;
         BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
 
         SkillManager.Instance.IsSelectingProgress = false;
-        //yield return babySelectUI.WaitForTileClickPiece();
-
-
-
-
-
     }
 }
