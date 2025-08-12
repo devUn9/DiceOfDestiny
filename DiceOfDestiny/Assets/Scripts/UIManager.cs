@@ -19,14 +19,9 @@ public class UIManager : Singletone<UIManager>
     public bool IsSettingUIOpen() => settingUI != null && settingUI.activeSelf;
     public bool IsUIReady { get; private set; }
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        DontDestroyOnLoad(gameObject);
+    protected override void Awake()
+    { 
+        base.Awake();
 
         CreateCanvas();
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -94,7 +89,7 @@ public class UIManager : Singletone<UIManager>
             case "GameScene_2.0.1":
                 currentUIRoot = Instantiate(gameUI, currentCanvas.transform, false);
                 break;
-            case "GameScene_2.0":
+            case "GameScene_2.0.1 DH":
                 currentUIRoot = Instantiate(gameUI, currentCanvas.transform, false);
                 break;
             default:
@@ -102,8 +97,12 @@ public class UIManager : Singletone<UIManager>
                 break;
         }
 
-        settingUI = Instantiate(settingUIPrefab, currentCanvas.transform, false);
-        settingUI.SetActive(false);
+        if (settingUIPrefab != null)
+        {
+            settingUI = Instantiate(settingUIPrefab, currentCanvas.transform, false);
+            settingUI.SetActive(false);
+
+        }
 
         if (dialogueUIPrefab != null)
         {
@@ -119,7 +118,7 @@ public class UIManager : Singletone<UIManager>
         
         if (settingUI == null)
         {
-            Debug.LogWarning("[UIManager] SettingUI가 존재하지 않습니다.");
+            settingUI = Instantiate(settingUIPrefab, currentCanvas.transform, false);
             return;
         }
         settingUI.SetActive(isOn);

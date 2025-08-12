@@ -73,14 +73,14 @@ public class ActionPointManager : MonoBehaviour
     public void Reset()
     {
         CurrentTurn = 1;
-        
+
         Init();
     }
     public void Init()
     {
         GameState = GameState.Dice;
         CurrentDiceValue = 0;
-        SetAP(0,0);
+        SetAP(0, 0);
         NotifyChange();
     }
 
@@ -108,11 +108,21 @@ public class ActionPointManager : MonoBehaviour
 
     public void RollDice()
     {
-        int idx = UnityEngine.Random.Range(0, diceFaces.Length);
-        CurrentDiceValue = diceFaces[idx];
-        AddAP(CurrentDiceValue);
-        Debug.Log($"주사위를 굴려서 {CurrentDiceValue}가 나왔습니다.");
-        GameManager.Instance.actionPointManager.GameState = GameState.Action;
+        if (GameState != GameState.Dice) return;
+        if (DiceRollManager.Instance == null) return;
+        bool started = DiceRollManager.Instance.TryRoll((value) =>
+        {
+            CurrentDiceValue = value;
+            AddAP(value);
+            Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
+            GameManager.Instance.actionPointManager.GameState = GameState.Action;
+            OnValueChanged?.Invoke();
+        });
+        if (!started)
+        {
+            // 굴림 시작 실패 시에도 UI를 한 번 갱신해 버튼 상태를 안정화
+            OnValueChanged?.Invoke();
+        }
     }
 
     public void PieceAction()

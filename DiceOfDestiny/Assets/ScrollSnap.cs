@@ -1,19 +1,35 @@
+using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Collections;
 
-public class ScrollSnap : MonoBehaviour, IEndDragHandler, IBeginDragHandler
+[DisallowMultipleComponent]
+[RequireComponent(typeof(ScrollRect))]
+public sealed class ScrollSnap : MonoBehaviour, IEndDragHandler, IBeginDragHandler
 {
     [Header("필수 컴포넌트")]
-    public ScrollRect scrollRect;
+    [SerializeField] private ScrollRect scrollRect;
 
     [Header("설정")]
     private int itemCount;
-    public float snapSpeed = 10f;        // 스냅 애니메이션 속도
+    [SerializeField, Min(1f)] private float snapSpeed = 10f;        // 스냅 애니메이션 속도
+    [SerializeField, Min(0f)] private float snapEpsilon = 0.001f;  // 정착 허용 오차(정규화 좌표)
+    [SerializeField, Min(0.1f)] private float maxSnapTime = 0.6f;   // 무한 대기 방지
+    [SerializeField] private bool disableInertiaDuringSnap = true;   // 스냅 동안 관성 OFF
+    [SerializeField] private bool zeroElasticityDuringSnap = true;   // 스냅 동안 탄성 0으로
 
-    private bool isSnapping = false;
-    private Coroutine snapCoroutine = null;
+    // private bool isSnapping = false;
+    private Coroutine snapCoroutine;
+    private RectTransform viewport;
+    private RectTransform content;
+
+    private void Awake()
+    {
+        if (!scrollRect) scrollRect = GetComponent<ScrollRect>();
+        viewport = scrollRect.viewport;
+        content = scrollRect.content;
+    }
 
     private void Update()
     {
@@ -48,46 +64,81 @@ public class ScrollSnap : MonoBehaviour, IEndDragHandler, IBeginDragHandler
     public void OnBeginDrag(PointerEventData eventData)
     {
         // 드래그 시작 시 스냅 코루틴 중단
-        if (isSnapping && snapCoroutine != null)
+        if (snapCoroutine != null)
         {
             StopCoroutine(snapCoroutine);
-            isSnapping = false;
+            snapCoroutine = null;
         }
+        scrollRect.inertia = true;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnEndDrag(PointerEventData eventData) => TryStartSnap();
+
+    private void TryStartSnap()
     {
-        if (!isSnapping)
-        {
-            snapCoroutine = StartCoroutine(SnapToClosest());
-        }
+        if (!scrollRect || !content || !viewport) return;
+        if (content.childCount == 0) return;
+
+        if (snapCoroutine != null) StopCoroutine(snapCoroutine);
+        snapCoroutine = StartCoroutine(SnapToClosest());
     }
 
     IEnumerator SnapToClosest()
     {
-        isSnapping = true;
+        // 현재 설정 백업
+        bool prevInertia = scrollRect.inertia;
+        float prevElasticity = scrollRect.elasticity;
 
-        // 현재 스크롤 위치 (0~1)
-        float currentPos = scrollRect.horizontalNormalizedPosition;
+        // 스냅 모드 진입: 충돌 요인 제거
+        if (disableInertiaDuringSnap) scrollRect.inertia = false;
+        if (zeroElasticityDuringSnap) scrollRect.elasticity = 0f;
 
-        // 가장 가까운 아이템 인덱스 (0 ~ itemCount-1)
-        int targetIndex = Mathf.RoundToInt(currentPos * (itemCount - 1));
+        // 관성/탄성 잔여힘 제거
+        scrollRect.StopMovement();
+        scrollRect.velocity = Vector2.zero;
 
-        // 목표 위치 normalizedPosition
-        float targetPos = (float)targetIndex / (itemCount - 1);
+        // 목표 인덱스/위치 계산 (균일 간격 가정)
+        int count = Mathf.Max(1, scrollRect.content.childCount);
+        float current = Mathf.Clamp01(scrollRect.horizontalNormalizedPosition);
+        int targetIndex = Mathf.RoundToInt(current * (count - 1));
+        targetIndex = Mathf.Clamp(targetIndex, 0, count - 1);
+        float target = (count == 1) ? 0f : (float)targetIndex / (count - 1);
 
-        // 부드럽게 이동
-        while (Mathf.Abs(scrollRect.horizontalNormalizedPosition - targetPos) > 0.001f)
+        // SmoothDamp로 안정 수렴
+        float vel = 0f;
+        float elapsed = 0f;
+        float smoothTime = 1f / Mathf.Max(1f, snapSpeed);
+
+        while (elapsed < maxSnapTime)
         {
-            scrollRect.horizontalNormalizedPosition = Mathf.Lerp(
-                scrollRect.horizontalNormalizedPosition, targetPos, Time.deltaTime * snapSpeed);
+            float next = Mathf.SmoothDamp(
+                scrollRect.horizontalNormalizedPosition,
+                target,
+                ref vel,
+                smoothTime,
+                Mathf.Infinity,
+                Time.unscaledDeltaTime);
 
+            // Dead-zone: 목표 근처에서는 즉시 고정
+            if (Mathf.Abs(next - target) <= snapEpsilon) next = target;
+
+            scrollRect.horizontalNormalizedPosition = next;
+
+            if (next == target) break;
+
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
 
-        scrollRect.horizontalNormalizedPosition = targetPos;
-        isSnapping = false;
+        // 최종 고정 및 힘 제거
+        scrollRect.horizontalNormalizedPosition = target;
+        scrollRect.velocity = Vector2.zero;
 
+        // 설정 복구 (Movement Type은 내내 Elastic 유지)
+        scrollRect.inertia = prevInertia;
+        scrollRect.elasticity = prevElasticity;
+
+        snapCoroutine = null;
         Debug.Log($"Snap 완료! 현재 아이템 인덱스: {targetIndex}");
     }
 }

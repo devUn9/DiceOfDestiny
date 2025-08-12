@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PuddleBehaviour : Obstacle, IObstacleBehaviour
 {
@@ -37,9 +38,8 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
         if (className == "Baby")
         {
             Debug.Log("패로 돌아가는 코루틴 시작");
-
+            ToastManager.Instance.ShowToast($"응애! <color=blue>(퐁당)</color>", piece.transform, 1f);
             StartCoroutine(GoHand(piece));
-
             return;
         }
 

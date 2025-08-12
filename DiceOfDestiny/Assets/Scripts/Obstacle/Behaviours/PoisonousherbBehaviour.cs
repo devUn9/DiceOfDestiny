@@ -36,7 +36,7 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
 
             if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
             {
-                Debug.Log("아기는 독초를 못 밟습니다.");
+                Debug.Log("아기는 너무 작아서 밟아도 독초가 안 없어집니다.");
                 ToastManager.Instance.ShowToast("아기는 독초를 밟을 수 없습니다.", currentTile.GetPiece().transform, 1f);
                 return;
             }

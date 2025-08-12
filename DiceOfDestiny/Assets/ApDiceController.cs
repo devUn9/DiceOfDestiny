@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class ApDiceController : MonoBehaviour
 {
     [Header("Sprite Renderers")]
-    public SpriteRenderer expandRenderer; 
-    public SpriteRenderer contractRenderer; 
-    public SpriteRenderer nextRenderer; 
+    [SerializeField] private SpriteRenderer expandRenderer;
+    [SerializeField] private SpriteRenderer contractRenderer;
+    [SerializeField] private SpriteRenderer nextRenderer;
 
     [Header("Dice Sides")]
-    public DiceFace[] diceFaces;
+    [SerializeField] private DiceFace[] diceFaces;
 
     [Header("Roll Settings")]
     [SerializeField] private int rollCountMin = 3;
@@ -27,14 +30,31 @@ public class ApDiceController : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 endPosition;
 
-    bool isRolling = false;
+    private bool isRolling = false;
 
-    private void Update()
+    public event Action<int> OnRollEnded;   // 굴림 종료 시 값 전달
+
+    #region LifeCycle
+    private void OnEnable()
     {
-        if (Input.GetMouseButtonDown(0) && !isRolling)
+        // 재사용 시 초기 상태 리셋
+        isRolling = false;
+        transform.localScale = Vector3.one * 3.5f;
+        foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
         {
-            DiceRoll();
+            var c = sr.color;
+            sr.color = new Color(c.r, c.g, c.b, 1f);
         }
+    }
+    #endregion
+
+    public void PlayRoll()
+    {
+        if (!gameObject.activeInHierarchy)
+            gameObject.SetActive(true);
+
+        if (isRolling) return;
+        DiceRoll();
     }
 
     void DiceRoll()
@@ -222,7 +242,9 @@ public class ApDiceController : MonoBehaviour
 
         // 마지막 사이드 설정
         isRolling = false;
-        Debug.Log($"Dice rolled: {diceFaces[nextIndex].value}");
+        int finalValue = diceFaces[nextIndex].value;
+        OnRollEnded?.Invoke(finalValue);
+        Debug.Log($"Dice rolled: {finalValue}");
     }
 
     private void RollCycleStep(float t, SpriteRenderer expand, SpriteRenderer contract)
@@ -246,6 +268,58 @@ public class ApDiceController : MonoBehaviour
     }
 
     int GetNextIndex(int index) => (index + 1) % diceFaces.Length;
+
+    public IEnumerator ZoomIn()
+    {        
+        float elapsed;
+        float duration;    
+
+        // 1단계: 중앙 이동 및 회전 보정
+        Camera cam = Camera.main;
+        Vector3 screenCenter = new Vector3((Screen.width / 2f) + 100f, Screen.height / 2f, cam.nearClipPlane);
+        Vector3 targetPosition = cam.ScreenToWorldPoint(screenCenter);
+        targetPosition.z = 0f;
+        
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, 0f);
+        
+        elapsed = 0f;
+        duration = 1f;
+        
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            float smoothT = Mathf.SmoothStep(0f, 1f, t);
+            
+            transform.position = Vector3.Lerp(startPosition, targetPosition, smoothT);
+            transform.rotation = Quaternion.Lerp(startRotation, targetRotation, smoothT);
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 2단계: 크기 확대
+        elapsed = 0f;
+        duration = 0.7f;
+
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            float scaleValue = Mathf.Lerp(1f, 2.5f, t);
+            transform.localScale = Vector3.one * scaleValue;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.localScale = Vector3.one * 2.5f;
+
+        transform.position = targetPosition;
+        transform.rotation = targetRotation;
+
+        // 3단계: 대기 후 비활성화
+        yield return new WaitForSecondsRealtime(0.5f);
+        gameObject.SetActive(false);
+    }
 }
 
 
