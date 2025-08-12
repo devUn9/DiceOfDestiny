@@ -6,7 +6,7 @@ public class PieceSelectUI : MonoBehaviour
 {
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private Canvas canvas;
-
+        
     private Dictionary<GameObject, PieceController> buttonToPieceMap = new Dictionary<GameObject, PieceController>();
     private List<GameObject> buttons = new List<GameObject>();
     private PieceController selectedPiece;

@@ -25,7 +25,7 @@ public class PieceController : MonoBehaviour
     [SerializeField] public SpriteRenderer colorRenderer;
 
 
-    bool isMoving = false; // 이동 중인지 여부
+    public bool isMoving = false; // 이동 중인지 여부
 
     public StatusEffectController statusEffectController;
 
@@ -250,8 +250,15 @@ public class PieceController : MonoBehaviour
     // 기물 눌렀을 때 호출, BoardSelectManager에 저장
     private void OnMouseUp()
     {
-        if (SkillManager.Instance.IsSelectingProgress)
-            return; // 스킬 진행 중이면 클릭 무시
+        // UI 위 클릭이면 무시
+        if (IsPointerOnLayer("BlockUI"))
+            return;
+
+        // 움직이거나 스킬 진행 중이면 클릭 무시
+        if (isMoving || SkillManager.Instance.IsSelectingProgress)
+        {
+            return;
+        }
 
         Vector2Int position = new Vector2Int(
         Mathf.RoundToInt(transform.position.x - BoardManager.Instance.boardTransform.position.x),
@@ -264,6 +271,27 @@ public class PieceController : MonoBehaviour
         }
         //BoardSelectManager.Instance.SetClickedTilePosition(position);
         BoardSelectManager.Instance.ClearAllEffects();
+    }
+
+    private bool IsPointerOnLayer(string layerName)
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        int targetLayer = LayerMask.NameToLayer(layerName);
+
+        foreach (var result in results)
+        {
+            if (result.gameObject.layer == targetLayer)
+                return true; // 해당 레이어 위에 있음
+        }
+
+        return false; // 해당 레이어 위에 없음
     }
 
     public Face GetTopFace()

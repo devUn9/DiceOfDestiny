@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class Tile : MonoBehaviour
 {
@@ -45,6 +48,10 @@ public class Tile : MonoBehaviour
     // 타일 눌렀을 때 호출, BoardSelectManager에 저장
     private void OnMouseUp()
     {
+        // UI 위 클릭이면 무시
+        if (IsPointerOnLayer("BlockUI"))
+            return;
+
         if (SkillManager.Instance.IsSelectingProgress)
             return; // 스킬 진행 중이면 클릭 무시
 
@@ -63,5 +70,26 @@ public class Tile : MonoBehaviour
         }
         BoardSelectManager.Instance.SetClickedTilePosition(position);
         BoardSelectManager.Instance.ClearAllEffects();
+    }
+
+    private bool IsPointerOnLayer(string layerName)
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        int targetLayer = LayerMask.NameToLayer(layerName);
+
+        foreach (var result in results)
+        {
+            if (result.gameObject.layer == targetLayer)
+                return true; // 해당 레이어 위에 있음
+        }
+
+        return false; // 해당 레이어 위에 없음
     }
 }

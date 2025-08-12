@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 6989186115329613593}
   - component: {fileID: -496050788824586386}
   - component: {fileID: 6137268399929019762}
-  - component: {fileID: 1601854556063128969}
+  - component: {fileID: 6639501204920833905}
   m_Layer: 0
   m_Name: Piece0
   m_TagString: Untagged
@@ -403,6 +403,7 @@ MonoBehaviour:
   gridPosition: {x: 0, y: 0}
   classRenderer: {fileID: 6441678837052477297}
   colorRenderer: {fileID: 3789393067031802111}
+  isMoving: 0
   statusEffectController: {fileID: 0}
 --- !u!114 &-496050788824586386
 MonoBehaviour:
@@ -432,8 +433,7 @@ MonoBehaviour:
   uiElement: {fileID: 1915675260418450139}
   offset: {x: 0, y: 0}
   pieceController: {fileID: 0}
-  cameraController: {fileID: 0}
---- !u!61 &1601854556063128969
+--- !u!61 &6639501204920833905
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -491,7 +491,7 @@ GameObject:
   - component: {fileID: 5381872500594462346}
   - component: {fileID: 7754529659093941139}
   - component: {fileID: 755099737506233582}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: RightArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &438653871639293440
 RectTransform:
   m_ObjectHideFlags: 0
@@ -875,7 +875,8 @@ GameObject:
   - component: {fileID: 1252055304719963721}
   - component: {fileID: 2121575205023685010}
   - component: {fileID: 1966670263121543505}
-  m_Layer: 5
+  - component: {fileID: 3100005074057541261}
+  m_Layer: 3
   m_Name: UpArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -898,7 +899,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -20}
+  m_AnchoredPosition: {x: -0.22, y: -21.31}
   m_SizeDelta: {x: 45, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1252055304719963721
@@ -961,6 +962,74 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3100005074057541261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026834440359459357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2121575205023685010}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 624855518047350019}
+        m_TargetAssemblyTypeName: PieceControlUI, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6137268399929019762}
+        m_TargetAssemblyTypeName: UIFollow, Assembly-CSharp
+        m_MethodName: ToggleUIElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2300401942455410093
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,7 +1750,7 @@ GameObject:
   - component: {fileID: 2458661909812322483}
   - component: {fileID: 7195803109333804506}
   - component: {fileID: 6407019957172460834}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: LeftArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1854,7 +1923,7 @@ GameObject:
   - component: {fileID: 45921282835780445}
   - component: {fileID: 5666445023096382036}
   - component: {fileID: 7882244439586154756}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: DownArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
