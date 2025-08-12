@@ -5,13 +5,6 @@ using UnityEngine.UI;
 
 public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 {
-<<<<<<< Updated upstream
-    [Header("UI Panels")]
-    [SerializeField] private GameObject cutomizePanel;
-    [SerializeField] private GameObject carouselUIPanel;
-    [SerializeField] private GameObject pieceCarouselUI;
-    [SerializeField] private GameObject pieceNetCarouselUI;
-=======
     [SerializeField] private GameObject diceCustomizeUIPrefab;
     private DiceCustomizeUI diceCustomizeUI;
 
@@ -25,43 +18,23 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     private GameObject piecesContent;
     private GameObject pieceNetContent;
->>>>>>> Stashed changes
 
     [SerializeField] private GameObject piecePreviewButtonPrefab;
     [SerializeField] private GameObject pieceNetPreviewButtonPrefab;
 
-<<<<<<< Updated upstream
-    List<PiecePreviewButton> piecePreviewButtonList = new List<PiecePreviewButton>();
-    List<PieceNetPreviewButton> pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
-
-    [Header("Sticker Drawer")]
-    public GameObject stickerDrawer;
-    public GameObject stickerSourcePrefab;
-
-    [Header("Customize Controller")]
-    public CustomizePieceController customizePieceContoller;  
-    public GameObject backToMainButton;
-=======
-    private GameObject customizePanel;
-
     List<PiecePreviewButton> piecePreviewButtonList;
     List<PieceNetPreviewButton> pieceNetPreviewButtonList;
->>>>>>> Stashed changes
 
-    [HideInInspector] public bool isFolded;
+    private GameObject customizePanel;
+    CustomizePieceController customizePieceContoller;  
 
-<<<<<<< Updated upstream
-=======
     [SerializeField] private GameObject stickerSourcePrefab;
-
-    CustomizePieceController customizePieceContoller;
     GameObject stickerDrawer;
 
     private GameObject backToMainButton;
-
     [HideInInspector] public bool isFolded;
 
->>>>>>> Stashed changes
+
     public void Initialize()
     {
         GameObject go = Instantiate(diceCustomizeUIPrefab, GameObject.Find("Canvas").transform);

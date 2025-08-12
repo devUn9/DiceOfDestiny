@@ -2,19 +2,6 @@ using UnityEngine;
 
 public class DiceCustomizeUI : MonoBehaviour
 {
-<<<<<<< Updated upstream
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-=======
     [Header("SelectPanel")]
     public GameObject selectPanel;
     public GameObject pieceScrollView;
@@ -28,5 +15,5 @@ public class DiceCustomizeUI : MonoBehaviour
     public GameObject showPieceButton;
     public GameObject showPieceNetButton;
     public GameObject backToMainButton;
->>>>>>> Stashed changes
+
 }
