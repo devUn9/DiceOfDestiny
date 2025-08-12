@@ -29,7 +29,7 @@ public class GameManager : Singletone<GameManager>
                 Debug.LogError("[GameManager] Canvas 오브젝트를 찾을 수 없습니다.");
                 return;
             }
-            actionPointManager = GetComponent<ActionPointManager>();
+            actionPointManager = FindAnyObjectByType<ActionPointManager>();
             actionPointUI = canvas.GetComponentInChildren<ActionPointUI>();
 
             historyManager = GetComponent<HistoryManager>();
