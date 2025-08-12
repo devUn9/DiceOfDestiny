@@ -29,11 +29,15 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
             {
                 BoardManager.Instance.MoveObstacle(this, nextPosition);
                 AnimateObstacleMove(nextStep);
+
+                RuleEvents.TriggerRule("Zombie_Move");
             }
             else
             {
                 AnimateObstacleHalfBack(nextStep);
                 nextStep = oppositeStep;
+
+                RuleEvents.TriggerRule("Zombie_Move_MeetObstacle");
             }
         }
         else
@@ -43,6 +47,8 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
                 AnimateObstacleHalfBack(nextStep);
                 nextStep = oppositeStep;
                 ToastManager.Instance.ShowToast("어림도 없지! <color=red>(팅!)</color>", nextTile.GetPiece().transform, 1f);
+
+                RuleEvents.TriggerRule("Zombie_VsCombat_RecoilStun");
             }
             else
             {
@@ -59,6 +65,8 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
                 var stunTurns = 2;
                 nextTile.GetPiece().statusEffectController.SetStatus(StatusType.Stun, stunTurns);
                 ToastManager.Instance.ShowToast($"좀비한테 물렸습니다! {stunTurns}턴간 기절합니다.", nextTile.GetPiece().transform, 1f);
+
+                RuleEvents.TriggerRule("Zombie_VsNonCombat_BiteStun");
             }
         }
     }

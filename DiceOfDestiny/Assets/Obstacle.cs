@@ -9,8 +9,6 @@ public enum ObstacleType
     Lion,
     Puddle,
     Chest,
-    ManaSpring,
-    Goblin,
     PoisonousHerb,
     Grass,
     Slime,
@@ -48,7 +46,7 @@ public class Obstacle : MonoBehaviour
     protected IEnumerator GoHand(PieceController pieceController)
     {
         // 약간의 연출 대기 (예: 0.2초)
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
 
         // 기존 보드의 기물 제거
         Destroy(pieceController.gameObject);

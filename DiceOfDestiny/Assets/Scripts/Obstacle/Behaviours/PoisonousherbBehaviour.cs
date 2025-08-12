@@ -23,6 +23,8 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
                 GameManager.Instance.actionPointManager.AddAP(point);
                 Debug.Log($"악마가 독초를 밟아 행동력 +{point}");
                 ToastManager.Instance.ShowToast($"독초를 밟아 {point} 행동력을 얻었습니다.", currentPiece.transform, 1f);
+                RuleEvents.TriggerRule("PoisonousHerb_Passive_vsDemon");
+
                 BoardManager.Instance.RemoveObstacle(this);
                 return;
             }
@@ -30,12 +32,12 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
             GameManager.Instance.actionPointManager.RemoveAP(point);
             Debug.Log($"독초를 밟아 행동력 -{point}");
             ToastManager.Instance.ShowToast($"독초를 밟아 {point} 행동력을 잃었습니다.", currentPiece.transform, 1f);
+            RuleEvents.TriggerRule("PoisonousHerb_Passive");
 
             if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
             {
-                Debug.Log("아기는 독초를 못 밟습니다.");
+                Debug.Log("아기는 너무 작아서 밟아도 독초가 안 없어집니다.");
                 ToastManager.Instance.ShowToast("아기는 독초를 밟을 수 없습니다.", currentTile.GetPiece().transform, 1f);
-                BoardManager.Instance.RemoveObstacle(this);
                 return;
             }
 

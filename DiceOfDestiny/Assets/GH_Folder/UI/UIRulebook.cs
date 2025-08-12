@@ -1,24 +1,60 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using TMPro;
+using System.Collections.Generic;
 
-public class UIRulebook : MonoBehaviour
+public class UIRulebook : Singletone<UIRulebook>
 {
     [SerializeField] private GameObject ClassRule;
     [SerializeField] private GameObject ObstacleRule;
 
     [SerializeField] private GameObject RuleTextPrefab;
-    void Update()
+
+    public void ShowRule(RuleData rule)
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        switch (rule.category)
         {
-            Instantiate(RuleTextPrefab, ClassRule.transform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(ClassRule.transform.GetComponent<RectTransform>());
+            case RuleCategory.Class:
+                CreateRuleText(rule, ClassRule.transform);
+                break;
+            case RuleCategory.Obstacle:
+                CreateRuleText(rule, ObstacleRule.transform);
+                break;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+    }
+
+    private void CreateRuleText(RuleData rule, Transform categoryTransform)
+    {
+        GameObject prefab = Instantiate(RuleTextPrefab, categoryTransform);
+        var ruleTextUI = prefab.GetComponent<RuleText>();
+        ruleTextUI.Initialize(rule);
+
+        SortChildrenByPriority(categoryTransform);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(categoryTransform.GetComponent<RectTransform>());
+    }
+
+    private void SortChildrenByPriority(Transform parent)
+    {
+        List<Transform> children = new();
+
+        foreach (Transform child in parent)
         {
-            Instantiate(RuleTextPrefab, ObstacleRule.transform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(ObstacleRule.transform.GetComponent<RectTransform>());
+            children.Add(child);
+        }
+
+        // displayPriority 기준으로 정렬 (작은 값이 위에 오도록)
+        children.Sort((a, b) =>
+        {
+            var aPriority = a.GetComponent<RuleText>()?.ruleData.displayPriority ?? 0;
+            var bPriority = b.GetComponent<RuleText>()?.ruleData.displayPriority ?? 0;
+            return aPriority.CompareTo(bPriority);
+        });
+
+        // 정렬된 순서대로 SetSiblingIndex
+        for (int i = 0; i < children.Count; i++)
+        {
+            children[i].SetSiblingIndex(i);
         }
     }
 }

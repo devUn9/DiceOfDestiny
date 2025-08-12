@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1277410006, guid: 7885ce3e0f277a2408fdf855c4cb1b0c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3f100f27ffd55449b76da611f76ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleType: 11
+  obstacleType: 9
   nextStep: 4
   obstaclePosition: {x: 0, y: 0}
   isWalkable: 1

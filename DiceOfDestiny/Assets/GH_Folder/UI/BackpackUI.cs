@@ -33,6 +33,7 @@ public class BackpackUI : MonoBehaviour
     private readonly int[] rightRotateTransition = new int[] { 0, 4, 2, 5, 3, 1 }; // 오른쪽으로 회전
 
     private bool isMove = false;
+    private bool isChoice = false;
 
     private void Start()
     {
@@ -54,8 +55,12 @@ public class BackpackUI : MonoBehaviour
 
             currentPiece = PieceManager.Instance.pieceDatas[i];
             if (currentPiece == null)
-                return;
-            Debug.Log("piece no null");
+            {
+                SpawnPieceColorImage.color = Color.white;
+                SpawnPieceObject.GetComponent<Image>().sprite = null;
+                continue;
+            }
+
             ChoicePieceImageColorImage[i].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
             ChoicePieceClassImage[i].sprite = currentPiece.faces[2].classData.sprite;
         }
@@ -91,6 +96,10 @@ public class BackpackUI : MonoBehaviour
         // 윗면 선택창 On
         if (!ChoiceTopFaceWindow.activeSelf)
             ChoiceTopFaceWindow.SetActive(true);
+
+        // 기물 선택 UI의 기물 윗면 새로고침
+        ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
+        ChoicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
 
         // 기물 윗면 선택 UI 의 기물 윗면 초기화
         SpawnPieceColorImage.color = BoardManager.Instance.GetColor(currentPiece.faces[2].color);
@@ -165,12 +174,24 @@ public class BackpackUI : MonoBehaviour
             return;
         }
 
+        if (BoardSelectManager.Instance.isWaitingForClick)
+        {
+            Debug.Log("클릭 대기 종료");
+            BoardSelectManager.Instance.ClearAllEffects();
+            BoardSelectManager.Instance.isWaitingForClick = false;
+            return;
+        }
+
         // 피스 스폰
         StartCoroutine(SpawnPiece());
     }
 
     public void onClickUpdateTopFace(int dir)
     {
+        // 충돌 지점
+        if (currentPiece == null)
+            return;
+
         if (isMove)
             return;
 

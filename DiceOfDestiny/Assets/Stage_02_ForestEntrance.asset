@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b2505132fde72345af474f8fca00a1a, type: 3}
+  m_Name: Stage_02_ForestEntrance
+  m_EditorClassIdentifier: 
+  <StageName>k__BackingField: "\uC232\uC758 \uCD08\uC785"
+  mission: 0
+  minimumColorEnsure: 0
+  weightPower: 10
+  redWeight: 1
+  greenWeight: 1
+  blueWeight: 1
+  yellowWeight: 1
+  purpleWeight: 1
+  orangeWeight: 1
+  availableObstacle:
+  - type: 1
+    weight: 5
+  - type: 7
+    weight: 3
+  - type: 8
+    weight: 3
+  - type: 5
+    weight: 1
+  - type: 0
+    weight: 3
+  - type: 10
+    weight: 3
+  obstacleDensity: 0.2
+  stageNumber: 2
+  stageTitle: "\uC232\uC758 \uCD08\uC785"

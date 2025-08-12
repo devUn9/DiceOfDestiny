@@ -25,6 +25,11 @@ public class PieceArrowUI : MonoBehaviour
     {
         arrowImage.color = new Color(arrowImage.color.r, arrowImage.color.g, arrowImage.color.b, TARGET_ALPHA);
         arrowAnim.speed = 0f;
-        arrowAnim.Play("Animation", 0, 0f);
+        //arrowAnim.Play("Animation", 0, 0f);
+    }
+
+    public void OnDisable()
+    {
+        OnArrowExit();
     }
 }
