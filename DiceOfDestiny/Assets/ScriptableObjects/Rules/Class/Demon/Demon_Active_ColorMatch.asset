@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Demon_Active_ColorMatch
   m_EditorClassIdentifier: 
   ruleDescription: "\uC545\uB9C8: \uAC8C\uC784\uD310\uC5D0\uC11C \uC7A5\uC560\uBB3C\uC774\uB098
-    \uAE30\uBB3C\uC774 \uC5C6\uB294 \uACF3 1\uCE78\uC5D0 \uB3C5\uCD08\uB97C \uC2EC\uB294\uB2E4.."
+    \uAE30\uBB3C\uC774 \uC5C6\uB294 \uACF3 1\uCE78\uC5D0 \uB3C5\uCD08\uB97C \uC2EC\uB294\uB2E4."
   displayPriority: 16
   category: 0
   triggerCount: 3

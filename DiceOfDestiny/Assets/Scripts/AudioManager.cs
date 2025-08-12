@@ -27,16 +27,14 @@ public class AudioManager : Singletone<AudioManager>
     private float clickCooldown = 0.05f; // 50ms
     public static bool IsClickSoundEnabled = true;
 
-    private void Awake()
+    protected override void Awake()
     {
-        // if (Instance != null)
-        // {
-        //     Destroy(gameObject);
-        //     return;
-        // }
-
-        // Instance = this;
-        DontDestroyOnLoad(gameObject);
+        base.Awake();
+        if (bgmSource == null || sfxSource == null || audioMixer == null)
+        {
+            Debug.LogError("AudioManager is missing required components. Please assign them in the inspector.");
+            return;
+        }
 
         bgmDict = bgmClips.ToDictionary(c => c.name, c => c);
         sfxDict = sfxClips.ToDictionary(c => c.name, c => c);

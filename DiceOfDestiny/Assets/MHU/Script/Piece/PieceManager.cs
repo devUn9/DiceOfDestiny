@@ -22,8 +22,9 @@ public class PieceManager : Singletone<PieceManager>
 
     public Piece[] pieceDatas = new Piece[3]; // 이번 게임동안 내가 가져온 말
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         UpdatePieceManagerList();
 
         InitializePieceDatas();

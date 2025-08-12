@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d9f41b650ce96d4b8ff706e9f924cc8, type: 3}
   m_Name: Zombie_VsCombat_RecoilStun
   m_EditorClassIdentifier: 
-  ruleDescription: "\uC880\uBE44\uAC00 \uC804\uD22C\uACC4\uB97C \uB9CC\uB098\uBA74
-    \uD295\uAE30\uACE0 1\uD134\uB3D9\uC548 \uC2A4\uD134 \uC0C1\uD0DC\uAC00 \uB41C\uB2E4."
+  ruleDescription: "\uC880\uBE44\uB294 \uC804\uD22C\uACC4\uB97C \uB9CC\uB098\uBA74
+    \uD295\uAE30\uACE0 1\uD134 \uB3D9\uC548 \uC2A4\uD134 \uC0C1\uD0DC\uAC00 \uB41C\uB2E4."
   displayPriority: 14
   category: 1
   triggerCount: 3

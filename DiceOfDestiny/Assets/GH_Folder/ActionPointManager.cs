@@ -41,7 +41,9 @@ public class ActionPointManager : MonoBehaviour
             case GameState.Dice:
                 if (Input.GetKeyDown(KeyCode.R))
                     RollDice();
-                break;
+                if (Input.GetKeyDown(KeyCode.Z))
+                    GameManager.Instance.actionPointManager.AddAP(100);
+            break;
 
             case GameState.Action:
                 if (Input.GetKeyDown(KeyCode.T))
@@ -83,7 +85,7 @@ public class ActionPointManager : MonoBehaviour
             CurrentDiceValue = value;
             AddAP(value);
             Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
-            GameManager.Instance.actionPointManager.GameState = GameState.Action;
+            GameState = GameState.Action;
             OnValueChanged?.Invoke();
         });
 
