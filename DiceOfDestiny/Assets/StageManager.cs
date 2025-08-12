@@ -19,30 +19,24 @@ public sealed class StageManager : Singletone<StageManager>
     [Header("Next Stage Info")]
     [SerializeField] private GameObject NextStageUI;
     [SerializeField] private GameObject mainCanvasGroup;
-    private Coroutine bannerRoutine;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         // StageData 유효성 검사
         if (stageProfiles == null || stageProfiles.Length == 0)
         {
             Debug.LogError("[StageManager] StageProfiles 배열이 비어 있습니다.");
         }
 
-        // bannerManager가 비어 있으면 Canvas에서 자동 검색
         if (bannerManager == null)
         {
-            var canvas = GameObject.Find("Canvas");
-            if (canvas != null)
-            {
-                bannerManager = canvas.GetComponentInChildren<StageBannerManager>(true);
-            }
-
+            bannerManager = FindAnyObjectByType<StageBannerManager>(FindObjectsInactive.Include);
             if (bannerManager == null)
-            {
                 Debug.LogWarning("[StageManager] StageBannerManager를 찾지 못했습니다. 배너를 띄우지 않습니다.");
-            }
         }
+
     }
 
     private void Start()
@@ -95,8 +89,6 @@ public sealed class StageManager : Singletone<StageManager>
         StartCoroutine(DeferredStartStage());
         return true;
     }
-
-    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
     public void StageClear()
     {

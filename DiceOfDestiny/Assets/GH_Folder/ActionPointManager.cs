@@ -65,6 +65,9 @@ public class ActionPointManager : MonoBehaviour
 
     public void InitTurn()
     {
+        if (DiceRollManager.Instance != null)
+            DiceRollManager.Instance.DeactivateAllDice();
+
         GameState = GameState.Dice;
         CurrentDiceValue = 0;
         actionPoint.Reset();
@@ -138,6 +141,9 @@ public class ActionPointManager : MonoBehaviour
                 ToastManager.Instance.ShowToast("먼저 주사위를 굴리세요.", transform);
             return;
         }
+
+        if (DiceRollManager.Instance != null)
+            DiceRollManager.Instance.DeactivateAllDice();
 
         if (PieceManager.Instance != null)
             PieceManager.Instance.DecreaseDebuffAllPieces();

@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: ce9edd7b2ed68e9478ff09f087366ffd, type: 3}
+  m_Sprite: {fileID: -418678913202170186, guid: 351543ee48179404da64486a3c5556c1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -163,7 +163,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 5b03dde04c7beff41a3d2d170021ef34, type: 3}
+  m_Sprite: {fileID: 1983979194, guid: 351543ee48179404da64486a3c5556c1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -225,17 +225,17 @@ MonoBehaviour:
   contractRenderer: {fileID: 6583498445256631222}
   nextRenderer: {fileID: 1568442263394717950}
   diceFaces:
-  - sprite: {fileID: 21300000, guid: ce9edd7b2ed68e9478ff09f087366ffd, type: 3}
+  - sprite: {fileID: -418678913202170186, guid: 351543ee48179404da64486a3c5556c1, type: 3}
     value: 1
-  - sprite: {fileID: 21300000, guid: 80e9eaf8288e57e49b1c283992861fcb, type: 3}
+  - sprite: {fileID: -17483421, guid: 351543ee48179404da64486a3c5556c1, type: 3}
     value: 2
-  - sprite: {fileID: 21300000, guid: 5b03dde04c7beff41a3d2d170021ef34, type: 3}
+  - sprite: {fileID: 1983979194, guid: 351543ee48179404da64486a3c5556c1, type: 3}
     value: 3
-  - sprite: {fileID: 21300000, guid: ce9edd7b2ed68e9478ff09f087366ffd, type: 3}
+  - sprite: {fileID: -418678913202170186, guid: 351543ee48179404da64486a3c5556c1, type: 3}
     value: 1
-  - sprite: {fileID: 21300000, guid: 80e9eaf8288e57e49b1c283992861fcb, type: 3}
+  - sprite: {fileID: -17483421, guid: 351543ee48179404da64486a3c5556c1, type: 3}
     value: 2
-  - sprite: {fileID: 21300000, guid: 5b03dde04c7beff41a3d2d170021ef34, type: 3}
+  - sprite: {fileID: 1983979194, guid: 351543ee48179404da64486a3c5556c1, type: 3}
     value: 3
   rollCountMin: 8
   rollCountMax: 10
@@ -319,7 +319,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 80e9eaf8288e57e49b1c283992861fcb, type: 3}
+  m_Sprite: {fileID: -17483421, guid: 351543ee48179404da64486a3c5556c1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
