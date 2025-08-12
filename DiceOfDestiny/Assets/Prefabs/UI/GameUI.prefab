@@ -420,7 +420,6 @@ GameObject:
   - component: {fileID: 5871212226624033188}
   - component: {fileID: 1348566884849320576}
   - component: {fileID: 6330682711020914740}
-  - component: {fileID: 1095804401544566440}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -478,21 +477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b613c3959f6b54192a170652e71533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1095804401544566440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1551000356895241345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af7c2f23854bb7c4fb33cd735b94d0e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  apManager: {fileID: 3190985300922684211}
-  tokenPrefab: {fileID: 2654133370820500766, guid: 118c445ca462e654da52229e22f20f38, type: 3}
-  tokenParent: {fileID: 267711609012087}
 --- !u!1 &2244925693305487814
 GameObject:
   m_ObjectHideFlags: 0
@@ -2097,26 +2081,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5871212226624033188}
     m_Modifications:
-    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 7052730918962665029, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2201,10 +2165,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BackpackUI
       objectReference: {fileID: 0}
-    - target: {fileID: 9023347391756377333, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -1489819980984513191, guid: e60878b8dab60b74c8d193c9810fb540, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2303,14 +2263,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1056844544007088008, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
-      propertyPath: m_fontSize
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 1056844544007088008, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 64
-      objectReference: {fileID: 0}
     - target: {fileID: 1902015867770646705, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
       propertyPath: m_Name
       value: ActionPointUI
@@ -2320,22 +2272,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
---- !u!224 &267711609012087 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 9010475385894040744, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
-  m_PrefabInstance: {fileID: 9010384423136660447}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3190985300922684211 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5855797569895749868, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
-  m_PrefabInstance: {fileID: 9010384423136660447}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c16fdf1bb19ef6409f457b60f5af1f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &8177226717378978277 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 896225925768882746, guid: 53453f6633213f64ea5b330d850736b4, type: 3}
