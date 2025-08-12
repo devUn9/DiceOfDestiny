@@ -44,27 +44,11 @@ public class BoardManager : Singletone<BoardManager>
     List<int> colorIndices = new List<int>();
     List<ObstacleType> obstacleIndices = new List<ObstacleType>();
 
+    public void Initialize()
+    {
 
-    void Start()
-    {
-               
-    }
-
-    void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if(SceneManager.GetActiveScene().name == "GameScene_2.0.1")
-        {
-            boardSizeY = boardSize + 2;
-            GenerateBoard();
-        }
-    }
-
-    private void Update()
-    {
+        boardSizeY = boardSize + 2;
+        GenerateBoard();
 
     }
 

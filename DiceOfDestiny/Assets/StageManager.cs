@@ -129,7 +129,7 @@ public sealed class StageManager : Singletone<StageManager>
         mainCanvasGroup.SetActive(true);
 
         // 행동력, 턴 상태 초기화
-        GameManager.Instance.actionPointManager.Reset();
+        GameManager.Instance.ActionPointManager.Reset();
 
         // 기물 인벤토리 초기화
 

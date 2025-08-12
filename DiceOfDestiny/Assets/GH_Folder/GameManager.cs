@@ -5,9 +5,10 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singletone<GameManager>
 {
     public Canvas mainCanvas { get; private set; }
-    public ActionPointManager actionPointManager { get; private set; }
-    public ActionPointUI actionPointUI { get; private set; }
-    public DiceCustomizeManager diceCustomizeManager { get; private set; }
+    public ActionPointManager ActionPointManager { get; private set; }
+    public ActionPointUI ActionPointUI { get; private set; }
+    public DiceCustomizeManager DiceCustomizeManager { get; private set; }
+    public BoardManager BoardManager { get; private set; }
 
     public Piece[] selectedPieces = new Piece[3];
 
@@ -22,19 +23,26 @@ public class GameManager : Singletone<GameManager>
 
         if(newScene.name == "CustomizeScene")
         {
-            if(diceCustomizeManager == null)
+            if(DiceCustomizeManager == null)
             {
-                diceCustomizeManager = FindFirstObjectByType<DiceCustomizeManager>();
+                DiceCustomizeManager = FindFirstObjectByType<DiceCustomizeManager>();
             }
 
-            diceCustomizeManager.Initialize();
+            DiceCustomizeManager.Initialize();
         }
 
-        if (newScene.name == "GameScene")
+        if (newScene.name == "GameScene" || newScene.name == "GameScene_2.0.1")
         {
             mainCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-            actionPointManager = mainCanvas.GetComponentInChildren<ActionPointManager>();
-            actionPointUI = mainCanvas.GetComponentInChildren<ActionPointUI>();
+            ActionPointManager = mainCanvas.GetComponentInChildren<ActionPointManager>();
+            ActionPointUI = mainCanvas.GetComponentInChildren<ActionPointUI>();
+
+            if(BoardManager == null)
+            {
+                BoardManager = FindFirstObjectByType<BoardManager>();
+            }
+            BoardManager.Initialize();
+
         }
     }
 

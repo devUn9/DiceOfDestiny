@@ -147,6 +147,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     {
         customizePanel.SetActive(true);
         carouselUIPanel.SetActive(false);
+        backToMainButton.SetActive(false);
     }
 
     public void OnClickPieceCaruselUIButton()
@@ -171,6 +172,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     {
         customizePanel.SetActive(false);
         carouselUIPanel.SetActive(true);
+        backToMainButton.SetActive(true);
     }
 
     public void OnClickBackToMainButton()

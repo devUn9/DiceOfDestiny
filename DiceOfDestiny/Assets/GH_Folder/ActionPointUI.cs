@@ -22,31 +22,33 @@ public class ActionPointUI : MonoBehaviour
         Refresh();
     }
 
-    //private void OnDestroy()
-    //{
-    //    if (GameManager.Instance != null)
-    //        GameManager.Instance.actionPointManager.OnValueChanged -= Refresh;
-    //}
+
     private void onClickDiceRollButton()
     {
-        if (GameManager.Instance.actionPointManager.GameState == GameState.Dice)
+        if (GameManager.Instance.ActionPointManager.GameState == GameState.Dice)
         {
-            GameManager.Instance.actionPointManager.RollDice();
+            GameManager.Instance.ActionPointManager.RollDice();
             return;
         }
     }
 
     public void onClickEndTurnButton()
     {
-        GameManager.Instance.actionPointManager.EndTurn();
+        GameManager.Instance.ActionPointManager.EndTurn();
     }
     public void Refresh()
     {
-        var apm = GameManager.Instance.actionPointManager;
+        var apm = GameManager.Instance.ActionPointManager;
 
         currentState.text = $"State : {apm.GameState}";
         currentTurn.text = $"Turn  : {apm.CurrentTurn}";
         Dice.text = $"Dice  : {apm.CurrentDiceValue}";
         AP.text = $"AP    : {apm.CurrentAP}";
+    }
+
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.ActionPointManager.OnValueChanged -= Refresh;
     }
 }

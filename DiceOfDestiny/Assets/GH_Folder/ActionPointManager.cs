@@ -115,7 +115,7 @@ public class ActionPointManager : MonoBehaviour
             CurrentDiceValue = value;
             AddAP(value);
             Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
-            GameManager.Instance.actionPointManager.GameState = GameState.Action;
+            GameManager.Instance.ActionPointManager.GameState = GameState.Action;
             OnValueChanged?.Invoke();
         });
         if (!started)
