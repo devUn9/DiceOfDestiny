@@ -2097,6 +2097,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5871212226624033188}
     m_Modifications:
+    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3538237773303447002, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 7052730918962665029, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2181,6 +2201,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BackpackUI
       objectReference: {fileID: 0}
+    - target: {fileID: 9023347391756377333, guid: 79ab288d55ddad4408f3e48ece5fc04c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1489819980984513191, guid: e60878b8dab60b74c8d193c9810fb540, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

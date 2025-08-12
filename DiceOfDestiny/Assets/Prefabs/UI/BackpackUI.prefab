@@ -2074,18 +2074,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d396ceef50f28d46a264e2bc80e90db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BackpackOpenCloseButton: {fileID: 8329110096348382702}
-  UIPieceGroup: {fileID: 8938702168977800323}
-  ChoiceTopFaceWindow: {fileID: 3847877617234441166}
-  SpawnPieceColorImage: {fileID: 1752640755105100128}
-  SpawnPieceObject: {fileID: 578073013123475228}
+  backpackOpenCloseButton: {fileID: 8329110096348382702}
+  backpackButtonImage: {fileID: 9023347391756377333}
+  defaultSprite: {fileID: -1489819980984513191, guid: e60878b8dab60b74c8d193c9810fb540, type: 3}
+  clickedSprite: {fileID: -3483382947888150493, guid: e60878b8dab60b74c8d193c9810fb540, type: 3}
+  uIPieceGroup: {fileID: 8938702168977800323}
+  choiceTopFaceWindow: {fileID: 3847877617234441166}
+  spawnPieceColorImage: {fileID: 1752640755105100128}
+  spawnPieceObject: {fileID: 578073013123475228}
   nextSpawnPieceImage: {fileID: 7416230743270211733}
-  nextSpwanPieceObject: {fileID: 4825299344584271094}
-  ChoicePieceImageColorImage:
+  nextSpawnPieceObject: {fileID: 4825299344584271094}
+  choicePieceImageColorImage:
   - {fileID: 8163007770036710342}
   - {fileID: 6031289454284927893}
   - {fileID: 6603300109391332241}
-  ChoicePieceClassImage:
+  choicePieceClassImage:
   - {fileID: 2643026889920594236}
   - {fileID: 5289376026652853431}
   - {fileID: 2348484124726618899}
