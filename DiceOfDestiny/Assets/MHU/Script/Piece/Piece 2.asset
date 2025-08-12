@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675178a9476353c42882c46a90e39f45, type: 3}
   m_Name: Piece 2
   m_EditorClassIdentifier: 
-  isAvailable: 0
+  isAvailable: 1
   faces:
   - classData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
     color: 0

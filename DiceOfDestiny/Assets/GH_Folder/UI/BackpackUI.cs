@@ -71,7 +71,8 @@ public class BackpackUI : MonoBehaviour
 
     public void onClickPieceAppearButton(int index)
     {
-        if (PieceManager.Instance.pieceDatas[currentIndex] == null)
+
+        if (PieceManager.Instance.pieceDatas[index] == null)
         {
             Debug.Log("해당 슬롯에 기물이 존재하지 않습니다.");
             return;
