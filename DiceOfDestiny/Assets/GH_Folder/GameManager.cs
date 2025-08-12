@@ -4,34 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singletone<GameManager>
 {
-    private ActionPointManager _actionPointManager;
-    public ActionPointManager actionPointManager
-    {
-        get
-        {
-            if (_actionPointManager == null)
-            {
-                var canvas = GameObject.Find("Canvas");
-                if (canvas != null)
-                {
-                    _actionPointManager = canvas.GetComponentInChildren<ActionPointManager>();
-                }
-                else
-                {
-                    Debug.LogError("[GameManager] Canvas 오브젝트를 찾을 수 없습니다.");
-                }
-            }
-            return _actionPointManager;
-        }
-        private set
-        {
-            _actionPointManager = value;
-        }
-    }
-
-    public HistoryManager historyManager { get; private set; }
-
+    public Canvas mainCanvas { get; private set; }
+    public ActionPointManager actionPointManager { get; private set; }
     public ActionPointUI actionPointUI { get; private set; }
+    public DiceCustomizeManager diceCustomizeManager { get; private set; }
 
     public Piece[] selectedPieces = new Piece[3];
 
@@ -43,43 +19,29 @@ public class GameManager : Singletone<GameManager>
     private void OnActiveSceneChanged(Scene oldScene, Scene newScene)
     {
         Debug.Log($"[GameManager] Active scene changed from {oldScene.name} to {newScene.name}");
-        if (SceneManager.GetActiveScene().name == "GameScene_2.0.1")
+
+        if(newScene.name == "CustomizeScene")
         {
-            Debug.Log("[GameManager] GameScene_2.0.1 scene is loaded, initializing components...");
-            var canvas = GameObject.Find("Canvas");
-            if (canvas == null)
+            if(diceCustomizeManager == null)
             {
-                Debug.LogError("[GameManager] Canvas 오브젝트를 찾을 수 없습니다.");
-                return;
+                diceCustomizeManager = FindFirstObjectByType<DiceCustomizeManager>();
             }
-            _actionPointManager = canvas.GetComponentInChildren<ActionPointManager>();
-            actionPointUI = canvas.GetComponentInChildren<ActionPointUI>();
 
-            // if (_actionPointManager == null) Debug.LogError("[GameManager] ActionPointManager를 찾을 수 없습니다.");
-            // if (actionPointUI == null) Debug.LogError("[GameManager] actionPointUI를 찾을 수 없습니다.");
+            diceCustomizeManager.Initialize();
+        }
 
-            historyManager = GetComponent<HistoryManager>();
-            // if (historyManager == null) Debug.LogWarning("[GameManager] HistoryManager가 붙어있지 않습니다.");
+        if (newScene.name == "GameScene")
+        {
+            mainCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+            actionPointManager = mainCanvas.GetComponentInChildren<ActionPointManager>();
+            actionPointUI = mainCanvas.GetComponentInChildren<ActionPointUI>();
         }
     }
 
-
-
     public void SetPieces(Piece[] pieces)
     {
-        if (pieces.Length != 3)
-        {
-            Debug.LogError("[GameManager] SetPieces: pieces 배열의 길이는 3이어야 합니다.");
-            return;
-        }
         for (int i = 0; i < pieces.Length; i++)
         {
-            if (pieces[i] == null)
-            {
-                Debug.LogError($"[GameManager] SetPieces: pieces[{i}]는 null입니다.");
-                return;
-            }
-            selectedPieces[i].isAvailable = pieces[i].isAvailable;
             selectedPieces[i].faces = pieces[i].faces;
         }
     }

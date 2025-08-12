@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,19 +5,32 @@ using UnityEngine.UI;
 
 public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 {
+<<<<<<< Updated upstream
     [Header("UI Panels")]
     [SerializeField] private GameObject cutomizePanel;
     [SerializeField] private GameObject carouselUIPanel;
     [SerializeField] private GameObject pieceCarouselUI;
     [SerializeField] private GameObject pieceNetCarouselUI;
+=======
+    [SerializeField] private GameObject diceCustomizeUIPrefab;
+    private DiceCustomizeUI diceCustomizeUI;
 
-    [Header("Piece Preview UI")]
-    [SerializeField] private GameObject piecesContent;
+    private GameObject carouselUIPanel;
+
+    private GameObject pieceCarouselUI;
+    private GameObject pieceNetCarouselUI;
+
+    private GameObject showPieceButton;
+    private GameObject showPieceNestButton;
+
+    private GameObject piecesContent;
+    private GameObject pieceNetContent;
+>>>>>>> Stashed changes
+
     [SerializeField] private GameObject piecePreviewButtonPrefab;
-
     [SerializeField] private GameObject pieceNetPreviewButtonPrefab;
-    [SerializeField] private GameObject pieceNetContent;
 
+<<<<<<< Updated upstream
     List<PiecePreviewButton> piecePreviewButtonList = new List<PiecePreviewButton>();
     List<PieceNetPreviewButton> pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
 
@@ -30,11 +41,55 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     [Header("Customize Controller")]
     public CustomizePieceController customizePieceContoller;  
     public GameObject backToMainButton;
+=======
+    private GameObject customizePanel;
+
+    List<PiecePreviewButton> piecePreviewButtonList;
+    List<PieceNetPreviewButton> pieceNetPreviewButtonList;
+>>>>>>> Stashed changes
 
     [HideInInspector] public bool isFolded;
 
+<<<<<<< Updated upstream
+=======
+    [SerializeField] private GameObject stickerSourcePrefab;
+
+    CustomizePieceController customizePieceContoller;
+    GameObject stickerDrawer;
+
+    private GameObject backToMainButton;
+
+    [HideInInspector] public bool isFolded;
+
+>>>>>>> Stashed changes
     public void Initialize()
     {
+        GameObject go = Instantiate(diceCustomizeUIPrefab, GameObject.Find("Canvas").transform);
+        diceCustomizeUI = go.GetComponent<DiceCustomizeUI>();
+
+        carouselUIPanel = diceCustomizeUI.selectPanel;
+        pieceCarouselUI = diceCustomizeUI.pieceScrollView;
+        pieceNetCarouselUI = diceCustomizeUI.pieceNetScrollView;
+
+        showPieceButton = diceCustomizeUI.showPieceButton;
+        showPieceNestButton = diceCustomizeUI.showPieceNetButton;
+        showPieceButton.GetComponent<Button>().onClick.AddListener(OnClickPieceCaruselUIButton);
+        showPieceNestButton.GetComponent<Button>().onClick.AddListener(OnClickPieceNetCaruselUIButton);
+
+        piecesContent = pieceCarouselUI.GetComponent<ScrollRect>().content.gameObject;
+        pieceNetContent = pieceNetCarouselUI.GetComponent<ScrollRect>().content.gameObject;
+
+        customizePanel = diceCustomizeUI.customizePanel;
+        customizePieceContoller = diceCustomizeUI.customizePiece.GetComponent<CustomizePieceController>();
+
+        stickerDrawer = customizePanel.GetComponentInChildren<StickerDrawer>().gameObject;
+
+        backToMainButton = diceCustomizeUI.backToMainButton;
+        backToMainButton.GetComponent<Button>().onClick.AddListener(OnClickBackToMainButton);
+
+        piecePreviewButtonList = new List<PiecePreviewButton>();
+        pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
+
         InitializePiecesCaruselUI();
         InitializePieceNetCaruselUI();
         InitializeStickerDrawer();
@@ -52,6 +107,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
             Destroy(button.gameObject);
         }
         pieceNetPreviewButtonList.Clear();
+
         InitializePiecesCaruselUI();
         InitializePieceNetCaruselUI();
     }
@@ -116,7 +172,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     void ChangeToCustomizePanel()
     {
-        cutomizePanel.SetActive(true);
+        customizePanel.SetActive(true);
         carouselUIPanel.SetActive(false);
     }
 
@@ -140,7 +196,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     public void OnClickBackToSelectPanelButton()
     {
-        cutomizePanel.SetActive(false);
+        customizePanel.SetActive(false);
         carouselUIPanel.SetActive(true);
     }
 

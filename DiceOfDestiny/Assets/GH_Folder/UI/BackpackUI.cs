@@ -76,7 +76,10 @@ public class BackpackUI : MonoBehaviour
 
     public void onClickPieceAppearButton(int index)
     {
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         if (PieceManager.Instance.pieceDatas[index] == null)
         {
             Debug.Log("해당 슬롯에 기물이 존재하지 않습니다.");
