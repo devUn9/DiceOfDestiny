@@ -266,11 +266,12 @@ public class PieceController : MonoBehaviour
 
         if (piece != null)
         {
+            PieceManager.Instance.currentPiece = this;
             BoardSelectManager.Instance.PieceHighlightTiles(position);
             EventManager.Instance.TriggerEvent("ToggleUIElement");
         }
         //BoardSelectManager.Instance.SetClickedTilePosition(position);
-        BoardSelectManager.Instance.ClearAllEffects();
+        //BoardSelectManager.Instance.ClearAllEffects();
     }
 
     private bool IsPointerOnLayer(string layerName)

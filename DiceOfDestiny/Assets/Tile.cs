@@ -62,12 +62,12 @@ public class Tile : MonoBehaviour
         if (!BoardManager.Instance.IsEmptyTile(position) && BoardSelectManager.Instance.restrictObstacle)
             return; // 장애물이 있는 타일에 장애물 제한 트리거가 켜져있으면 저장하지마.
 
-        if (piece != null)
-        {
-            PieceManager.Instance.currentPiece = piece;
-            BoardSelectManager.Instance.PieceHighlightTiles(position);
-            EventManager.Instance.TriggerEvent("ToggleUIElement");
-        }
+        //if (piece != null)
+        //{
+        //    PieceManager.Instance.currentPiece = piece;
+        //    BoardSelectManager.Instance.PieceHighlightTiles(position);
+        //    EventManager.Instance.TriggerEvent("ToggleUIElement");
+        //}
         BoardSelectManager.Instance.SetClickedTilePosition(position);
         BoardSelectManager.Instance.ClearAllEffects();
     }
