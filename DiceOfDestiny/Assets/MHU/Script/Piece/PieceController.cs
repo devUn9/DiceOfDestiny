@@ -26,6 +26,7 @@ public class PieceController : MonoBehaviour
 
 
     public bool isMoving = false; // 이동 중인지 여부
+    public bool canControl = true; // 기물 조작 가능 여부
 
     public StatusEffectController statusEffectController;
 
@@ -93,6 +94,10 @@ public class PieceController : MonoBehaviour
             {
                 PieceFaceManager.Instance.RestorePieceFaceData(0);
                 ToastManager.Instance.ShowToast("0번 피스 복구 !", PieceManager.Instance.currentPiece.transform);
+            }
+            else if (Input.GetKeyDown(KeyCode.Z)) // 행동력 100 추가
+            {
+                GameManager.Instance.actionPointManager.AddAP(100);
             }
         }
         MoveToDirection(moveDirection);
@@ -257,8 +262,8 @@ public class PieceController : MonoBehaviour
         if (IsPointerOnLayer("BlockUI"))
             return;
 
-        // 움직이거나 스킬 진행 중이면 클릭 무시
-        if (isMoving || SkillManager.Instance.IsSelectingProgress)
+        // 움직이거나 컨트롤 불가능하면 무시
+        if (isMoving || SkillManager.Instance.IsSelectingProgress || !canControl)
         {
             return;
         }

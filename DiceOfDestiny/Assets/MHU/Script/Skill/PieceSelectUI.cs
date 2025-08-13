@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PieceSelectUI : MonoBehaviour
 {
-    [SerializeField] private GameObject buttonPrefab;
+    [SerializeField] private GameObject pieceSelectButton;
     [SerializeField] private Canvas canvas;
         
     private Dictionary<GameObject, PieceController> buttonToPieceMap = new Dictionary<GameObject, PieceController>();
@@ -26,7 +26,7 @@ public class PieceSelectUI : MonoBehaviour
 
     private void Start()
     {
-        baseUIScale = buttonPrefab.transform.localScale;
+        baseUIScale = pieceSelectButton.transform.localScale;
     }
 
     private void LateUpdate()
@@ -74,7 +74,7 @@ public class PieceSelectUI : MonoBehaviour
             if (piece == PieceManager.Instance.currentPiece) continue;
 
             Vector3 screenPos = mainCamera.WorldToScreenPoint(piece.transform.position);
-            GameObject button = Instantiate(buttonPrefab, screenPos, Quaternion.identity, canvas.transform);
+            GameObject button = Instantiate(pieceSelectButton, screenPos, Quaternion.identity, canvas.transform);
             buttons.Add(button);
             buttonToPieceMap.Add(button, piece); // 버튼과 기물 매핑
 
