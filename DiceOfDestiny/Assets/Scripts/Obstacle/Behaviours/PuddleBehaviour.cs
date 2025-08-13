@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PuddleBehaviour : Obstacle, IObstacleBehaviour
 {
@@ -25,8 +26,8 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
 
         if (className == "Knight")
         {
-            Debug.Log("기사가 확률 100%로 질병에 걸렸습니다.");
-            ToastManager.Instance.ShowToast("기사가 확률 100%로 질병에 걸렸습니다.", piece.transform, 1f);
+            Debug.Log("기사가 100% 확률로 질병에 걸렸습니다.");
+            ToastManager.Instance.ShowToast("기사가 100% 확률로 질병에 걸렸습니다.", piece.transform, 1f);
             RuleEvents.TriggerRule("Knight_Passive_DiseaseX2");
 
             piece.statusEffectController.SetStatus(StatusType.Disease, 2);
@@ -36,9 +37,8 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
         if (className == "Baby")
         {
             Debug.Log("패로 돌아가는 코루틴 시작");
-
+            ToastManager.Instance.ShowToast($"응애! <color=blue>(퐁당)</color>", piece.transform, 1f);
             StartCoroutine(GoHand(piece));
-
             return;
         }
 
@@ -50,8 +50,8 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
         }
         else
         {
-            Debug.Log("확률 50%로 질병에 걸렸습니다.");
-            ToastManager.Instance.ShowToast("확률 50%로 질병에 걸렸습니다.", piece.transform, 1f);
+            Debug.Log("50%의 확률로 질병에 걸렸습니다.");
+            ToastManager.Instance.ShowToast("50%의 확률로 질병에 걸렸습니다.", piece.transform, 1f);
 
             // 질병 디버프 걸리는 함수 실행
             piece.statusEffectController.SetStatus(StatusType.Disease, 2);

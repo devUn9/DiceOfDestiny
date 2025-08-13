@@ -14,7 +14,7 @@ public enum GameState
 /// </summary>
 public class ActionPointManager : MonoBehaviour
 {
-    [Header("Dice Settings")]
+    [Header("Dice Settings (정보용)")]
     [SerializeField] private int[] diceFaces = new int[] { 1, 1, 2, 2, 3, 3 };
 
     private ActionPoint actionPoint;
@@ -26,12 +26,12 @@ public class ActionPointManager : MonoBehaviour
     public int CurrentTurn { get; private set; } = 1;
     public int CurrentDiceValue { get; private set; }
 
-    public int CurrentAP => actionPoint.Value;
+    public int CurrentAP => actionPoint?.Value ?? 0;
 
     private void Awake()
     {
         actionPoint = new ActionPoint();
-        NotifyChange();
+        NotifyAll();
     }
 
     private void Update()
@@ -40,54 +40,74 @@ public class ActionPointManager : MonoBehaviour
         {
             case GameState.Dice:
                 if (Input.GetKeyDown(KeyCode.R))
-                {
                     RollDice();
-                    GameState = GameState.Action;
-                }
-                break;
+                if (Input.GetKeyDown(KeyCode.Z))
+                    GameManager.Instance.actionPointManager.AddAP(100);
+            break;
 
             case GameState.Action:
                 if (Input.GetKeyDown(KeyCode.T))
-                {
                     EndTurn();
-                }
                 break;
 
             case GameState.EndTurn:
                 if (Input.GetKeyDown(KeyCode.T))
-                {
                     EndTurn();
-                }
                 break;
         }
     }
 
-    private int GetCurrentAP() => CurrentAP;
-
-    private void SetAP(int value, int currentAP)
-    {
-        currentAP = value;
-        OnValueChanged?.Invoke();
-    }
-
-    public void Reset()
+    public void ResetAll()
     {
         CurrentTurn = 1;
-        
-        Init();
-    }
-    public void Init()
-    {
-        GameState = GameState.Dice;
-        CurrentDiceValue = 0;
-        SetAP(0,0);
-        NotifyChange();
+        InitTurn();
     }
 
-    public void AddAP(int _plusAP)
+    public void InitTurn()
     {
-        actionPoint.Add(_plusAP);
-        NotifyChange();
+        if (DiceRollManager.Instance != null)
+            DiceRollManager.Instance.DeactivateAllDice();
+
+        GameState = GameState.Dice;
+        CurrentDiceValue = 0;
+        actionPoint.Reset();
+        NotifyAll();
+    }
+
+    public void RollDice()
+    {
+        if (GameState != GameState.Dice) return;
+        if (DiceRollManager.Instance == null)
+        {
+            Debug.LogWarning("[APM] DiceRollManager.Instance = null");
+            return;
+        }
+
+        bool started = DiceRollManager.Instance.TryRoll((value) =>
+        {
+            CurrentDiceValue = value;
+            AddAP(value);
+            Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
+            GameState = GameState.Action;
+            OnValueChanged?.Invoke();
+        });
+
+        if (!started)
+        {
+            Debug.Log("[APM] RollDice 시작 실패(이미 굴리는 중이거나 프리팹 없음).");
+            NotifyMisc();
+        }
+    }
+
+    public void AddAP(int plus)
+    {
+        actionPoint.Add(plus);
+        NotifyAll();
+    }
+
+    public void PieceAction()
+    {
+        RemoveAP(1);
     }
 
     public void RemoveAP(int amount)
@@ -101,29 +121,16 @@ public class ActionPointManager : MonoBehaviour
         }
 
         actionPoint.Remove(amount);
-        NotifyChange();
+        NotifyAP();
+
+        if (!actionPoint.CanUse(1))
+        {
+            GameState = GameState.EndTurn;
+            NotifyMisc();
+        }
     }
 
     public bool TryUseAP() => actionPoint.CanUse(1);
-
-    public void RollDice()
-    {
-        int idx = UnityEngine.Random.Range(0, diceFaces.Length);
-        CurrentDiceValue = diceFaces[idx];
-        AddAP(CurrentDiceValue);
-        Debug.Log($"주사위를 굴려서 {CurrentDiceValue}가 나왔습니다.");
-        GameManager.Instance.actionPointManager.GameState = GameState.Action;
-    }
-
-    public void PieceAction()
-    {
-        RemoveAP(1);
-
-        if (!TryUseAP())
-        {
-            GameState = GameState.EndTurn;
-        }
-    }
 
     public void EndTurn()
     {
@@ -135,18 +142,14 @@ public class ActionPointManager : MonoBehaviour
             return;
         }
 
+        if (DiceRollManager.Instance != null)
+            DiceRollManager.Instance.DeactivateAllDice();
+
         if (PieceManager.Instance != null)
             PieceManager.Instance.DecreaseDebuffAllPieces();
 
         CurrentTurn++;
-        ResetTurn();
-    }
-
-    private void ResetTurn()
-    {
-        actionPoint.Reset();
-        GameState = GameState.Dice;
-        NotifyChange();
+        InitTurn();
     }
 
     public void SetDiceFaces(int[] newFaces)
@@ -155,5 +158,7 @@ public class ActionPointManager : MonoBehaviour
         Array.Copy(newFaces, diceFaces, diceFaces.Length);
     }
 
-    private void NotifyChange() => OnActionPointChanged?.Invoke(actionPoint.Value);
+    private void NotifyAP() => OnActionPointChanged?.Invoke(actionPoint.Value);
+    private void NotifyMisc() => OnValueChanged?.Invoke();
+    private void NotifyAll() { NotifyAP(); NotifyMisc(); }
 }

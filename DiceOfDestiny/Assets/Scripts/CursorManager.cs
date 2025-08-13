@@ -3,66 +3,109 @@ using System.Collections.Generic;
 
 public class CursorManager : Singletone<CursorManager>
 {
+    [Header("Refs")]
     [SerializeField] private GameObject cursorPrefab;
+
+    [Header("Order")]
+    [SerializeField] private int defaultSortOrder = 32760;
+
     private GameObject cursorInstance;
     private Canvas cursorCanvas;
     private RectTransform cursorRectTransform;
-    private int defaultSortOrder = 32760;
-    
-    private static readonly HashSet<Canvas> activeCanvases = new HashSet<Canvas>();
 
-    // 씬 로드 직후 한번 실행 → 매 씬 전환마다 자동 생성 보장
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void InitAfterSceneLoad()
-    {
-        if (Instance == null)
-        {
-            // 싱글톤 인스턴스가 없으면 새 GameObject에 컴포넌트 추가
-            var go = new GameObject("CursorManager");
-            go.AddComponent<CursorManager>();
-        }
-    }
+    // 싱글톤 인스턴스가 파괴되었는지 여부
+    private static bool s_IsQuitting;
+
+    // 외부 Overlay 캔버스 정렬용
+    private static readonly HashSet<Canvas> activeCanvases = new();
 
     public static void RegisterCanvas(Canvas canvas)
     {
-        if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
-        {
-            activeCanvases.Add(canvas);
-            UpdateCursorCanvasOrder();
-        }
+        if (s_IsQuitting || canvas == null) return;
+        if (canvas.renderMode == RenderMode.ScreenSpaceOverlay) return;
+        
+        activeCanvases.Add(canvas);
+        UpdateCursorCanvasOrder();
     }
 
     public static void UnregisterCanvas(Canvas canvas)
     {
+        if (s_IsQuitting || canvas == null) return;
         activeCanvases.Remove(canvas);
         UpdateCursorCanvasOrder();
     }
 
     private static void UpdateCursorCanvasOrder()
     {
-        if (Instance != null && Instance.cursorCanvas != null)
-        {
-            int highestOrder = Instance.defaultSortOrder;
-            foreach (var canvas in activeCanvases)
-            {
-                if (canvas != null && canvas != Instance.cursorCanvas)
-                {
-                    highestOrder = Mathf.Max(highestOrder, canvas.sortingOrder + 1);
-                }
-            }
-            Instance.cursorCanvas.sortingOrder = highestOrder;
-        }
-    }
+        if (s_IsQuitting) return;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
+        var mgr = FindAnyObjectByType<CursorManager>(FindObjectsInactive.Include);
+        if (mgr == null || mgr.cursorCanvas == null) return;
+
+        int highestOrder = mgr.defaultSortOrder;
+        foreach (var canvas in activeCanvases)
+        {
+            if (canvas != null && canvas != Instance.cursorCanvas)
+            {
+                highestOrder = Mathf.Max(highestOrder, canvas.sortingOrder + 1);
+            }
+        }
+        Instance.cursorCanvas.sortingOrder = highestOrder;
+
     }
 
     private void Start()
     {
+        s_IsQuitting = false;
+
         CreateCursorCanvas();
         CreateCursor();
+
+        UpdateCursorCanvasOrder();
+    }
+
+    private void Update()
+    {
+        if (cursorRectTransform == null || cursorCanvas == null) return;
+
+        Vector2 pos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            cursorRectTransform.parent as RectTransform,
+            Input.mousePosition,
+            cursorCanvas.worldCamera,
+            out pos
+        );
+        cursorRectTransform.anchoredPosition = pos;
+    }
+    private void OnDisable()
+    {
+        // 씬 언로드/플레이모드 종료 중 정적 경로 차단
+        s_IsQuitting = true;
+    }
+
+    protected override void OnDestroy()
+    {
+        // 종료 플래그를 최우선 세워 재생성 루트를 원천 차단
+        s_IsQuitting = true;
+
+        // 커서 오브젝트 정리
+        if (cursorInstance != null)
+        {
+            Destroy(cursorInstance);
+            cursorInstance = null;
+        }
+
+        // 캔버스 정리
+        if (cursorCanvas != null)
+        {
+            UnregisterCanvas(cursorCanvas);
+            Destroy(cursorCanvas.gameObject);
+            cursorCanvas = null;
+        }
+
+        activeCanvases.Clear();
+
+        base.OnDestroy();
     }
 
     private void CreateCursorCanvas()
@@ -81,7 +124,7 @@ public class CursorManager : Singletone<CursorManager>
         cursorCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
         cursorCanvas.sortingOrder = defaultSortOrder;
 
-        DontDestroyOnLoad(canvasObj);
+        canvasObj.transform.SetParent(transform, false);
     }
 
     private void CreateCursor()
@@ -102,35 +145,5 @@ public class CursorManager : Singletone<CursorManager>
         cursorInstance = Instantiate(cursorPrefab, cursorCanvas.transform);
         cursorRectTransform = cursorInstance.GetComponent<RectTransform>();
         Cursor.visible = false;
-    }
-
-    private void Update()
-    {
-        if (cursorRectTransform == null)
-            return;
-
-        Vector2 pos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            cursorRectTransform.parent as RectTransform,
-            Input.mousePosition,
-            cursorCanvas.worldCamera,
-            out pos
-        );
-        cursorRectTransform.anchoredPosition = pos;
-    }
-
-    private void OnDisable()
-    {
-        // 캔버스 등록 해제 및 생성 오브젝트 정리
-        UnregisterCanvas(cursorCanvas);
-        if (cursorCanvas != null)
-        {
-            Destroy(cursorCanvas.gameObject);
-            cursorCanvas = null;
-        }
-    }
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
     }
 }

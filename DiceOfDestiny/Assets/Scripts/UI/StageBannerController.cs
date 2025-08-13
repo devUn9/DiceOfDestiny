@@ -6,29 +6,37 @@ using System.Collections;
 public sealed class StageBannerController : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private RectTransform bannerRect = null!;
-    [SerializeField] private TextMeshProUGUI stageText = null!;
+    [SerializeField] private RectTransform bannerRect;
+    [SerializeField] private TextMeshProUGUI stageText;
 
     [Header("Animation")]
-    [SerializeField] private float fadeDuration = .3f;
-    [SerializeField] private float holdDuration = 1.5f;
-    [SerializeField] private Vector2 slideOffset = new(0f, 200f);
+    [SerializeField] private float fadeDuration = 1f;
+    [SerializeField] private float holdDuration = 1.25f;
+    [Header("Slide Offset")]
+    [SerializeField] private Vector2 initPos;
+    [SerializeField] private Vector2 slideOffset = new(0f, 100f);
 
-    private CanvasGroup cg = null!;
-    private Vector2 _initPos;
+    private CanvasGroup cg;
+    private LayoutGroup layoutGroup;
 
     private void Awake()
     {
+        Canvas.ForceUpdateCanvases();
         cg = GetComponent<CanvasGroup>();
+        layoutGroup = GetComponentInParent<LayoutGroup>();
         cg.alpha = 0f;
-        _initPos = bannerRect.anchoredPosition;
+        initPos = bannerRect.anchoredPosition;
     }
 
     public void Show(int stageNumber, string stageTitle)
     {
-        stageText.text = $"STAGE {stageNumber} – {stageTitle}";
-
+        if (cg == null) cg = GetComponent<CanvasGroup>();
         gameObject.SetActive(true);
+        transform.SetAsLastSibling();
+
+        stageText.text =
+            $"STAGE {stageNumber}\n" +
+            $"{stageTitle}";
 
         StopAllCoroutines();
         StartCoroutine(PlayRoutine());
@@ -36,47 +44,49 @@ public sealed class StageBannerController : MonoBehaviour
 
     private IEnumerator PlayRoutine()
     {
+        if (layoutGroup != null) layoutGroup.enabled = false;
+
+        Vector2 inStart = initPos + slideOffset;
+        Vector2 inEnd = initPos;
+
+        Vector2 outStart = initPos;
+        Vector2 outEnd = initPos + slideOffset;
+
+        gameObject.SetActive(true);
+        bannerRect.anchoredPosition = inStart;
         cg.alpha = 0f;
 
+        yield return null;
         // Fade-in
-        yield return Fade(0f, 1f, fadeDuration);
-
+        yield return SlideAndFade(inStart, 0f, inEnd, 1f, fadeDuration);
         // Hold
         yield return new WaitForSecondsRealtime(holdDuration);
 
         // Slide + Fade-out
-        var targetPos = _initPos + slideOffset;
-        yield return SlideAndFade(targetPos, 0f, fadeDuration);
+        yield return SlideAndFade(outStart, 1f, outEnd, 0f, 0.5f);
 
         // Reset
-        bannerRect.anchoredPosition = _initPos;
+        bannerRect.anchoredPosition = initPos;
+        cg.alpha = 0f;
 
         // Deactivate the banner
         gameObject.SetActive(false);
+        if (layoutGroup != null) layoutGroup.enabled = true;
     }
 
-    private IEnumerator Fade(float from, float to, float duration)
+    private IEnumerator SlideAndFade(Vector2 startPos, float startAlpha, Vector2 endPos, float endAlpha, float duration)
     {
-        for (float t = 0; t < duration; t += Time.unscaledDeltaTime)
-        {
-            cg.alpha = Mathf.Lerp(from, to, t / duration);
-            yield return null;
-        }
-        cg.alpha = to;
-    }
+        bannerRect.anchoredPosition = startPos;
+        cg.alpha = startAlpha;
 
-    private IEnumerator SlideAndFade(Vector2 endPos, float endAlpha, float duration)
-    {
-        var startPos = bannerRect.anchoredPosition;
-        var startAlpha = cg.alpha;
-
-        for (float t = 0; t < duration; t += Time.unscaledDeltaTime)
+        for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
         {
-            var lerp = t / duration;
+            float lerp = t / duration;
             bannerRect.anchoredPosition = Vector2.Lerp(startPos, endPos, lerp);
             cg.alpha = Mathf.Lerp(startAlpha, endAlpha, lerp);
             yield return null;
         }
+
         bannerRect.anchoredPosition = endPos;
         cg.alpha = endAlpha;
     }

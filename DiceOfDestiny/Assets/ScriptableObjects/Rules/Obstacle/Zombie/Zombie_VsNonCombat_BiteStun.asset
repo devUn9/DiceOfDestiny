@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d9f41b650ce96d4b8ff706e9f924cc8, type: 3}
   m_Name: Zombie_VsNonCombat_BiteStun
   m_EditorClassIdentifier: 
-  ruleDescription: "\uC880\uBE44\uAC00 \uBE44\uC804\uD22C\uACC4\uB97C \uB9CC\uB098\uBA74
+  ruleDescription: "\uC880\uBE44\uB294 \uBE44\uC804\uD22C\uACC4\uB97C \uB9CC\uB098\uBA74
     \uBB3C\uC5B4\uC11C \uAE30\uC808\uC2DC\uD0A8\uB2E4."
   displayPriority: 13
   category: 1
