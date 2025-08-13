@@ -1914,7 +1914,7 @@ MonoBehaviour:
   blueButton: {fileID: 277443439}
   yellowButton: {fileID: 1395148978}
   purpleButton: {fileID: 2101212407}
-  grayButton: {fileID: 885577661}
+  brownButton: {fileID: 0}
   paletteImage: {fileID: 1282756431}
   offset: {x: 0, y: 50}
 --- !u!114 &830614875
@@ -2265,6 +2265,7 @@ MonoBehaviour:
   grassPrefab: {fileID: 5239956457780272049, guid: fefe575a2ba4a7249bbf77dc777e9eca, type: 3}
   slimePrefab: {fileID: 2465335938598337309, guid: 2a6ce1ef19d36e64684f0baf6f13cd5e, type: 3}
   slimeDdongPrefab: {fileID: 5239956457780272049, guid: fb256067f7bba754cb8c7031d1842fd4, type: 3}
+  pawnPrefab: {fileID: 2465335938598337309, guid: a3f4b156df2deab45a8922a6cb66fd15, type: 3}
   currentObstacles: []
 --- !u!1 &1146971578
 GameObject:
@@ -3538,6 +3539,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
   - {fileID: 11400000, guid: 6828c2986df7d6e4aabc87941897539e, type: 2}
   - {fileID: 11400000, guid: 8ed4859463f62cf448965ea0fe6e3bca, type: 2}
+  - {fileID: 11400000, guid: 60f221dfb72b1b84aa4272684d5f262c, type: 2}
   bannerManager: {fileID: 1235193593}
   NextStageUI: {fileID: 58160367}
   mainCanvasGroup: {fileID: 1222871034}
