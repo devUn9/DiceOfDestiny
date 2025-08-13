@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b2505132fde72345af474f8fca00a1a, type: 3}
-  m_Name: Stage_05_DeepForest
+  m_Name: Stage_06_ClueToGrayout
   m_EditorClassIdentifier: 
-  <StageName>k__BackingField: "\uAE4A\uC740 \uC232\uC18D"
+  <StageName>k__BackingField: "\uD68C\uC0C9\uD654\uC758 \uB2E8\uC11C"
   missions:
   - {fileID: 11400000, guid: 8b7aabaad09513640bf6ade8d548c0a5, type: 2}
-  - {fileID: 11400000, guid: c5568090e8328ef48b8bd76c63508829, type: 2}
+  - {fileID: 11400000, guid: e6a93ad1884e47e45917f4bf6cfbe37a, type: 2}
   isGrayGrass: 1
   isGrayTree: 1
-  isGrayPoisonousherb: 0
+  isGrayPoisonousherb: 1
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1
@@ -29,17 +29,21 @@ MonoBehaviour:
   orangeWeight: 1
   availableObstacle:
   - type: 7
-    weight: 3
+    weight: 1
   - type: 1
-    weight: 10
+    weight: 1
   - type: 6
-    weight: 10
-  - type: 5
     weight: 5
+  - type: 2
+    weight: 2
+  - type: 4
+    weight: 3
+  - type: 5
+    weight: 2
   - type: 0
-    weight: 4
+    weight: 1
   - type: 8
-    weight: 4
+    weight: 1
   obstacleDensity: 0.2
-  stageNumber: 5
-  stageTitle: "\uAE4A\uC740 \uC232\uC18D"
+  stageNumber: 6
+  stageTitle: "\uD68C\uC0C9\uD654\uC758 \uB2E8\uC11C"

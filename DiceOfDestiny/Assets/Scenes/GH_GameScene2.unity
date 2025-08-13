@@ -155,6 +155,7 @@ MonoBehaviour:
   demonPassiveEffect: {fileID: 84916646586745765, guid: fe0897a09dab2144abb15ffab9a336de, type: 3}
   fanaticPassiveEffect: {fileID: 3347284115625885614, guid: 5d29921e938fa1847b4a1e27b16e0390, type: 3}
   priestPassiveEffect: {fileID: 5289000743379248508, guid: 9b6c560882bfbdd4ab5fcdf0116860e8, type: 3}
+  thiefPassiveEffect: {fileID: 0}
 --- !u!114 &35463619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +194,8 @@ MonoBehaviour:
   fanaticSkillEffect: {fileID: 8301357996556643184, guid: 81f74734435b88a4c8c84b73f8b6d86a, type: 3}
   priestSkillEffect: {fileID: 5770720890533067149, guid: fea0a462d8377824dafad442c933594a, type: 3}
   painterActiveSkillUI: {fileID: 35463619}
+  moveSkillUI: {fileID: 0}
+  pieceSelectUI: {fileID: 0}
 --- !u!114 &35463621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1029,6 +1032,7 @@ MonoBehaviour:
   - 5
   - 3
   dragSpeed: 1
+  boardCenter: {x: 0, y: 0}
 --- !u!114 &484592001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,6 +2449,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f87987e238908d648ad13262bfee9153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedPieces:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &951686392
 Transform:
   m_ObjectHideFlags: 0
@@ -3897,15 +3905,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4259a5003f9fdb4da145318d316a557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots:
-  - pieceNumber: 0
-    piece: {fileID: 11400000, guid: e3318411d8ae1584fb49f040757ebb02, type: 2}
-  - pieceNumber: 1
-    piece: {fileID: 11400000, guid: 1fb9240d845d3894581627b691354015, type: 2}
-  - pieceNumber: 2
-    piece: {fileID: 11400000, guid: 0fcdb5779e6cacd4cb2a8d2675573cc7, type: 2}
-  selectedSlot:
-    pieceNumber: 0
+  pieceSlots:
+  - piece: {fileID: 0}
+  - piece: {fileID: 0}
+  - piece: {fileID: 0}
+  currentSlot:
     piece: {fileID: 0}
 --- !u!114 &1631429162
 MonoBehaviour:
@@ -3924,7 +3928,10 @@ MonoBehaviour:
   - {fileID: 1324270886440449900, guid: 4af746e0c8666a64d8d7beaf3fd1f63c, type: 3}
   - {fileID: 1324270886440449900, guid: e156fce312521164bad40a610ec80d9d, type: 3}
   currentPiece: {fileID: 0}
-  pieceInventory: {fileID: 0}
+  pieceDatas:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1631429163
 Transform:
   m_ObjectHideFlags: 0
@@ -5150,9 +5157,9 @@ SceneRoots:
   - {fileID: 63591172}
   - {fileID: 793120335}
   - {fileID: 204876771}
+  - {fileID: 636043691}
   - {fileID: 1708666941}
   - {fileID: 522462335}
   - {fileID: 648247456}
-  - {fileID: 636043691}
   - {fileID: 1785682156}
   - {fileID: 1987798261}

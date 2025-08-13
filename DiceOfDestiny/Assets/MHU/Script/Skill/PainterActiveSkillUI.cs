@@ -9,7 +9,7 @@ public class PainterActiveSkillUI : MonoBehaviour
     [SerializeField] private Button blueButton;
     [SerializeField] private Button yellowButton;
     [SerializeField] private Button purpleButton;
-    [SerializeField] private Button grayButton;
+    [SerializeField] private Button brownButton;
 
     [Header("팔레트 이미지")]
     [SerializeField] private Image paletteImage;
@@ -49,7 +49,7 @@ public class PainterActiveSkillUI : MonoBehaviour
         if (blueButton != null) blueButton.onClick.AddListener(OnBlueButtonClicked);
         if (yellowButton != null) yellowButton.onClick.AddListener(OnYellowButtonClicked);
         if (purpleButton != null) purpleButton.onClick.AddListener(OnPurpleButtonClicked);
-        if (grayButton != null) grayButton.onClick.AddListener(OnGrayButtonClicked);
+        if (brownButton != null) brownButton.onClick.AddListener(OnBrownButtonClicked);
     }
 
     void LateUpdate()
@@ -97,8 +97,8 @@ public class PainterActiveSkillUI : MonoBehaviour
             yellowButton.GetComponent<Image>().color = BoardManager.Instance.tileColors[3]; // 노랑
         if (purpleButton != null && BoardManager.Instance.tileColors.Length > 4)
             purpleButton.GetComponent<Image>().color = BoardManager.Instance.tileColors[4]; // 보라
-        if (grayButton != null && BoardManager.Instance.tileColors.Length > 5)
-            grayButton.GetComponent<Image>().color = BoardManager.Instance.tileColors[5]; // 회색
+        if (brownButton != null && BoardManager.Instance.tileColors.Length > 5)
+            brownButton.GetComponent<Image>().color = BoardManager.Instance.tileColors[5]; // 회색
     }
 
     public void ShowPalette()
@@ -142,9 +142,9 @@ public class PainterActiveSkillUI : MonoBehaviour
         paletteImage.gameObject.SetActive(false); // UI 비활성화
     }
 
-    public void OnGrayButtonClicked()
+    public void OnBrownButtonClicked()
     {
-        selectedColor = TileColor.Gray;
+        selectedColor = TileColor.Brown;
         paletteImage.gameObject.SetActive(false); // UI 비활성화
     }
 

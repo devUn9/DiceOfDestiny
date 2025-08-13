@@ -199,8 +199,8 @@ public class BackpackUI : MonoBehaviour
     public void onClickUpdateTopFace(int dir)
     {
         // 충돌 지점
-        if (currentPiece == null)
-            return;
+        // if (currentPiece == null)
+        //     return;
 
         if (isMove)
             return;

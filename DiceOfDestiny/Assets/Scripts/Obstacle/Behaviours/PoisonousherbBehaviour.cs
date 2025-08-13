@@ -5,6 +5,7 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
     public void DoLogic()
     {
         Tile currentTile = BoardManager.Instance.GetTile(obstaclePosition);
+
         if (currentTile.GetPiece() != null)
         {
             if (currentTile.GetPiece().GetTopFace().classData.className == "Priest")

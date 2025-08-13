@@ -95,7 +95,7 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
         };
     }
 
-    public void AnimateObstacleMove(NextStep nextStep)
+    private void AnimateObstacleMove(NextStep nextStep)
     {
         Vector2Int direction = GetDirection(nextStep);
 
@@ -123,7 +123,7 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
         }
     }
 
-    public void AnimateObstacleHalfBack(NextStep nextStep)
+    private void AnimateObstacleHalfBack(NextStep nextStep)
     {
         Vector2Int direction = GetDirection(nextStep);
 
@@ -156,7 +156,7 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
         }
     }
 
-    public void AnimateZombieNyamNyam(NextStep nextStep)
+    private void AnimateZombieNyamNyam(NextStep nextStep)
     {
         Vector2Int direction = GetDirection(nextStep);
 
