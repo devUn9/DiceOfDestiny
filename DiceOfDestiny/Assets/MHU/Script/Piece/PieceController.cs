@@ -18,15 +18,14 @@ public class PieceController : MonoBehaviour
     [SerializeField] public SpriteRenderer colorRenderer;
     [SerializeField] private SpriteRenderer animationRenderer;
 
-    [SerializeField] private Animator animator;
-
-
     public bool isMoving = false; // 이동 중인지 여부
     public bool canControl = true; // 기물 조작 가능 여부
     private bool animPlaying = false; // 애니메이션 재생 중인지 여부
+    public bool isFinishLine = false; // 도착 지점인지 여부
 
     public StatusEffectController statusEffectController;
     public UIFollow uiFollow;
+    private Animator animator;
 
     // 전개도 데이터 (십자형: 0:바닥, 1:앞, 2:위, 3:뒤, 4:왼쪽, 5:오른쪽)
     private readonly int[] upTransition = new int[] { 1, 2, 3, 0, 4, 5 }; // 위로 이동
