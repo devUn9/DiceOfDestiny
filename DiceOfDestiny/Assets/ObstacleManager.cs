@@ -17,6 +17,8 @@ public class ObstacleManager : MonoBehaviour
     [SerializeField] private GameObject slimePrefab;
     [SerializeField] private GameObject slimeDdongPrefab;
 
+    [SerializeField] private GameObject pawnPrefab;
+
     public Dictionary<ObstacleType, GameObject> obstaclePrefabs;
 
     public List<GameObject> currentObstacles;
@@ -48,6 +50,8 @@ public class ObstacleManager : MonoBehaviour
             { ObstacleType.Grass, grassPrefab },
             { ObstacleType.Slime, slimePrefab },
             { ObstacleType.SlimeDdong, slimeDdongPrefab },
+            
+            { ObstacleType.Pawn, pawnPrefab },
         };
 
         currentObstacles = new List<GameObject>();

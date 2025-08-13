@@ -10,10 +10,22 @@ using UnityEngine.UIElements;
 
 public class PieceController : MonoBehaviour
 {
-    [SerializeField] private Piece piece; // 현재 기물
-    [SerializeField] private Vector2Int lastMoveDirection = Vector2Int.zero; // 마지막 방향
+    [SerializeField] private Piece piece;
+    [SerializeField] private Vector2Int lastMoveDirection = Vector2Int.zero;
     [SerializeField] public Vector2Int gridPosition;
 
+    [SerializeField] private SpriteRenderer classRenderer;
+    [SerializeField] public SpriteRenderer colorRenderer;
+    [SerializeField] private SpriteRenderer animationRenderer;
+
+    public bool isMoving = false; // 이동 중인지 여부
+    public bool canControl = true; // 기물 조작 가능 여부
+    private bool animPlaying = false; // 애니메이션 재생 중인지 여부
+    public bool isFinishLine = false; // 도착 지점인지 여부
+
+    public StatusEffectController statusEffectController;
+    public UIFollow uiFollow;
+    private Animator animator;
 
     // 전개도 데이터 (십자형: 0:바닥, 1:앞, 2:위, 3:뒤, 4:왼쪽, 5:오른쪽)
     private readonly int[] upTransition = new int[] { 1, 2, 3, 0, 4, 5 }; // 위로 이동
@@ -21,17 +33,11 @@ public class PieceController : MonoBehaviour
     private readonly int[] leftTransition = new int[] { 4, 1, 5, 3, 2, 0 }; // 왼쪽으로 이동
     private readonly int[] rightTransition = new int[] { 5, 1, 4, 3, 0, 2 }; // 오른쪽으로 이동
 
-    [SerializeField] private SpriteRenderer classRenderer;
-    [SerializeField] public SpriteRenderer colorRenderer;
-
-
-    bool isMoving = false; // 이동 중인지 여부
-
-    public StatusEffectController statusEffectController;
-
     void Start()
     {
         statusEffectController = GetComponent<StatusEffectController>();
+        animator = GetComponentInChildren<Animator>();
+        uiFollow = GetComponent<UIFollow>();
     }
 
     void Update()
@@ -93,6 +99,10 @@ public class PieceController : MonoBehaviour
             {
                 PieceFaceManager.Instance.RestorePieceFaceData(0);
                 ToastManager.Instance.ShowToast("0번 피스 복구 !", PieceManager.Instance.currentPiece.transform);
+            }
+            else if (Input.GetKeyDown(KeyCode.Z)) // 행동력 100 추가
+            {
+                GameManager.Instance.actionPointManager.AddAP(100);
             }
         }
         MoveToDirection(moveDirection);
@@ -253,8 +263,18 @@ public class PieceController : MonoBehaviour
     // 기물 눌렀을 때 호출, BoardSelectManager에 저장
     private void OnMouseUp()
     {
-        if (SkillManager.Instance.IsSelectingProgress)
-            return; // 스킬 진행 중이면 클릭 무시
+        // UI 위 클릭이면 무시
+        if (IsPointerOnLayer("BlockUI"))
+        {
+            return;
+        }
+
+
+        // 움직이거나 컨트롤 불가능하면 무시
+        if (isMoving || SkillManager.Instance.IsSelectingProgress || !canControl)
+        {
+            return;
+        }
 
         Vector2Int position = new Vector2Int(
         Mathf.RoundToInt(transform.position.x - BoardManager.Instance.boardTransform.position.x),
@@ -262,11 +282,140 @@ public class PieceController : MonoBehaviour
 
         if (piece != null)
         {
+            PieceManager.Instance.currentPiece = this;
             BoardSelectManager.Instance.PieceHighlightTiles(position);
             EventManager.Instance.TriggerEvent("ToggleUIElement");
         }
-        //BoardSelectManager.Instance.SetClickedTilePosition(position);
-        BoardSelectManager.Instance.ClearAllEffects();
+
+        // 클릭 시 애니메이션 트리거 실행
+        if (animator != null && !animPlaying && uiFollow.IsUIActive())
+        {
+
+            string animationName = "";
+
+
+            switch (piece.faces[2].classData.className)
+            {
+                case "Knight":
+                    animationName = "Knight_Idle";
+
+                    break;
+                case "Priest":
+                    animationName = "Priest_Idle";
+
+                    break;
+                case "Demon":
+                    animationName = "Demon_Idle";
+
+                    break;
+                case "Thief":
+                    animationName = "Thief_Idle";
+
+                    break;
+                case "Baby":
+                    animationName = "Baby_Idle";
+
+                    break;
+                case "Painter":
+                    animationName = "Painter_Idle";
+
+                    break;
+                case "Fanatic":
+                    animationName = "Fanatic_Idle";
+
+                    break;
+                default:
+                    Debug.LogWarning($"Unknown class: {piece.faces[2].classData.className}");
+
+                    break;
+            }
+
+            classRenderer.gameObject.SetActive(false);
+            animationRenderer.gameObject.SetActive(true);
+            animator.enabled = true; // Animator 활성화
+            animator.Play(animationName, 0, 0f); // 애니메이션 재생
+            
+
+
+            // currentPiece일 경우 루프 애니메이션 시작
+            if (PieceManager.Instance.currentPiece == this)
+            {
+                StartCoroutine(LoopAnimation(animationName));
+            }
+            else
+            {
+                animator.Play(animationName, 0, 0f); // 한 번만 재생
+                StartCoroutine(EndAnimation(animationName));
+            }
+
+        }
+    }
+
+    private IEnumerator LoopAnimation(string animationName)
+    {
+        animPlaying = true; // 애니메이션 재생 중 상태 설정
+
+        float animationLength = GetAnimationLength(animationName);
+
+        while (PieceManager.Instance.currentPiece == this && animPlaying)
+        {
+            animator.Play(animationName, 0, 0f); // 애니메이션 재생
+            yield return new WaitForSeconds(animationLength); // 애니메이션 길이만큼 대기
+        }
+
+        // 루프 종료 후 애니메이션 비활성화
+        StartCoroutine(EndAnimation(animationName));
+    }
+
+    private IEnumerator EndAnimation(string animationName)
+    {
+        float animationLength = GetAnimationLength(animationName);
+        yield return new WaitForSeconds(animationLength);
+
+        if (animator != null)
+        {
+            animator.enabled = false; // 애니메이션 종료 후 Animator 비활성화
+        }
+
+        classRenderer.gameObject.SetActive(true);
+        animationRenderer.gameObject.SetActive(false);
+        animPlaying = false;
+    }
+
+    // 애니메이션 클립의 길이를 가져오는 헬퍼 메서드
+    private float GetAnimationLength(string animationName)
+    {
+        if (animator == null) return 1f; // 기본값
+        var controller = animator.runtimeAnimatorController;
+        foreach (var clip in controller.animationClips)
+        {
+            if (clip.name == animationName)
+            {
+                return clip.length;
+            }
+        }
+        return 1f; // 기본값
+    }
+
+    private bool IsPointerOnLayer(string layerName)
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        int targetLayer = LayerMask.NameToLayer(layerName);
+
+        foreach (var result in results)
+        {
+            if (result.gameObject.layer == targetLayer)
+                return true; // 해당 레이어 위에 있음
+        }
+
+        return false; // 해당 레이어 위에 없음
     }
 
     public Face GetTopFace()
@@ -313,6 +462,10 @@ public class PieceController : MonoBehaviour
 
     public void RotateToTopFace(Vector2Int moveDirection)
     {
+        classRenderer.gameObject.SetActive(true);
+        animationRenderer.gameObject.SetActive(false);
+        animPlaying = false;
+
         StartCoroutine(RotateToTopFaceCoroutine(moveDirection));
     }
 

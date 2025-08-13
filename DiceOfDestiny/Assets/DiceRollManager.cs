@@ -26,7 +26,6 @@ public class DiceRollManager : Singletone<DiceRollManager>
             isRolling = false;
             OnRollEnded?.Invoke(value);
             dice.StartCoroutine(dice.ZoomIn());
-            //dice.gameObject.SetActive(false);
         }
 
         dice.PlayRoll();
@@ -42,5 +41,15 @@ public class DiceRollManager : Singletone<DiceRollManager>
         newDice.gameObject.SetActive(false);
         pool.Add(newDice);
         return newDice;
+    }
+
+    public void DeactivateAllDice()
+    {
+        foreach (var d in pool)
+        {
+            if (d != null && d.gameObject.activeSelf)
+                d.gameObject.SetActive(false);
+        }
+        isRolling = false;
     }
 }

@@ -10,6 +10,7 @@ public enum TileColor
     Blue,
     Yellow,
     Purple,
+    Brown,
     Gray,
     None
 }
@@ -38,7 +39,7 @@ public class BoardManager : Singletone<BoardManager>
         new Color(0f, 0f, 1f), // 파랑
         new Color(1f, 1f, 0f), // 노랑
         new Color(1f, 0f, 1f), // 보라
-        new Color(0.9f, 0.9f, 0.9f) // 회색
+        new Color(0.9f, 0.9f, 0.9f) // 갈색
     };
 
     List<int> colorIndices = new List<int>();
@@ -46,11 +47,10 @@ public class BoardManager : Singletone<BoardManager>
 
     public void Initialize()
     {
-
         boardSizeY = boardSize + 2;
         GenerateBoard();
-
     }
+
 
     // 보드 경계 체크 함수, 보드 안쪽을 리턴
     private bool IsValidPosition(Vector2Int position)
@@ -148,8 +148,8 @@ public class BoardManager : Singletone<BoardManager>
                     case 4: // 보라
                         Board[x, y].TileColor = TileColor.Purple;
                         break;
-                    case 5: // 회색
-                        Board[x, y].TileColor = TileColor.Gray;
+                    case 5: // 갈색
+                        Board[x, y].TileColor = TileColor.Brown;
                         break;
                 }
                 idx++;
@@ -206,9 +206,20 @@ public class BoardManager : Singletone<BoardManager>
                 idx++;
             }
         }
+
+        // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
+        StageManager.Instance.currentStage.missions.ForEach(mission =>
+        {
+            if (mission is FindGrayGrassSO)
+            {
+                GrayOutTiles();
+            }
+            else if (mission is KillPawnSO)
+            {
+                SetPawn();
+            }
+        });
     }
-
-
 
     public Obstacle ReturnObstacleByPosition(Vector2Int position)
     {
@@ -253,7 +264,6 @@ public class BoardManager : Singletone<BoardManager>
         Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // 현재 타일의 장애물 제거
         Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // 다음 타일에 장애물 설정
         obstacle.obstaclePosition = nextPos; // 장애물의 위치 업데이트
-        // obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
     }
 
     // 주변 8칸 중 윗면과 같은 색이 몇개인지 카운팅하는 함수
@@ -363,7 +373,7 @@ public class BoardManager : Singletone<BoardManager>
                     case 2: Board[checkPos.x, checkPos.y].TileColor = TileColor.Blue; break;
                     case 3: Board[checkPos.x, checkPos.y].TileColor = TileColor.Yellow; break;
                     case 4: Board[checkPos.x, checkPos.y].TileColor = TileColor.Purple; break;
-                    case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Gray; break;
+                    case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Brown; break;
                 }
             }
         }
@@ -403,7 +413,7 @@ public class BoardManager : Singletone<BoardManager>
                     case 2: Board[checkPos.x, checkPos.y].TileColor = TileColor.Blue; break;
                     case 3: Board[checkPos.x, checkPos.y].TileColor = TileColor.Yellow; break;
                     case 4: Board[checkPos.x, checkPos.y].TileColor = TileColor.Purple; break;
-                    case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Gray; break;
+                    case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Brown; break;
                 }
             }
         }
@@ -582,19 +592,19 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
-    public void CreateObstacle(Vector2Int position, ObstacleType obstacleType)
+    public GameObject CreateObstacle(Vector2Int position, ObstacleType obstacleType)
     {
         if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSizeY)
         {
             Debug.LogError("Position out of bounds");
-            return;
+            return null;
         }
 
         Tile tile = Board[position.x, position.y];
         if (tile.Obstacle != ObstacleType.None)
         {
             Debug.LogWarning($"Obstacle already exists at position ({position.x}, {position.y})");
-            return;
+            return null;
         }
 
         // 장애물 타입 설정
@@ -616,12 +626,15 @@ public class BoardManager : Singletone<BoardManager>
 
             // 타일의 isWalkable 속성 업데이트
             tile.isWalkable = obstacleComponent.isWalkable;
+
+            return obstacle;
         }
         else
         {
             Debug.LogError($"No prefab found for ObstacleType: {obstacleType}");
             tile.Obstacle = ObstacleType.None; // 프리팹이 없으면 장애물 설정 취소
         }
+        return null;
     }
 
     // 상하좌우 칸에 장애물 확인
@@ -701,6 +714,63 @@ public class BoardManager : Singletone<BoardManager>
         return false;
     }
 
+    public bool HasMovingEnemyObstacles()
+    {
+        int count = 0;
+
+        for (int x = 0; x < boardSize; x++)
+        {
+            for (int y = 1; y < boardSize + 1; y++)
+            {
+                if (Board[x, y].Obstacle == ObstacleType.Slime || Board[x, y].Obstacle == ObstacleType.Zombie)
+                {
+                    ++count;
+                }
+            }
+        }
+
+        return count > 0;
+    }
+
+    public void GrayOutTiles()
+    {
+        for (int x = 0; x < boardSize; x++)
+        {
+            for (int y = 1; y < boardSize + 1; y++)
+            {
+                if (Board[x, y].Obstacle == ObstacleType.Grass && StageManager.Instance.currentStage.isGrayGrass)
+                {
+                    Board[x, y].SetTileColor(Color.gray); // 회색으로 설정
+                    Board[x, y].TileColor = TileColor.Gray; // TileColor도 회색으로 설정
+                }
+                else if (Board[x, y].Obstacle == ObstacleType.Tree && StageManager.Instance.currentStage.isGrayTree)
+                {
+                    Board[x, y].SetTileColor(Color.gray); // 회색으로 설정
+                    Board[x, y].TileColor = TileColor.Gray; // TileColor도 회색으로 설정
+                }
+                else if (Board[x, y].Obstacle == ObstacleType.PoisonousHerb && StageManager.Instance.currentStage.isGrayPoisonousherb)
+                {
+                    Board[x, y].SetTileColor(Color.gray); // 회색으로 설정
+                    Board[x, y].TileColor = TileColor.Gray; // TileColor도 회색으로 설정
+                }
+            }
+        }
+    }
+
+    public void SetPawn()
+    {
+        for (int x = 0; x < boardSize; x += 2)
+        {
+            Vector2Int panwPos = new Vector2Int(x, boardSize);
+
+            RemoveObstacleAtPosition(panwPos);
+            GameObject obstacle = CreateObstacle(panwPos, ObstacleType.Pawn);
+
+            // 미션을 위한 스테이지 상의 Pawn 리스트에 추가
+            StageManager.Instance.AddPawnToList(obstacle);
+        }
+    }
+
     public bool IsMovementArea(Vector2Int position)
     {
         return position.y < boardSizeY - 1 && position.y > 0;
@@ -742,8 +812,11 @@ public class BoardManager : Singletone<BoardManager>
             case TileColor.Purple:
                 tile.SetTileColor(tileColors[4]);
                 break;
-            case TileColor.Gray:
+            case TileColor.Brown:
                 tile.SetTileColor(tileColors[5]);
+                break;
+            case TileColor.Gray:
+                tile.SetTileColor(tileColors[6]);
                 break;
             case TileColor.None:
                 tile.SetTileColor(Color.white); // None일 경우 기본 색상 (예: 흰색)

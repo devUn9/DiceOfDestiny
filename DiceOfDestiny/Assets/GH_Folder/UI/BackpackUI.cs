@@ -5,21 +5,28 @@ using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class BackpackUI : MonoBehaviour
 {
+    [Header("Button")]
+    [SerializeField] private Button backpackOpenCloseButton;
+    [SerializeField] private Image backpackButtonImage;
+    [SerializeField] private Sprite defaultSprite;
+    [SerializeField] private Sprite clickedSprite;
+
+    private bool isClicked = false;
+
     [Header("Choice Piece")]
-    [SerializeField] private Button BackpackOpenCloseButton;
-    [SerializeField] private GameObject UIPieceGroup;
+    [SerializeField] private GameObject uIPieceGroup;
 
     [Header("Choice Top Face")]
-    [SerializeField] private GameObject ChoiceTopFaceWindow;
+    [SerializeField] private GameObject choiceTopFaceWindow;
 
-    [SerializeField] private Image SpawnPieceColorImage;
-    [SerializeField] private GameObject SpawnPieceObject;
+    [SerializeField] private Image spawnPieceColorImage;
+    [SerializeField] private GameObject spawnPieceObject;
     [SerializeField] private Image nextSpawnPieceImage;
-    [SerializeField] private GameObject nextSpwanPieceObject;
+    [SerializeField] private GameObject nextSpawnPieceObject;
 
 
-    [SerializeField] private Image[] ChoicePieceImageColorImage;
-    [SerializeField] private Image[] ChoicePieceClassImage;
+    [SerializeField] private Image[] choicePieceImageColorImage;
+    [SerializeField] private Image[] choicePieceClassImage;
 
     private Piece currentPiece;
     private int currentIndex;
@@ -37,8 +44,8 @@ public class BackpackUI : MonoBehaviour
 
     private void Start()
     {
-        BackpackOpenCloseButton.onClick.AddListener(onClickBackpackOpenCloseButton);
-        SpawnPieceObject.GetComponent<Button>().onClick.AddListener(onClickSpawnPieceButton);
+        backpackOpenCloseButton.onClick.AddListener(onClickBackpackOpenCloseButton);
+        spawnPieceObject.GetComponent<Button>().onClick.AddListener(onClickSpawnPieceButton);
 
         // Refresh 함수 구독
         EventManager.Instance.AddListener("Refresh", _ => Refresh());
@@ -49,29 +56,33 @@ public class BackpackUI : MonoBehaviour
 
     public void Refresh()
     {
-        for (int i = 0; i < ChoicePieceImageColorImage.Length; i++)
+        for (int i = 0; i < choicePieceImageColorImage.Length; i++)
         {
             Debug.Log("Enter Refresh");
 
             currentPiece = PieceManager.Instance.pieceDatas[i];
             if (currentPiece == null)
             {
-                SpawnPieceColorImage.color = Color.white;
-                SpawnPieceObject.GetComponent<Image>().sprite = null;
+                spawnPieceColorImage.color = Color.white;
+                spawnPieceObject.GetComponent<Image>().sprite = null;
                 continue;
             }
 
-            ChoicePieceImageColorImage[i].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
-            ChoicePieceClassImage[i].sprite = currentPiece.faces[2].classData.sprite;
+            choicePieceImageColorImage[i].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
+            choicePieceClassImage[i].sprite = currentPiece.faces[2].classData.sprite;
         }
     }
 
     public void onClickBackpackOpenCloseButton()
     {
-        UIPieceGroup.SetActive(!UIPieceGroup.activeSelf);
+        uIPieceGroup.SetActive(!uIPieceGroup.activeSelf);
 
-        if (ChoiceTopFaceWindow.activeSelf)
-            ChoiceTopFaceWindow.SetActive(false);
+        isClicked = !isClicked;
+        backpackButtonImage.sprite = isClicked ? clickedSprite : defaultSprite;
+
+
+        if (choiceTopFaceWindow.activeSelf)
+            choiceTopFaceWindow.SetActive(false);
     }
 
     public void onClickPieceAppearButton(int index)
@@ -83,9 +94,9 @@ public class BackpackUI : MonoBehaviour
         }
 
         // 같은 피스를 다시 클릭한 경우 창을 닫음
-        if (currentIndex == index && ChoiceTopFaceWindow.activeSelf)
+        if (currentIndex == index && choiceTopFaceWindow.activeSelf)
         {
-            ChoiceTopFaceWindow.SetActive(false);
+            choiceTopFaceWindow.SetActive(false);
             return;
         }
 
@@ -93,16 +104,16 @@ public class BackpackUI : MonoBehaviour
         currentPiece = PieceManager.Instance.pieceDatas[currentIndex];
 
         // 윗면 선택창 On
-        if (!ChoiceTopFaceWindow.activeSelf)
-            ChoiceTopFaceWindow.SetActive(true);
+        if (!choiceTopFaceWindow.activeSelf)
+            choiceTopFaceWindow.SetActive(true);
 
         // 기물 선택 UI의 기물 윗면 새로고침
-        ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
-        ChoicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
+        choicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
+        choicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
 
         // 기물 윗면 선택 UI 의 기물 윗면 초기화
-        SpawnPieceColorImage.color = BoardManager.Instance.GetColor(currentPiece.faces[2].color);
-        SpawnPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
+        spawnPieceColorImage.color = BoardManager.Instance.GetColor(currentPiece.faces[2].color);
+        spawnPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
     }
 
     IEnumerator SpawnPiece()
@@ -130,7 +141,7 @@ public class BackpackUI : MonoBehaviour
                     BoardManager.Instance.boardTransform.position.y + gridPos.y),
         Quaternion.identity);
 
-        ChoiceTopFaceWindow.SetActive(false);
+        choiceTopFaceWindow.SetActive(false);
 
         // 현재 조작중인 기물로 초기화
         PieceController currentPieceController = piece.GetComponent<PieceController>();
@@ -155,7 +166,7 @@ public class BackpackUI : MonoBehaviour
 
         // =====================[ 생성 종료 ]=====================
 
-        ChoicePieceClassImage[currentIndex].sprite = null;
+        choicePieceClassImage[currentIndex].sprite = null;
 
         // 슬롯에 있는 피스 제거
         Debug.Log(currentIndex + "번 피스 제거");
@@ -188,8 +199,8 @@ public class BackpackUI : MonoBehaviour
     public void onClickUpdateTopFace(int dir)
     {
         // 충돌 지점
-        if (currentPiece == null)
-            return;
+        // if (currentPiece == null)
+        //     return;
 
         if (isMove)
             return;
@@ -258,18 +269,18 @@ public class BackpackUI : MonoBehaviour
         bool isHorizontalMove = (moveDirection == Vector2Int.left || moveDirection == Vector2Int.right);
         Vector3 moveDir = new Vector3(-moveDirection.x, -moveDirection.y, 0f);
 
-        Transform parentTransform = SpawnPieceColorImage.transform.parent;
+        Transform parentTransform = spawnPieceColorImage.transform.parent;
         Vector3 parentStartPos = parentTransform.localPosition;
 
-        Vector3 contractStartPos = SpawnPieceColorImage.transform.localPosition;
+        Vector3 contractStartPos = spawnPieceColorImage.transform.localPosition;
         Vector3 expandStartPos = nextSpawnPieceImage.transform.localPosition;
 
         // 3. 다음 면 스프라이트 & 색상 세팅 (expand 쪽)        
         nextSpawnPieceImage.color = BoardManager.Instance.GetColor(currentPiece.faces[2].color);
-        nextSpwanPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
+        nextSpawnPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
 
         // 4. 초기 스케일 설정
-        SpawnPieceColorImage.transform.localScale = Vector3.one;
+        spawnPieceColorImage.transform.localScale = Vector3.one;
         nextSpawnPieceImage.transform.localScale = isHorizontalMove ? new Vector3(0f, 1f, 1f) : new Vector3(1f, 0f, 1f);
 
         float duration = 0.3f;
@@ -289,12 +300,12 @@ public class BackpackUI : MonoBehaviour
             if (isHorizontalMove)
             {
                 nextSpawnPieceImage.transform.localScale = new Vector3(scaleExpand, 1f, 1f);
-                SpawnPieceColorImage.transform.localScale = new Vector3(scaleContract, 1f, 1f);
+                spawnPieceColorImage.transform.localScale = new Vector3(scaleContract, 1f, 1f);
             }
             else
             {
                 nextSpawnPieceImage.transform.localScale = new Vector3(1f, scaleExpand, 1f);
-                SpawnPieceColorImage.transform.localScale = new Vector3(1f, scaleContract, 1f);
+                spawnPieceColorImage.transform.localScale = new Vector3(1f, scaleContract, 1f);
             }
 
             // 6. 각 면 크기 반영한 반지름 계산
@@ -303,15 +314,15 @@ public class BackpackUI : MonoBehaviour
                 : nextSpawnPieceImage.rectTransform.rect.height) * 0.5f * scaleExpand;
 
             float contractHalfSize = (isHorizontalMove
-                ? SpawnPieceColorImage.rectTransform.rect.width
-                : SpawnPieceColorImage.rectTransform.rect.height) * 0.5f * scaleContract;
+                ? spawnPieceColorImage.rectTransform.rect.width
+                : spawnPieceColorImage.rectTransform.rect.height) * 0.5f * scaleContract;
 
             // 7. 두 면 중심 간격
             float separation = expandHalfSize + contractHalfSize;
 
             // 8. 면 위치 조정 — contract는 moveDir 반대 방향으로, expand는 moveDir 방향으로 이동
             nextSpawnPieceImage.transform.localPosition = expandStartPos + moveDir * separation * 0.5f;
-            SpawnPieceColorImage.transform.localPosition = contractStartPos - moveDir * separation * 0.5f;
+            spawnPieceColorImage.transform.localPosition = contractStartPos - moveDir * separation * 0.5f;
 
             // 9. 부모는 반대 방향으로 이동해 전체 제자리 회전 효과
             Vector3 targetParentPos = parentStartPos - moveDir; // 이동 목표 위치
@@ -325,21 +336,21 @@ public class BackpackUI : MonoBehaviour
         nextSpawnPieceImage.transform.localScale = Vector3.one;
         nextSpawnPieceImage.transform.localPosition = expandStartPos;
 
-        SpawnPieceColorImage.transform.localScale = isHorizontalMove ? new Vector3(0f, 1f, 1f) : new Vector3(1f, 0f, 1f);
-        SpawnPieceColorImage.transform.localPosition = contractStartPos;
+        spawnPieceColorImage.transform.localScale = isHorizontalMove ? new Vector3(0f, 1f, 1f) : new Vector3(1f, 0f, 1f);
+        spawnPieceColorImage.transform.localPosition = contractStartPos;
 
         parentTransform.localPosition = parentStartPos;
 
-        SpawnPieceObject.GetComponent<Image>().sprite = nextSpwanPieceObject.GetComponent<Image>().sprite;
-        SpawnPieceColorImage.color = nextSpawnPieceImage.color;
-        SpawnPieceColorImage.transform.localPosition = nextSpawnPieceImage.transform.localPosition;
-        SpawnPieceColorImage.transform.localScale = nextSpawnPieceImage.transform.localScale;
+        spawnPieceObject.GetComponent<Image>().sprite = nextSpawnPieceObject.GetComponent<Image>().sprite;
+        spawnPieceColorImage.color = nextSpawnPieceImage.color;
+        spawnPieceColorImage.transform.localPosition = nextSpawnPieceImage.transform.localPosition;
+        spawnPieceColorImage.transform.localScale = nextSpawnPieceImage.transform.localScale;
 
         nextSpawnPieceImage.transform.localScale = Vector3.zero;
 
         // 기물 선택 UI의 기물 윗면 새로고침
-        ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
-        ChoicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
+        choicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
+        choicePieceClassImage[currentIndex].sprite = currentPiece.faces[2].classData.sprite;
 
         isMove = false;
     }

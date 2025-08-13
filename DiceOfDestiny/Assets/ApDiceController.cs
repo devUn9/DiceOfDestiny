@@ -46,6 +46,12 @@ public class ApDiceController : MonoBehaviour
             sr.color = new Color(c.r, c.g, c.b, 1f);
         }
     }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        isRolling = false;
+    }
     #endregion
 
     public void PlayRoll()

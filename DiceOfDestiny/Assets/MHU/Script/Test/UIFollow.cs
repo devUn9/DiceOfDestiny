@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class UIFollow : MonoBehaviour
 {
+    // 피스 프리팹에 붙이는 스크립트
+
     [SerializeField] private Transform target; // 따라갈 2D 오브젝트의 Transform
     [SerializeField] private GameObject uiElement; // 따라갈 UI 요소
     [SerializeField] private Vector2 offset; // UI 위치 오프셋 (화면 좌표 기준)
-    [SerializeField] private PieceController pieceController; // 이 스크립트가 부착된 피스
     
+    private PieceController pieceController; // 이 스크립트가 부착된 피스
     private CameraController cameraController;
     private Camera mainCamera;
     private Canvas canvas;
@@ -87,5 +89,10 @@ public class UIFollow : MonoBehaviour
             return;
         }
         uiElement.SetActive(true);
+    }
+
+    public bool IsUIActive()
+    {
+        return uiElement.activeSelf;
     }
 }

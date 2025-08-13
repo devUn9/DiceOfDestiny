@@ -9,19 +9,20 @@ public class PainterActiveSkillUI : MonoBehaviour
     [SerializeField] private Button blueButton;
     [SerializeField] private Button yellowButton;
     [SerializeField] private Button purpleButton;
-    [SerializeField] private Button grayButton;
+    [SerializeField] private Button brownButton;
 
     [Header("팔레트 이미지")]
     [SerializeField] private Image paletteImage;
 
-    [Header("UI 오프셋")]
-    [SerializeField] private Vector2 offset = new Vector2(0f, 50f); // 타겟 기준 UI 오프셋 (화면 좌표)
+    private Vector2 offset = new Vector2(0f, 0f); // 타겟 기준 UI 오프셋 (화면 좌표)
 
     private TileColor selectedColor = TileColor.None;
 
     private Transform target; // 따라갈 타겟(마지막 클릭 타일)의 Transform
     private Camera mainCamera;
     private Canvas canvas;
+    private CameraController cameraController;
+    private Vector3 baseUIScale;
 
     // 선택된 색상을 외부에서 가져갈 수 있는 getter
     public TileColor SelectedColor
@@ -29,11 +30,16 @@ public class PainterActiveSkillUI : MonoBehaviour
         get { return selectedColor; }
     }
 
-    void Start()
+    private void Awake()
     {
-        // 카메라와 캔버스 초기화
         mainCamera = Camera.main;
         canvas = paletteImage.GetComponentInParent<Canvas>();
+        cameraController = mainCamera.GetComponent<CameraController>();
+    }
+    void Start()
+    {
+        // UI 요소의 기본 스케일 저장
+        baseUIScale = paletteImage.transform.localScale;
 
         AssignButtonColors();
 
@@ -43,7 +49,7 @@ public class PainterActiveSkillUI : MonoBehaviour
         if (blueButton != null) blueButton.onClick.AddListener(OnBlueButtonClicked);
         if (yellowButton != null) yellowButton.onClick.AddListener(OnYellowButtonClicked);
         if (purpleButton != null) purpleButton.onClick.AddListener(OnPurpleButtonClicked);
-        if (grayButton != null) grayButton.onClick.AddListener(OnGrayButtonClicked);
+        if (brownButton != null) brownButton.onClick.AddListener(OnBrownButtonClicked);
     }
 
     void LateUpdate()
@@ -62,6 +68,21 @@ public class PainterActiveSkillUI : MonoBehaviour
 
         // UI 위치 업데이트
         paletteImage.GetComponent<RectTransform>().position = adjustedPos;
+
+        // UI 스케일 업데이트
+        UpdateUIScale();
+    }
+    private void UpdateUIScale()
+    {
+        if (cameraController == null) return;
+
+        // 카메라의 현재 orthographicSize를 기준으로 스케일 계산
+        float baseZoom = cameraController.GetZoomLevels()[0]; // 기본 줌 레벨 (예: 7f)
+        float currentZoom = mainCamera.orthographicSize; // 현재 줌 레벨
+        float scaleFactor = baseZoom / currentZoom; // 기본 줌 대비 스케일 비율
+
+        // UI 요소의 스케일 조정
+        paletteImage.transform.localScale = baseUIScale * scaleFactor;
     }
 
     private void AssignButtonColors()
@@ -76,8 +97,8 @@ public class PainterActiveSkillUI : MonoBehaviour
             yellowButton.GetComponent<Image>().color = BoardManager.Instance.tileColors[3]; // 노랑
         if (purpleButton != null && BoardManager.Instance.tileColors.Length > 4)
             purpleButton.GetComponent<Image>().color = BoardManager.Instance.tileColors[4]; // 보라
-        if (grayButton != null && BoardManager.Instance.tileColors.Length > 5)
-            grayButton.GetComponent<Image>().color = BoardManager.Instance.tileColors[5]; // 회색
+        if (brownButton != null && BoardManager.Instance.tileColors.Length > 5)
+            brownButton.GetComponent<Image>().color = BoardManager.Instance.tileColors[5]; // 회색
     }
 
     public void ShowPalette()
@@ -121,9 +142,9 @@ public class PainterActiveSkillUI : MonoBehaviour
         paletteImage.gameObject.SetActive(false); // UI 비활성화
     }
 
-    public void OnGrayButtonClicked()
+    public void OnBrownButtonClicked()
     {
-        selectedColor = TileColor.Gray;
+        selectedColor = TileColor.Brown;
         paletteImage.gameObject.SetActive(false); // UI 비활성화
     }
 

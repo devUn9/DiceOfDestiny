@@ -60,7 +60,7 @@ public class PieceControlUI : MonoBehaviour
     // Move Skill UI용 (도둑, 아기)
     public void OnButtonEnterUI()
     {
-        //buttonImage.color = new Color(buttonImage.color.r, buttonImage.color.g, buttonImage.color.b, 1f);
+        buttonImage.color = new Color(buttonImage.color.r, buttonImage.color.g, buttonImage.color.b, 0f);
 
         faceClass.SetActive(true);
         faceColor.SetActive(true);
@@ -74,8 +74,11 @@ public class PieceControlUI : MonoBehaviour
 
         Face gettedFace = currentPiece.GetFace(faceIndex);
         faceClassImage.sprite = gettedFace.classData.sprite;
-        Color gettedColor = BoardManager.Instance.tileColors[(int)currentPiece.GetFace(faceIndex).color];
+        Color gettedColor = BoardManager.Instance.tileColors[(int)(gettedFace).color];
         faceColorImage.color = gettedColor;
+
+        Debug.Log($"faceColorImage.color: {faceColorImage.color}");
+        Debug.Log(gettedFace.classData.sprite.name);
     }
 
     public void OnButtonExit()

@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <StageName>k__BackingField: "\uB9C8\uC744 \uB4B7 \uB3D9\uC0B0(\uC232\uC73C\uB85C
     \uAC00\uB294 \uAE38)"
-  mission: 0
+  missions:
+  - {fileID: 11400000, guid: 8b7aabaad09513640bf6ade8d548c0a5, type: 2}
+  isGrayGrass: 0
+  isGrayTree: 0
+  isGrayPoisonousherb: 0
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1
@@ -34,7 +38,7 @@ MonoBehaviour:
     weight: 3
   - type: 0
     weight: 2
-  - type: 10
+  - type: 8
     weight: 2
   obstacleDensity: 0.2
   stageNumber: 1

@@ -167,6 +167,9 @@ public class SkillManager : Singletone<SkillManager>
 
                 BoardManager.Instance.Board[currentPiece.gridPosition.x, currentPiece.gridPosition.y].SetPiece(null);
                 Vector2Int newPosition = currentPiece.gridPosition + lastDirection;
+
+                if (!BoardManager.Instance.IsInsideBoard(newPosition))
+                    return;
                 BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(currentPiece);
 
                 break;

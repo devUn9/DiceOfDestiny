@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Zombie_Move_MeetObstacle
   m_EditorClassIdentifier: 
   ruleDescription: "\uC7A5\uC560\uBB3C\uC774\uB098 \uAE30\uBB3C\uC744 \uB9CC\uB098\uAE30
-    \uC804\uAE4C\uC9C0 \uD55C\uBC29\uD5A5\uC73C\uB85C\uB9CC \uC6C0\uC9C1\uC778\uB2E4.."
+    \uC804\uAE4C\uC9C0 \uD55C \uBC29\uD5A5\uC73C\uB85C\uB9CC \uC6C0\uC9C1\uC778\uB2E4."
   displayPriority: 12
   category: 1
   triggerCount: 3

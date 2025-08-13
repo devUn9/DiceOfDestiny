@@ -13,6 +13,7 @@ public enum ObstacleType
     Grass,
     Slime,
     SlimeDdong,
+    Pawn,
     None
 }
 

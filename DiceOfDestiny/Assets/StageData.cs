@@ -6,8 +6,11 @@ public class StageData : ScriptableObject
 {
     [field: SerializeField] public string StageName { get; private set; }
     public int stageNumber = 1;
-    [Header("Stage Mission")]
-    public bool mission;
+    [Header("Stage Missions")]
+    public List<MissionSO> missions;
+    public bool isGrayGrass = false;
+    public bool isGrayTree = false;
+    public bool isGrayPoisonousherb = false;
 
     [Header("ColorSetting")]
     public int minimumColorEnsure;

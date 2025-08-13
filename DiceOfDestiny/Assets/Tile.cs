@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class Tile : MonoBehaviour
 {
@@ -45,6 +48,10 @@ public class Tile : MonoBehaviour
     // 타일 눌렀을 때 호출, BoardSelectManager에 저장
     private void OnMouseUp()
     {
+        // UI 위 클릭이면 무시
+        if (IsPointerOnLayer("BlockUI"))
+            return;
+
         if (SkillManager.Instance.IsSelectingProgress)
             return; // 스킬 진행 중이면 클릭 무시
 
@@ -55,13 +62,34 @@ public class Tile : MonoBehaviour
         if (!BoardManager.Instance.IsEmptyTile(position) && BoardSelectManager.Instance.restrictObstacle)
             return; // 장애물이 있는 타일에 장애물 제한 트리거가 켜져있으면 저장하지마.
 
-        if (piece != null)
-        {
-            PieceManager.Instance.currentPiece = piece;
-            BoardSelectManager.Instance.PieceHighlightTiles(position);
-            EventManager.Instance.TriggerEvent("ToggleUIElement");
-        }
+        //if (piece != null)
+        //{
+        //    PieceManager.Instance.currentPiece = piece;
+        //    BoardSelectManager.Instance.PieceHighlightTiles(position);
+        //    EventManager.Instance.TriggerEvent("ToggleUIElement");
+        //}
         BoardSelectManager.Instance.SetClickedTilePosition(position);
         BoardSelectManager.Instance.ClearAllEffects();
+    }
+
+    private bool IsPointerOnLayer(string layerName)
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        int targetLayer = LayerMask.NameToLayer(layerName);
+
+        foreach (var result in results)
+        {
+            if (result.gameObject.layer == targetLayer)
+                return true; // 해당 레이어 위에 있음
+        }
+
+        return false; // 해당 레이어 위에 없음
     }
 }

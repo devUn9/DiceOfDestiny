@@ -6,8 +6,8 @@ using System.Collections;
 public sealed class StageBannerController : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private RectTransform bannerRect = null!;
-    [SerializeField] private TextMeshProUGUI stageText = null!;
+    [SerializeField] private RectTransform bannerRect;
+    [SerializeField] private TextMeshProUGUI stageText;
 
     [Header("Animation")]
     [SerializeField] private float fadeDuration = 1f;
@@ -16,7 +16,7 @@ public sealed class StageBannerController : MonoBehaviour
     [SerializeField] private Vector2 initPos;
     [SerializeField] private Vector2 slideOffset = new(0f, 100f);
 
-    private CanvasGroup cg = null!;
+    private CanvasGroup cg;
     private LayoutGroup layoutGroup;
 
     private void Awake()
@@ -30,6 +30,10 @@ public sealed class StageBannerController : MonoBehaviour
 
     public void Show(int stageNumber, string stageTitle)
     {
+        if (cg == null) cg = GetComponent<CanvasGroup>();
+        gameObject.SetActive(true);
+        transform.SetAsLastSibling();
+
         stageText.text =
             $"STAGE {stageNumber}\n" +
             $"{stageTitle}";

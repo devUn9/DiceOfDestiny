@@ -89,7 +89,7 @@ public class SlimeBehaviour : Obstacle, IObstacleBehaviour
         };
     }
 
-    public void AnimateObstacleMove(NextStep nextStep)
+    private void AnimateObstacleMove(NextStep nextStep)
     {
         Vector2Int direction = GetDirection(nextStep);
 

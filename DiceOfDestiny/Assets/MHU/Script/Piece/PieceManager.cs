@@ -22,8 +22,9 @@ public class PieceManager : Singletone<PieceManager>
 
     public Piece[] pieceDatas = new Piece[3]; // 이번 게임동안 내가 가져온 말
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         UpdatePieceManagerList();
 
         InitializePieceDatas();
@@ -43,6 +44,13 @@ public class PieceManager : Singletone<PieceManager>
         EventManager.Instance.AddListener(AllEventNames.PIECE_COUNT_CHANGED, UpdatePieceManagerList);
     }
 
+    public void CanControlPiece(bool a)
+    {
+        if( a== true)
+            currentPiece.canControl = true;
+        else
+            currentPiece.canControl = false;
+    }
     public void DrawAllPieceUIs()
     {
         for (int i = 0; i < pieces.Count; i++)

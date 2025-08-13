@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Stage_04_RiversideField
   m_EditorClassIdentifier: 
   <StageName>k__BackingField: "\uAC15 \uADFC\uCC98\uC758 \uACF5\uD130"
-  mission: 0
+  missions:
+  - {fileID: 11400000, guid: 8b7aabaad09513640bf6ade8d548c0a5, type: 2}
+  isGrayGrass: 0
+  isGrayTree: 0
+  isGrayPoisonousherb: 0
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1
@@ -27,7 +31,7 @@ MonoBehaviour:
     weight: 3
   - type: 1
     weight: 3
-  - type: 8
+  - type: 6
     weight: 3
   - type: 2
     weight: 10
@@ -35,7 +39,7 @@ MonoBehaviour:
     weight: 20
   - type: 0
     weight: 3
-  - type: 10
+  - type: 8
     weight: 3
   obstacleDensity: 0.2
   stageNumber: 4
