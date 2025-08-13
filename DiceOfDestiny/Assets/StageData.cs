@@ -5,7 +5,7 @@ using UnityEngine;
 public class StageData : ScriptableObject
 {
     [field: SerializeField] public string StageName { get; private set; }
-
+    public int stageNumber = 1;
     [Header("Stage Mission")]
     public bool mission;
 
@@ -22,10 +22,6 @@ public class StageData : ScriptableObject
     [Header("Obstacle Settings")]
     public List<ObstacleWeight> availableObstacle;
     [Range(0,1)] public float obstacleDensity = 0.2f;
-
-    [Header("Banner")]
-    public int stageNumber = 1;
-    public string stageTitle = "STAGE 1";
 }
 
 [System.Serializable]

@@ -1,33 +1,22 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameUIController : MonoBehaviour
 {
-    [SerializeField] private PauseMenuController pauseMenuController;
-    private void Awake()
+    public GameObject pauseMenuUI;
+    public GameObject actionPointUI;
+
+    [SerializeField] private GameObject stageNameUI;
+
+    public void Initialize()
     {
-        pauseMenuController = GetComponentInChildren<PauseMenuController>(true);
+        pauseMenuUI.SetActive(false);
+        pauseMenuUI.GetComponent<PauseMenuController>().Initialize();
     }
 
-    private void Update()
+    public void SetStageName(string stageName)
     {
-        if (pauseMenuController == null)
-        {
-            pauseMenuController = FindFirstObjectByType<PauseMenuController>();
-            if (pauseMenuController == null) return; // 여전히 없으면 무시
-        }
-
-        // [중요] SettingUI 열려 있으면 ESC는 설정창만 닫고 끝
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (UIManager.Instance.IsSettingUIOpen())
-            {
-                UIManager.Instance.ToggleSettings(false);
-                return;
-            }
-
-            // PauseMenu만 온/오프
-            pauseMenuController.TogglePause();
-        }
+        stageNameUI.GetComponentInChildren<TextMeshProUGUI>().text = stageName;
     }
 }

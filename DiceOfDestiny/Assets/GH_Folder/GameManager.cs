@@ -5,12 +5,32 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singletone<GameManager>
 {
     public Canvas mainCanvas { get; private set; }
-    public ActionPointManager ActionPointManager { get; private set; }
-    public ActionPointUI ActionPointUI { get; private set; }
+    public UIManager UIManager { get; private set; }
     public DiceCustomizeManager DiceCustomizeManager { get; private set; }
     public BoardManager BoardManager { get; private set; }
+    public StageManager StageManager { get; private set; }
 
     public Piece[] selectedPieces = new Piece[3];
+
+    bool isPaused = false;
+
+    private void Update()
+    {
+        if(SceneManager.GetActiveScene().name == "GameScene" || SceneManager.GetActiveScene().name == "GameScene_2.0.1" || SceneManager.GetActiveScene().name == "GameScene_2.0.1hk")
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (isPaused)
+                {
+                    Pause();
+                }
+                else
+                {
+                    UnPause();
+                }
+            }
+        }
+    }
 
     private void OnEnable()
     {
@@ -21,7 +41,16 @@ public class GameManager : Singletone<GameManager>
     {
         Debug.Log($"[GameManager] Active scene changed from {oldScene.name} to {newScene.name}");
 
-        if(newScene.name == "CustomizeScene")
+        if(newScene.name == "Main")
+        {
+            if(UIManager == null)
+            {
+                UIManager = FindFirstObjectByType<UIManager>();
+            }
+            UIManager.InitializeMainUI();
+        }
+
+        if (newScene.name == "CustomizeScene")
         {
             if(DiceCustomizeManager == null)
             {
@@ -31,17 +60,25 @@ public class GameManager : Singletone<GameManager>
             DiceCustomizeManager.Initialize();
         }
 
-        if (newScene.name == "GameScene" || newScene.name == "GameScene_2.0.1")
+        if (newScene.name == "GameScene" || newScene.name == "GameScene_2.0.1" || newScene.name == "GameScene_2.0.1hk")
         {
-            mainCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-            ActionPointManager = mainCanvas.GetComponentInChildren<ActionPointManager>();
-            ActionPointUI = mainCanvas.GetComponentInChildren<ActionPointUI>();
+            if(UIManager == null)
+            {
+                UIManager = FindFirstObjectByType<UIManager>();
+            }
+            UIManager.InitializeGameUI();
 
-            if(BoardManager == null)
+            if (BoardManager == null)
             {
                 BoardManager = FindFirstObjectByType<BoardManager>();
             }
             BoardManager.Initialize();
+
+            if(StageManager == null)
+            {
+                StageManager = FindFirstObjectByType<StageManager>();
+            }
+            StageManager.StartStage();
 
         }
     }
@@ -52,5 +89,19 @@ public class GameManager : Singletone<GameManager>
         {
             selectedPieces[i].faces = pieces[i].faces;
         }
+    }
+
+    public void Pause()
+    {
+        UIManager.TogglePauseMenu();
+        isPaused = true;
+        Time.timeScale = 0f;
+    }
+
+    public void UnPause()
+    {
+        UIManager.TogglePauseMenu();
+        isPaused = false;
+        Time.timeScale = 1f;
     }
 }

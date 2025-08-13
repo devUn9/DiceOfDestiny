@@ -3,119 +3,40 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : Singletone<UIManager>
 {
-    [SerializeField] private StageNameDisplay stageNameDisplay;
-
     [Header("UI Prefabs")]
     [SerializeField] private GameObject mainUI;
     [SerializeField] private GameObject gameUI;
     [SerializeField] private GameObject settingUIPrefab;
     [SerializeField] private GameObject dialogueUIPrefab;
 
-    private Canvas currentCanvas;
-    private GameObject currentUIRoot;
+    private Canvas currentCanvas; // 현재 캔버스 참조
+    private GameObject currentUIRoot; // 현재 UI 루트 오브젝트
+
     private GameObject settingUI;
     private GameObject dialogueUI;
 
     public bool IsSettingUIOpen() => settingUI != null && settingUI.activeSelf;
-    public bool IsUIReady { get; private set; }
 
     protected override void Awake()
     { 
         base.Awake();
-
-        CreateCanvas();
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
-    private void CreateCanvas()
+
+    public void InitializeMainUI()
     {
-        // 전용 커서 Canvas가 이미 있으면 생략
-        if (GameObject.Find("Canvas") != null)
-            return;
-
-        GameObject canvasObj = new GameObject("Canvas");
-        currentCanvas = canvasObj.AddComponent<Canvas>();
-        currentCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-
-        // EventSystem은 필요 없음
-        DontDestroyOnLoad(canvasObj);
-    }
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        IsUIReady = false;
-
-        // 항상 현재 씬에서 Canvas 찾기
         currentCanvas = GameObject.Find("Canvas")?.GetComponent<Canvas>();
+        currentUIRoot = Instantiate(mainUI, currentCanvas.transform, false);
+    }
 
-        if (currentCanvas == null)
-        {
-            Debug.LogError("[UIManager] No Canvas found in scene. UI will not be visible.");
-            return;
-        }
-
-        if (currentUIRoot != null)
-        {
-            Destroy(currentUIRoot);
-            currentUIRoot = null;
-        }
-        if (settingUI != null)
-        {
-            Destroy(settingUI);
-            settingUI = null;
-        }
-        if (dialogueUI != null)
-        {
-            Destroy(dialogueUI);
-            dialogueUI = null;
-        }
-
-        var childrenToDelete = new System.Collections.Generic.List<GameObject>();
-        foreach (Transform child in currentCanvas.transform)
-        {
-            string n = child.name;
-            if (n.Contains("MainUI") || n.Contains("GameUI") ||
-                n.Contains("SettingUI") || n.Contains("DialogueUI"))
-            {
-                childrenToDelete.Add(child.gameObject);
-            }
-        }
-        foreach (var go in childrenToDelete)
-            Destroy(go);
-
-        switch (scene.name)
-        {
-            case "Main":
-                currentUIRoot = Instantiate(mainUI, currentCanvas.transform, false);
-                break;
-            case "GameScene_2.0.1":
-                currentUIRoot = Instantiate(gameUI, currentCanvas.transform, false);
-                break;
-            case "GameScene_2.0.1 DH":
-                currentUIRoot = Instantiate(gameUI, currentCanvas.transform, false);
-                break;
-            default:
-                currentUIRoot = null;
-                break;
-        }
-
-        if (settingUIPrefab != null)
-        {
-            settingUI = Instantiate(settingUIPrefab, currentCanvas.transform, false);
-            settingUI.SetActive(false);
-
-        }
-
-        if (dialogueUIPrefab != null)
-        {
-            dialogueUI = Instantiate(dialogueUIPrefab, currentCanvas.transform, false);
-            dialogueUI.SetActive(false);
-        }
-
-        IsUIReady = true;
+    public void InitializeGameUI()
+    {
+        currentCanvas = GameObject.Find("Canvas")?.GetComponent<Canvas>();
+        currentUIRoot = Instantiate(gameUI, currentCanvas.transform, false);
+        currentUIRoot.GetComponent<GameUIController>().Initialize();
     }
 
     public void ToggleSettings(bool isOn)
-    {
-        
+    {        
         if (settingUI == null)
         {
             settingUI = Instantiate(settingUIPrefab, currentCanvas.transform, false);
@@ -132,5 +53,20 @@ public class UIManager : Singletone<UIManager>
             return;
         }
         dialogueUI.SetActive(true);
+    }
+
+    public void TogglePauseMenu()
+    {
+        currentUIRoot.GetComponent<GameUIController>().pauseMenuUI.GetComponent<PauseMenuController>().TogglePauseMenu();
+    }
+
+    public void SetStageName(string stageName)
+    {
+        currentUIRoot.GetComponent<GameUIController>().SetStageName(stageName);
+    }
+
+    public void UpdateActionPointUI()
+    {
+        currentUIRoot.GetComponent<GameUIController>().actionPointUI.GetComponent<ActionPointUI>().UpdateActionPointUI();
     }
 }

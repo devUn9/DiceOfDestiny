@@ -4,43 +4,32 @@ using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
 {
-    private GameObject pauseMenu;
-    private Button resumeButton, settingsButton, mainMenuButton, exitButton;
-    public bool IsPaused => pauseMenu.activeSelf;
-    private void Awake()
+    public Button resumeButton;
+    public Button settingsButton;
+    public Button mainMenuButton;
+    public Button exitButton;
+
+    public void Initialize()
     {
-        // 항상 자식에서 pauseMenu 찾음
-        pauseMenu = transform.Find("PauseMenu")?.gameObject
-            ?? GetComponentInChildren<Canvas>(true)?.transform.Find("PauseMenu")?.gameObject;
-
-        resumeButton = pauseMenu.transform.Find("ResumeButton").GetComponent<Button>();
-        settingsButton = pauseMenu.transform.Find("SettingsButton").GetComponent<Button>();
-        mainMenuButton = pauseMenu.transform.Find("MainMenuButton").GetComponent<Button>();
-        exitButton = pauseMenu.transform.Find("ExitButton").GetComponent<Button>();
-
-        pauseMenu.SetActive(false);
-
-        resumeButton.onClick.AddListener(ClosePause);
+        resumeButton.onClick.AddListener(ClosePauseMenu);
         settingsButton.onClick.AddListener(() => UIManager.Instance.ToggleSettings(true));
-        mainMenuButton.onClick.AddListener(() => { Time.timeScale = 1f; SceneManager.LoadScene("Main"); });
+        mainMenuButton.onClick.AddListener(() => {SceneManager.LoadScene("Main"); });
         exitButton.onClick.AddListener(() => Application.Quit());
     }
 
-    public void OpenPause()
+    public void TogglePauseMenu()
     {
-        pauseMenu.SetActive(true);
-        Time.timeScale = 0f;
+        gameObject.SetActive(!gameObject.activeSelf);
     }
 
-    public void ClosePause()
+    private void OpenPauseMenu()
     {
-        pauseMenu.SetActive(false);
-        Time.timeScale = 1f;
+        gameObject.SetActive(true);
     }
 
-    public void TogglePause()
+    private void ClosePauseMenu()
     {
-        if (IsPaused) ClosePause();
-        else OpenPause();
+        gameObject.SetActive(false);
+        GameManager.Instance.UnPause();
     }
 }

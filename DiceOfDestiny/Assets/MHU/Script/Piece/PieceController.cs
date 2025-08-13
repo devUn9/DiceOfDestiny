@@ -107,7 +107,7 @@ public class PieceController : MonoBehaviour
 
             // 이동 확정 시
             // 행동력이 0이면 행동 불가
-            if (!GameManager.Instance.ActionPointManager.TryUseAP())
+            if (!ActionPointManager.Instance.CanUse())
             {
                 ToastManager.Instance.ShowToast("행동력이 부족합니다.", transform);
                 return;
@@ -127,7 +127,7 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
-            if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.ActionPointManager.CurrentAP < 2)
+            if (statusEffectController.IsStatusActive(StatusType.Disease) && ActionPointManager.Instance.GetAP() < 2)
             {
                 int DiseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
                 Debug.Log("Piece is diseased!");
@@ -218,11 +218,11 @@ public class PieceController : MonoBehaviour
                     return;
                 }
 
-                GameManager.Instance.ActionPointManager.PieceAction();
+                ActionPointManager.Instance.RemoveAP(); // 행동력 감소
 
                 if (statusEffectController.IsStatusActive(StatusType.Disease))
                 {
-                    GameManager.Instance.ActionPointManager.PieceAction();
+                    ActionPointManager.Instance.RemoveAP(); // 질병 상태라면 추가로 행동력 감소
                 }
 
 

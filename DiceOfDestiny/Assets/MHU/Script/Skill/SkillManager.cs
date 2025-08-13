@@ -174,7 +174,7 @@ public class SkillManager : Singletone<SkillManager>
             case "Priest":
                 // 사제 스킬 : 행동력을 1 추가
 
-                GameManager.Instance.ActionPointManager.AddAP(1);
+                ActionPointManager.Instance.AddAP(1);
                 StartCoroutine(activeSkill.HealAP());
                 ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", currentPiece.transform);
                 RuleEvents.TriggerRule("Priest_Active_ColorMatch");

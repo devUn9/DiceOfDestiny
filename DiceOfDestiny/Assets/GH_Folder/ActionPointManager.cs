@@ -1,169 +1,46 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState
+public class ActionPointManager : Singletone<ActionPointManager>
 {
-    Dice,
-    Action,
-    EndTurn
+    private int actionPoint;
+
+    public void AddAP(int amount = 1)
+    {
+        actionPoint += amount;
+    }
+
+    public void RemoveAP(int amount = 1)
+    {
+        if (CanUse(amount))
+        {
+            ToastManager.Instance.ShowToast("행동력이 없습니다.", transform);
+        }
+
+        actionPoint -= amount;
+        if (actionPoint == 0)
+        {
+            StageManager.Instance.EndTurn();
+        }
+    }
+
+    public bool CanUse(int amont = 1)
+    {
+        if (actionPoint >= amont)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void SetZero()
+    {
+        actionPoint = 0;
+    }
+    public int GetAP()
+    {
+        return actionPoint;
+    }
 }
 
-/// <summary>
-/// 행동력(AP) 로직만 담당하며, 시각적 토큰 UI와는 분리되어 있습니다.
-/// Token UI는 ActionPointDisplay가 OnActionPointChanged 이벤트를 구독하여 처리합니다.
-/// </summary>
-public class ActionPointManager : MonoBehaviour
-{
-    [Header("Dice Settings")]
-    [SerializeField] private int[] diceFaces = new int[] { 1, 1, 2, 2, 3, 3 };
-
-    private ActionPoint actionPoint;
-
-    public event Action<int> OnActionPointChanged;
-    public event Action OnValueChanged;
-
-    public GameState GameState { get; private set; } = GameState.Dice;
-    public int CurrentTurn { get; private set; } = 1;
-    public int CurrentDiceValue { get; private set; }
-
-    public int CurrentAP => actionPoint.Value;
-
-    private void Awake()
-    {
-        actionPoint = new ActionPoint();
-        NotifyChange();
-    }
-
-    private void Update()
-    {
-        switch (GameState)
-        {
-            case GameState.Dice:
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    RollDice();
-                    GameState = GameState.Action;
-                }
-                break;
-
-            case GameState.Action:
-                if (Input.GetKeyDown(KeyCode.T))
-                {
-                    EndTurn();
-                }
-                break;
-
-            case GameState.EndTurn:
-                if (Input.GetKeyDown(KeyCode.T))
-                {
-                    EndTurn();
-                }
-                break;
-        }
-    }
-
-    private int GetCurrentAP() => CurrentAP;
-
-    private void SetAP(int value, int currentAP)
-    {
-        currentAP = value;
-        OnValueChanged?.Invoke();
-    }
-
-    public void Reset()
-    {
-        CurrentTurn = 1;
-
-        Init();
-    }
-    public void Init()
-    {
-        GameState = GameState.Dice;
-        CurrentDiceValue = 0;
-        SetAP(0, 0);
-        NotifyChange();
-    }
-
-    public void AddAP(int _plusAP)
-    {
-        actionPoint.Add(_plusAP);
-        NotifyChange();
-    }
-
-    public void RemoveAP(int amount)
-    {
-        if (!actionPoint.CanUse(amount))
-        {
-            Debug.Log("행동력이 없습니다.");
-            if (ToastManager.Instance != null)
-                ToastManager.Instance.ShowToast("행동력이 없습니다.", transform);
-            return;
-        }
-
-        actionPoint.Remove(amount);
-        NotifyChange();
-    }
-
-    public bool TryUseAP() => actionPoint.CanUse(1);
-
-    public void RollDice()
-    {
-        if (GameState != GameState.Dice) return;
-        if (DiceRollManager.Instance == null) return;
-        bool started = DiceRollManager.Instance.TryRoll((value) =>
-        {
-            CurrentDiceValue = value;
-            AddAP(value);
-            Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
-            GameManager.Instance.ActionPointManager.GameState = GameState.Action;
-            OnValueChanged?.Invoke();
-        });
-        if (!started)
-        {
-            // 굴림 시작 실패 시에도 UI를 한 번 갱신해 버튼 상태를 안정화
-            OnValueChanged?.Invoke();
-        }
-    }
-
-    public void PieceAction()
-    {
-        RemoveAP(1);
-
-        if (!TryUseAP())
-        {
-            GameState = GameState.EndTurn;
-        }
-    }
-
-    public void EndTurn()
-    {
-        if (GameState == GameState.Dice)
-        {
-            Debug.Log("먼저 주사위를 굴리세요.");
-            if (ToastManager.Instance != null)
-                ToastManager.Instance.ShowToast("먼저 주사위를 굴리세요.", transform);
-            return;
-        }
-
-        if (PieceManager.Instance != null)
-            PieceManager.Instance.DecreaseDebuffAllPieces();
-
-        CurrentTurn++;
-        ResetTurn();
-    }
-
-    private void ResetTurn()
-    {
-        actionPoint.Reset();
-        GameState = GameState.Dice;
-        NotifyChange();
-    }
-
-    public void SetDiceFaces(int[] newFaces)
-    {
-        if (newFaces == null || newFaces.Length != diceFaces.Length) return;
-        Array.Copy(newFaces, diceFaces, diceFaces.Length);
-    }
-
-    private void NotifyChange() => OnActionPointChanged?.Invoke(actionPoint.Value);
-}

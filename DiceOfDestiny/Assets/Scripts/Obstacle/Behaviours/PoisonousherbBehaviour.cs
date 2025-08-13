@@ -20,7 +20,7 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
             PieceController currentPiece = currentTile.GetPiece();
             if (currentPiece.GetTopFace().classData.className == "Demon")
             {
-                GameManager.Instance.ActionPointManager.AddAP(point);
+                ActionPointManager.Instance.AddAP(point);
                 Debug.Log($"악마가 독초를 밟아 행동력 +{point}");
                 ToastManager.Instance.ShowToast($"독초를 밟아 {point} 행동력을 얻었습니다.", currentPiece.transform, 1f);
                 RuleEvents.TriggerRule("PoisonousHerb_Passive_vsDemon");
@@ -29,7 +29,7 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
                 return;
             }
 
-            GameManager.Instance.ActionPointManager.RemoveAP(point);
+            ActionPointManager.Instance.RemoveAP(point);
             Debug.Log($"독초를 밟아 행동력 -{point}");
             ToastManager.Instance.ShowToast($"독초를 밟아 {point} 행동력을 잃었습니다.", currentPiece.transform, 1f);
             RuleEvents.TriggerRule("PoisonousHerb_Passive");
