@@ -1913,9 +1913,8 @@ MonoBehaviour:
   blueButton: {fileID: 277443439}
   yellowButton: {fileID: 1395148978}
   purpleButton: {fileID: 2101212407}
-  grayButton: {fileID: 885577661}
+  brownButton: {fileID: 0}
   paletteImage: {fileID: 1282756431}
-  offset: {x: 0, y: 0}
 --- !u!114 &830614875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1993,7 +1992,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c16fdf1bb19ef6409f457b60f5af1f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceFaces: 010000000100000002000000020000000300000003000000
 --- !u!4 &847223744
 Transform:
   m_ObjectHideFlags: 0
@@ -2422,6 +2420,7 @@ MonoBehaviour:
   grassPrefab: {fileID: 5239956457780272049, guid: fefe575a2ba4a7249bbf77dc777e9eca, type: 3}
   slimePrefab: {fileID: 2465335938598337309, guid: 2a6ce1ef19d36e64684f0baf6f13cd5e, type: 3}
   slimeDdongPrefab: {fileID: 5239956457780272049, guid: fb256067f7bba754cb8c7031d1842fd4, type: 3}
+  pawnPrefab: {fileID: 0}
   currentObstacles: []
 --- !u!1 &1146971578
 GameObject:
@@ -2602,7 +2601,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1192841543}
   - component: {fileID: 1192841541}
-  - component: {fileID: 1192841544}
   m_Layer: 0
   m_Name: PieceManager
   m_TagString: Untagged
@@ -2646,24 +2644,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1192841544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192841539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4259a5003f9fdb4da145318d316a557, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pieceSlots:
-  - piece: {fileID: 0}
-  - piece: {fileID: 0}
-  - piece: {fileID: 0}
-  currentSlot:
-    piece: {fileID: 0}
 --- !u!1 &1195810565
 GameObject:
   m_ObjectHideFlags: 0
@@ -2901,17 +2881,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89929b9050f973d48bf349c8f8d49e9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1235193593 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1398269730392277151, guid: 3fdb2f436b63fe54780329e727b7cb84, type: 3}
-  m_PrefabInstance: {fileID: 5255341998981430743}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49e164dc68a70934581fabe636676806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1282756430
@@ -3696,7 +3665,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
   - {fileID: 11400000, guid: 6828c2986df7d6e4aabc87941897539e, type: 2}
   - {fileID: 11400000, guid: 8ed4859463f62cf448965ea0fe6e3bca, type: 2}
-  bannerManager: {fileID: 1235193593}
   NextStageUI: {fileID: 58160367}
   mainCanvasGroup: {fileID: 1222871034}
 --- !u!1 &1973307751
