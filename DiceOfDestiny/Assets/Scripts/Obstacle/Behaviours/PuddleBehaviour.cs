@@ -20,15 +20,14 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
         {
             Debug.Log("저주를 무시합니다.");
             ToastManager.Instance.ShowToast("제게 저주는 통하지 않습니다.", currentTile.GetPiece().transform, 1f);
-            BoardManager.Instance.RemoveObstacle(this);
             SkillManager.Instance.PriestPassive();
             return;
         }
 
         if (className == "Knight")
         {
-            Debug.Log("기사가 확률 100%로 질병에 걸렸습니다.");
-            ToastManager.Instance.ShowToast("기사가 확률 100%로 질병에 걸렸습니다.", piece.transform, 1f);
+            Debug.Log("기사가 100% 확률로 질병에 걸렸습니다.");
+            ToastManager.Instance.ShowToast("기사가 100% 확률로 질병에 걸렸습니다.", piece.transform, 1f);
             RuleEvents.TriggerRule("Knight_Passive_DiseaseX2");
 
             piece.statusEffectController.SetStatus(StatusType.Disease, 2);
@@ -51,8 +50,8 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
         }
         else
         {
-            Debug.Log("확률 50%로 질병에 걸렸습니다.");
-            ToastManager.Instance.ShowToast("확률 50%로 질병에 걸렸습니다.", piece.transform, 1f);
+            Debug.Log("50%의 확률로 질병에 걸렸습니다.");
+            ToastManager.Instance.ShowToast("50%의 확률로 질병에 걸렸습니다.", piece.transform, 1f);
 
             // 질병 디버프 걸리는 함수 실행
             piece.statusEffectController.SetStatus(StatusType.Disease, 2);

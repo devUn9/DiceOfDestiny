@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 5915877073728057463}
   - component: {fileID: 7430792717727876490}
   m_Layer: 5
-  m_Name: APToken
+  m_Name: APGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7028864617451856592
 RectTransform:
   m_ObjectHideFlags: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6f4cf385f1a4fb94f93b2e61d263adc1, type: 3}
+  m_Sprite: {fileID: -1156265176637526432, guid: 04bf366e4f798e24aa8f114bdbc467b6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
