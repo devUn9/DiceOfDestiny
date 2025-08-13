@@ -90,4 +90,9 @@ public class UIFollow : MonoBehaviour
         }
         uiElement.SetActive(true);
     }
+
+    public bool IsUIActive()
+    {
+        return uiElement.activeSelf;
+    }
 }

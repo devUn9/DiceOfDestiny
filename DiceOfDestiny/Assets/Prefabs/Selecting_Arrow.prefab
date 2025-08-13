@@ -217,7 +217,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8260598835274211928}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7122483811871881965}
+        m_TargetAssemblyTypeName: PieceControlUI, Assembly-CSharp
+        m_MethodName: OnButtonExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2949200422791596659
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,7 +681,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3953665945204623992}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6642108545664439237}
+        m_TargetAssemblyTypeName: PieceControlUI, Assembly-CSharp
+        m_MethodName: OnButtonExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3393376787968396794
 GameObject:
   m_ObjectHideFlags: 0
@@ -1545,7 +1569,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3101524409524023413}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1552913569610420062}
+        m_TargetAssemblyTypeName: PieceControlUI, Assembly-CSharp
+        m_MethodName: OnButtonExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6145461310172863318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1838,7 +1874,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5700548193224435497}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2116485869270393443}
+        m_TargetAssemblyTypeName: PieceControlUI, Assembly-CSharp
+        m_MethodName: OnButtonExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8060355297795471368
 GameObject:
   m_ObjectHideFlags: 0
