@@ -4,19 +4,6 @@ using System.Collections;
 
 public class MissionManager : Singletone<MissionManager>
 {
-    // private List<MissionData> missions = new();
-
-    // public void RegisterMission(MissionData mission) => missions.Add(mission);
-
-    // public bool AreAllMissionsComplete()
-    // {
-    //     foreach (var mission in missions)
-    //     {
-    //         if (!mission.IsCompleted()) return false;
-    //     }
-    //     return true;
-    // }
-
     [Header("FinishLine Mission")]
     public bool isFinishLine { get; private set; } = false; // 도착 지점인지 여부
 
