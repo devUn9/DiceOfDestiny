@@ -44,6 +44,13 @@ public class PieceManager : Singletone<PieceManager>
         EventManager.Instance.AddListener(AllEventNames.PIECE_COUNT_CHANGED, UpdatePieceManagerList);
     }
 
+    public void CanControlPiece(bool a)
+    {
+        if( a== true)
+            currentPiece.canControl = true;
+        else
+            currentPiece.canControl = false;
+    }
     public void DrawAllPieceUIs()
     {
         for (int i = 0; i < pieces.Count; i++)

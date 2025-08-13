@@ -10,13 +10,22 @@ public class ActiveSkill : MonoBehaviour
     [SerializeField] private GameObject fanaticSkillEffect;
     [SerializeField] private GameObject priestSkillEffect;
 
-    [SerializeField] private PainterActiveSkillUI painterActiveSkillUI;
-    [SerializeField] private MoveSkillUI moveSkillUI;
-    [SerializeField] private PieceSelectUI pieceSelectUI;
+    private PainterActiveSkillUI painterActiveSkillUI;
+    private MoveSkillUI moveSkillUI;
+    private PieceSelectUI pieceSelectUI;
+
+    private void Awake()
+    {
+        painterActiveSkillUI = GetComponentInParent<PainterActiveSkillUI>();
+        moveSkillUI = GetComponentInParent<MoveSkillUI>();
+        pieceSelectUI = GetComponentInParent<PieceSelectUI>();
+    }
 
     // 기사 스킬: 앞으로 이동
     public IEnumerator KnightMoveForward(PieceController pieceController, Vector2Int moveDirection)
     {
+        PieceManager.Instance.CanControlPiece(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         if (moveDirection != Vector2Int.up && moveDirection != Vector2Int.down &&
@@ -101,11 +110,15 @@ public class ActiveSkill : MonoBehaviour
         }
 
         BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
+
+        PieceManager.Instance.CanControlPiece(true);
     }
 
     // 악마 스킬: 독초 심기
     public IEnumerator Plant(PieceController pieceController)
     {
+        PieceManager.Instance.CanControlPiece(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.HighlightTiles();
@@ -135,11 +148,14 @@ public class ActiveSkill : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         BoardManager.Instance.CreateObstacle(gridPos, ObstacleType.PoisonousHerb);
         SkillManager.Instance.IsSelectingProgress = false;
+
+        PieceManager.Instance.CanControlPiece(true);
     }
 
     // 화가 스킬: 색칠하기
     public IEnumerator Paint(PieceController pieceController)
     {
+        PieceManager.Instance.CanControlPiece(false);
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.AllHighlightTiles();
@@ -183,11 +199,14 @@ public class ActiveSkill : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             BoardManager.Instance.SetTileColor(gridPos, selectedColor);
             SkillManager.Instance.IsSelectingProgress = false;
+            PieceManager.Instance.CanControlPiece(true);
         }
         else
         {
             Debug.LogWarning("PainterActiveSkillUI is not assigned!");
         }
+
+        
     }
 
     public IEnumerator ConvertToFanatic(PieceController piece)
@@ -245,6 +264,8 @@ public class ActiveSkill : MonoBehaviour
     // 사제 스킬
     public IEnumerator HealAP()
     {
+        PieceManager.Instance.CanControlPiece(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         if (priestSkillEffect != null)
@@ -265,11 +286,14 @@ public class ActiveSkill : MonoBehaviour
             Debug.LogWarning("PriestSkillEffect is not assigned!");
 
         }
+
+        PieceManager.Instance.CanControlPiece(true);
     }
 
     // 도적 스킬 : 이동 UI 띄우기
     public IEnumerator FastMove(PieceController piece)
     {
+        PieceManager.Instance.CanControlPiece(false);
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
         moveSkillUI.Initialize(piece); // 추가
         yield return moveSkillUI.WaitForArrowClick();
@@ -334,11 +358,14 @@ public class ActiveSkill : MonoBehaviour
 
         ObstacleManager.Instance.UpdateObstacleStep();
 
+        PieceManager.Instance.CanControlPiece(true);
     }
 
     // 아기 스킬 : 다른 기물 이동
     public IEnumerator HelpBaby(PieceController pieceController)
     {
+        PieceManager.Instance.CanControlPiece(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         // 본인을 제외한 기물들 중 이동 가능한 타일이 있는지 확인
@@ -391,7 +418,7 @@ public class ActiveSkill : MonoBehaviour
 
         // 기물 선택 UI 생성
         pieceSelectUI.CreateButtonsForPieces();
-        SkillManager.Instance.IsSelectingProgress = true;
+        
 
         // 화살표 클릭 대기
         yield return moveSkillUI.WaitForArrowClick();
@@ -404,6 +431,6 @@ public class ActiveSkill : MonoBehaviour
         PieceManager.Instance.currentPiece = pieceController;
         BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
 
-        SkillManager.Instance.IsSelectingProgress = false;
+        PieceManager.Instance.CanControlPiece(true);
     }
 }
