@@ -1955,6 +1955,76 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500490922}
   m_CullTransparentMesh: 1
+--- !u!1 &501055883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 501055885}
+  - component: {fileID: 501055884}
+  m_Layer: 0
+  m_Name: RuleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &501055884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501055883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f050eada5b062d4db074bcacec6f285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allRules:
+  - {fileID: 11400000, guid: 8874e488d16af3f4ea6bb93077ed5768, type: 2}
+  - {fileID: 11400000, guid: 441f7b9b498e94e488cd0aa8db5ada60, type: 2}
+  - {fileID: 11400000, guid: 0e18da4e9f1d7ba41b3761c44faba2c6, type: 2}
+  - {fileID: 11400000, guid: b540a10f4b5613f42b075b51e90a54a4, type: 2}
+  - {fileID: 11400000, guid: 44c29269b0f1818458400b5b7fbe7183, type: 2}
+  - {fileID: 11400000, guid: 6dfcbe60b5b7a4940bbbaa1b1f0f1d2e, type: 2}
+  - {fileID: 11400000, guid: 2cc450f05c9d4d349867279bb6f98477, type: 2}
+  - {fileID: 11400000, guid: dfeb0565873d65c41b6b05813e98198a, type: 2}
+  - {fileID: 11400000, guid: f6536424dbb1b8140bddc5fd2c84fe88, type: 2}
+  - {fileID: 11400000, guid: 6a4a4f1b20205614690496473e9192d6, type: 2}
+  - {fileID: 11400000, guid: a9eb2dcdca652ae46852b5ee5f81fc90, type: 2}
+  - {fileID: 11400000, guid: 82d4843a68e06a046b13506dcfb82a81, type: 2}
+  - {fileID: 11400000, guid: ef6fe6cae46cddc4d9c161b54830d562, type: 2}
+  - {fileID: 11400000, guid: 14dd6f2b8d9662b44a64f290c1d1107f, type: 2}
+  - {fileID: 11400000, guid: 6f7398666dcff3a4f86398961f7853e6, type: 2}
+  - {fileID: 11400000, guid: 409322b8c94ca3b478e5f7ad3d37b057, type: 2}
+  - {fileID: 11400000, guid: 045664c7e6d7a4b4188a5b8032745f3f, type: 2}
+  - {fileID: 11400000, guid: 1d3303bf6a9d59f41bed92f231bc0eab, type: 2}
+  - {fileID: 11400000, guid: 068d06addb9b21244b2d60eb2ec7542d, type: 2}
+  - {fileID: 11400000, guid: d0d86bd2da2487b4ba8e18b2304fcf89, type: 2}
+  - {fileID: 11400000, guid: 269145628c361324988d9ec14235001f, type: 2}
+  - {fileID: 11400000, guid: 1ad35e31c71c46f4582432efbde01712, type: 2}
+  - {fileID: 11400000, guid: 574dcd51d4b721744a575dd443185d30, type: 2}
+  - {fileID: 11400000, guid: 9bd697056411c9544a5f3c80f0bfa449, type: 2}
+  - {fileID: 11400000, guid: 151ba04802f0ddf4ea0367c62fc20663, type: 2}
+--- !u!4 &501055885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501055883}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &525292200
 GameObject:
   m_ObjectHideFlags: 0
@@ -3257,7 +3327,7 @@ MonoBehaviour:
   blueButton: {fileID: 277443439}
   yellowButton: {fileID: 1395148978}
   purpleButton: {fileID: 2101212407}
-  grayButton: {fileID: 885577661}
+  brownButton: {fileID: 0}
   paletteImage: {fileID: 1282756431}
   offset: {x: 0, y: 0}
 --- !u!114 &830614875
@@ -3984,6 +4054,7 @@ MonoBehaviour:
   grassPrefab: {fileID: 5239956457780272049, guid: fefe575a2ba4a7249bbf77dc777e9eca, type: 3}
   slimePrefab: {fileID: 2465335938598337309, guid: 2a6ce1ef19d36e64684f0baf6f13cd5e, type: 3}
   slimeDdongPrefab: {fileID: 5239956457780272049, guid: fb256067f7bba754cb8c7031d1842fd4, type: 3}
+  pawnPrefab: {fileID: 2465335938598337309, guid: a3f4b156df2deab45a8922a6cb66fd15, type: 3}
   currentObstacles: []
 --- !u!114 &1146015699
 MonoBehaviour:
@@ -6788,7 +6859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageIndex: 0
   stageProfiles:
-  - {fileID: 11400000, guid: c2c391696bc63994b898d9be7e4a7456, type: 2}
+  - {fileID: 11400000, guid: 60f221dfb72b1b84aa4272684d5f262c, type: 2}
   - {fileID: 11400000, guid: cfd912d1b69670743b9bd885b9536f75, type: 2}
   - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
   bannerManager: {fileID: 1222871040}
@@ -7317,6 +7388,7 @@ SceneRoots:
   - {fileID: 193770665}
   - {fileID: 1817241450}
   - {fileID: 1192841543}
+  - {fileID: 501055885}
   - {fileID: 1485107672}
   - {fileID: 1150930150}
   - {fileID: 855870362}

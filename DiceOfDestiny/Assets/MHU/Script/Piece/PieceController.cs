@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -25,7 +26,8 @@ public class PieceController : MonoBehaviour
     [SerializeField] public SpriteRenderer colorRenderer;
 
 
-    bool isMoving = false; // 이동 중인지 여부
+    private bool isMoving = false; // 이동 중인지 여부
+    [SerializeField] public bool isFinishLine = false; // 도착 지점인지 여부
 
     public StatusEffectController statusEffectController;
 
@@ -236,6 +238,7 @@ public class PieceController : MonoBehaviour
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
 
+                // newPosition이 도착지점이면 isFinishLine true
                 StartCoroutine(CheckStageClearAfterMove(newPosition));
 
                 ObstacleManager.Instance.UpdateObstacleStep();
@@ -572,10 +575,12 @@ public class PieceController : MonoBehaviour
         // 도착 지점이라면
         if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
         {
-            BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(null);
-            StageManager.Instance.StageClear();
+            //BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(null);
 
-            Destroy(this.gameObject);
+            isFinishLine = true;
+
+            // 모든 미션 클리어 시 스테이지 클리어 함수 호출
+            StageManager.Instance.IsAllMissionCompleted();
         }
     }
 

@@ -8,6 +8,15 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
         var piece = currentTile.GetPiece();
         if (piece == null) return;
 
+        // 만약 미션중에 회색 풀 찾기 미션이 있다면
+        StageManager.Instance.currentStage.missions.ForEach(mission =>
+        {
+            if (mission is FindGrayGrassSO)
+            {
+                StageManager.Instance.AddGrayGrassMission();
+            }
+        });
+
         RuleEvents.TriggerRule("Grass_Passive");
 
         // 이미 질병 상태면 아무것도 하지 않음
@@ -40,7 +49,7 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
                 Debug.Log("기사가 20%의 확률로 질병에 걸렸습니다.");
                 ToastManager.Instance.ShowToast("기사가 20%의 확률로 질병에 걸렸습니다.", piece.transform, 1f);
                 RuleEvents.TriggerRule("Knight_Passive_DiseaseX2");
-                
+
                 piece.statusEffectController.SetStatus(StatusType.Disease, 2);
             }
             else
@@ -54,7 +63,7 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
             BoardManager.Instance.RemoveObstacle(this);
             return;
         }
-        
+
         if (rand == 0)
         {
             Debug.Log("10%의 확률로 질병에 걸렸습니다.");

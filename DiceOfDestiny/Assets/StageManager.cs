@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class StageManager : Singletone<StageManager>
@@ -9,6 +10,14 @@ public sealed class StageManager : Singletone<StageManager>
     [Header("Stage Settings")]
     [SerializeField] private int stageIndex = 0;
     [SerializeField] private StageData[] stageProfiles = null!;
+
+    [Header("Stage 5 Mission")]
+    private int findGrayGrassCount = 0;
+    public bool isFindGrayGrass { get; private set; } = false;
+
+    [Header("Stage 6 Mission")]
+    private List<GameObject> pawnList = new List<GameObject>();
+    public int pawnMoveIndex { get; private set; } = 0;
 
     [Header("UI References")]
     [SerializeField] private StageBannerManager bannerManager = null!;
@@ -98,6 +107,15 @@ public sealed class StageManager : Singletone<StageManager>
 
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
+    public void IsAllMissionCompleted()
+    {
+        if (currentStage.missions.TrueForAll(m => m.IsMissionCompleted()))
+        {
+            Debug.Log("복합 미션 완료!");
+            StageClear();
+        }
+    }
+
     public void StageClear()
     {
         // 인게임 보드판에 있는 피스들 제거
@@ -151,5 +169,42 @@ public sealed class StageManager : Singletone<StageManager>
     private void UpdateCurrentStage(StageData stage)
     {
         currentStage = stage;
+    }
+
+    public void AddGrayGrassMission()
+    {
+        findGrayGrassCount++;
+
+        if (findGrayGrassCount >= 3)
+            isFindGrayGrass = true;
+    }
+
+    public void AddPawnToList(GameObject pawn)
+    {
+        if (pawn != null && !pawnList.Contains(pawn))
+        {
+            pawnList.Add(pawn);
+        }
+    }
+
+    public void RemovePawn(GameObject pawn)
+    {
+        pawnList.Remove(pawn);
+    }
+
+    public int GetPawnListIndex(GameObject pawn)
+    {
+        return pawnList.IndexOf(pawn);
+    }
+
+    public void InOrderToMovePawn()
+    {
+        if (pawnMoveIndex >= 6)
+        {
+            pawnMoveIndex = 0;
+            return;
+        }
+        
+        pawnMoveIndex++;
     }
 }
