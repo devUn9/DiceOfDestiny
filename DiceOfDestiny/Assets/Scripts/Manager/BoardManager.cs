@@ -25,7 +25,7 @@ public enum DirectionType
 public class BoardManager : Singletone<BoardManager>
 {
     [Header("Board Size Settings")]
-    [SerializeField] public int boardSize = 13;
+    [SerializeField] public int boardSize { get; private set; } = 13;
     public int boardSizeY;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] public Transform boardTransform;
@@ -211,11 +211,13 @@ public class BoardManager : Singletone<BoardManager>
         // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
         StageManager.Instance.currentStage.missions.ForEach(mission =>
         {
-            if (mission is FindGrayGrassSO)
+            // 5스테이지
+            if (mission.missionType is MissionType.FindGrayGrass)
             {
                 GrayOutTiles();
             }
-            else if (mission is KillPawnSO)
+            // 6스테이지
+            else if (mission.missionType is MissionType.KillPawn)
             {
                 SetPawn();
             }
@@ -715,24 +717,6 @@ public class BoardManager : Singletone<BoardManager>
         return false;
     }
 
-    public bool HasMovingEnemyObstacles()
-    {
-        int count = 0;
-
-        for (int x = 0; x < boardSize; x++)
-        {
-            for (int y = 1; y < boardSize + 1; y++)
-            {
-                if (Board[x, y].Obstacle == ObstacleType.Slime || Board[x, y].Obstacle == ObstacleType.Zombie)
-                {
-                    ++count;
-                }
-            }
-        }
-
-        return count > 0;
-    }
-
     public void GrayOutTiles()
     {
         for (int x = 0; x < boardSize; x++)
@@ -768,7 +752,7 @@ public class BoardManager : Singletone<BoardManager>
             GameObject obstacle = CreateObstacle(panwPos, ObstacleType.Pawn);
 
             // 미션을 위한 스테이지 상의 Pawn 리스트에 추가
-            StageManager.Instance.AddPawnToList(obstacle);
+            ObstacleManager.Instance.AddPawnToList(obstacle);
         }
     }
 

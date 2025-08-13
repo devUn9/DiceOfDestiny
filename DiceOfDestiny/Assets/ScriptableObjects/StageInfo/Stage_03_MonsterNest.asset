@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Stage_03_MonsterNest
   m_EditorClassIdentifier: 
   <StageName>k__BackingField: "\uB9C8\uBB3C \uC11C\uC2DD\uC9C0"
+  stageNumber: 3
   missions:
-  - {fileID: 11400000, guid: 8b7aabaad09513640bf6ade8d548c0a5, type: 2}
-  - {fileID: 11400000, guid: 7b25244ba75b7db44b6b8330feaa7760, type: 2}
+  - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
+  - {fileID: 11400000, guid: eab06947b722f724fa8b501a534bf66b, type: 2}
   isGrayGrass: 0
   isGrayTree: 0
   isGrayPoisonousherb: 0
@@ -45,5 +46,3 @@ MonoBehaviour:
   - type: 8
     weight: 5
   obstacleDensity: 0.2
-  stageNumber: 3
-  stageTitle: "\uB9C8\uBB3C \uC11C\uC2DD\uC9C0"

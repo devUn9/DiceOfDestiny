@@ -15,11 +15,11 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
     public void DoLogic()
     {
-        if (StageManager.Instance.GetPawnListIndex(gameObject) != StageManager.Instance.pawnMoveIndex)
+        if (ObstacleManager.Instance.GetPawnListIndex(gameObject) != ObstacleManager.Instance.pawnMoveIndex)
         {
             return;
         }
-        StageManager.Instance.InOrderToMovePawn();
+        ObstacleManager.Instance.InOrderToMovePawn();
 
         // 이동 관련 변수
         Vector2Int direction = Vector2Int.down;

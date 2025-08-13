@@ -21,6 +21,10 @@ public class ObstacleManager : Singletone<ObstacleManager>
 
     public List<GameObject> currentObstacles;
 
+    [Header("Boss Pawn")]
+    private List<GameObject> pawnList = new List<GameObject>();
+    public int pawnMoveIndex { get; private set; } = 0;
+
     public void Initialize()
     {
         obstaclePrefabs = new Dictionary<ObstacleType, GameObject>
@@ -63,5 +67,35 @@ public class ObstacleManager : Singletone<ObstacleManager>
             if (behaviour != null)
                 behaviour.DoLogic();
         }
+    }
+
+    // 보스 폰 함수들
+    public void AddPawnToList(GameObject pawn)
+    {
+        if (pawn != null && !pawnList.Contains(pawn))
+        {
+            pawnList.Add(pawn);
+        }
+    }
+
+    public void RemovePawn(GameObject pawn)
+    {
+        pawnList.Remove(pawn);
+    }
+
+    public int GetPawnListIndex(GameObject pawn)
+    {
+        return pawnList.IndexOf(pawn);
+    }
+
+    public void InOrderToMovePawn()
+    {
+        if (pawnMoveIndex >= 6)
+        {
+            pawnMoveIndex = 0;
+            return;
+        }
+
+        pawnMoveIndex++;
     }
 }

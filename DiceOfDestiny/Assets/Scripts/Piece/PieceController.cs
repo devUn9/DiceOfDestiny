@@ -18,10 +18,9 @@ public class PieceController : MonoBehaviour
     [SerializeField] public SpriteRenderer colorRenderer;
     [SerializeField] private SpriteRenderer animationRenderer;
 
-    public bool isMoving = false; // 이동 중인지 여부
+    public bool isMoving { get; private set; } = false; // 이동 중인지 여부
     public bool canControl = true; // 기물 조작 가능 여부
     private bool animPlaying = false; // 애니메이션 재생 중인지 여부
-    public bool isFinishLine = false; // 도착 지점인지 여부
 
     public PieceStatusEffectController statusEffectController;
     public UIFollow uiFollow;
@@ -234,8 +233,12 @@ public class PieceController : MonoBehaviour
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
 
-                StartCoroutine(CheckStageClearAfterMove(newPosition));
+                // 도착점 체크
+                MissionManager.Instance.CheckStageClearAfterMove(newPosition);
+                // 모든 미션완료 상태 체크
+                MissionManager.Instance.IsAllMissionCompleted();
 
+                // 모든 장애물 기믹 동작
                 ObstacleManager.Instance.UpdateObstacleStep();
             }
             else
@@ -702,22 +705,6 @@ public class PieceController : MonoBehaviour
         Destroy(newColorObj);
 
         isMoving = false;
-    }
-
-    private IEnumerator CheckStageClearAfterMove(Vector2Int newPosition)
-    {
-        // 이동 애니메이션이 끝날 때까지 대기
-        while (isMoving)
-            yield return null;
-
-        // 도착 지점이라면
-        if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
-        {
-            BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(null);
-            StageManager.Instance.StageClear();
-
-            Destroy(this.gameObject);
-        }
     }
 
     public Face GetFace(int index)

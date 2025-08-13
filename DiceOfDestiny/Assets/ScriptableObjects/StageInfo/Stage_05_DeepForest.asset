@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Stage_05_DeepForest
   m_EditorClassIdentifier: 
   <StageName>k__BackingField: "\uAE4A\uC740 \uC232\uC18D"
+  stageNumber: 5
   missions:
-  - {fileID: 11400000, guid: 8b7aabaad09513640bf6ade8d548c0a5, type: 2}
-  - {fileID: 11400000, guid: c5568090e8328ef48b8bd76c63508829, type: 2}
+  - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
+  - {fileID: 11400000, guid: 91ce260453d76eb479e9479b1aa28d64, type: 2}
   isGrayGrass: 1
   isGrayTree: 1
   isGrayPoisonousherb: 0
@@ -29,7 +30,7 @@ MonoBehaviour:
   orangeWeight: 1
   availableObstacle:
   - type: 7
-    weight: 3
+    weight: 5
   - type: 1
     weight: 10
   - type: 6
@@ -41,5 +42,3 @@ MonoBehaviour:
   - type: 8
     weight: 4
   obstacleDensity: 0.2
-  stageNumber: 5
-  stageTitle: "\uAE4A\uC740 \uC232\uC18D"

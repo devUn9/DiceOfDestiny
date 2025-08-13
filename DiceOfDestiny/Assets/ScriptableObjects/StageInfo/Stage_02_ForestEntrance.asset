@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Stage_02_ForestEntrance
   m_EditorClassIdentifier: 
   <StageName>k__BackingField: "\uC232\uC758 \uCD08\uC785"
+  stageNumber: 2
   missions:
-  - {fileID: 11400000, guid: 8b7aabaad09513640bf6ade8d548c0a5, type: 2}
+  - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
   isGrayGrass: 0
   isGrayTree: 0
   isGrayPoisonousherb: 0
@@ -40,5 +41,3 @@ MonoBehaviour:
   - type: 8
     weight: 3
   obstacleDensity: 0.2
-  stageNumber: 2
-  stageTitle: "\uC232\uC758 \uCD08\uC785"

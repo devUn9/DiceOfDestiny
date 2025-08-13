@@ -3,12 +3,18 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class UIRulebook : Singletone<UIRulebook>
+public class UIRulebook : MonoBehaviour
 {
     [SerializeField] private GameObject ClassRule;
     [SerializeField] private GameObject ObstacleRule;
 
     [SerializeField] private GameObject RuleTextPrefab;
+
+    private void Start()
+    {
+        // Refresh 함수 구독
+        EventManager.Instance.AddListener<RuleData>("ShowRule", ShowRule);
+    }
 
     public void ShowRule(RuleData rule)
     {
