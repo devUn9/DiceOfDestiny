@@ -132,9 +132,9 @@ MonoBehaviour:
   classRenderer: {fileID: 6441678837052477297}
   colorRenderer: {fileID: 3789393067031802111}
   animationRenderer: {fileID: 6293703101159080490}
-  animator: {fileID: 0}
   isMoving: 0
   canControl: 1
+  isFinishLine: 0
   statusEffectController: {fileID: 0}
   uiFollow: {fileID: 0}
 --- !u!114 &-496050788824586386
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1324270886440449900}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d798ea2d3be35fd47acf8d1a485b6486, type: 3}
+  m_Script: {fileID: 11500000, guid: 2767808f5c672404891e31b9e03263c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8203489627927508350

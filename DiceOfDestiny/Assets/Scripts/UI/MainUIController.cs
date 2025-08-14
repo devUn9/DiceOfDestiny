@@ -8,7 +8,7 @@ public class MainUIController : MonoBehaviour
 {
     private const string KeySaveExists = "SaveExists";
     private const string KeyLastScene = "LastScene";
-    private const string DefaultScene = "GameScene_2.0.1";
+    private const string DefaultScene = "GameScene_2.1";
     private const string CustomizeScene = "CustomizeScene";
 
     [SerializeField] private Button continueButton;

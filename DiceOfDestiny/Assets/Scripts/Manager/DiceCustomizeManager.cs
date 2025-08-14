@@ -177,6 +177,6 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     public void OnClickBackToMainButton()
     {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("MainScene");
     }
 }

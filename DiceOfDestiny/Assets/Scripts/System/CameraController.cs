@@ -52,6 +52,7 @@ public class CameraController : MonoBehaviour
 
     void HandleZoom()
     {
+        if (GameManager.Instance.isPaused) return;
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (scroll != 0f)
