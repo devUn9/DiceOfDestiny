@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class UIRulebook : Singletone<UIRulebook>
 {
+    [Header("Rulebook UI")]
     [SerializeField] private GameObject ClassRule;
     [SerializeField] private GameObject ObstacleRule;
 

@@ -15,14 +15,14 @@ public class ApDiceController : MonoBehaviour
     [SerializeField] private DiceFace[] diceFaces;
 
     [Header("Roll Settings")]
-    [SerializeField] private int rollCountMin = 3;
+    [SerializeField] private int rollCountMin = 8;
     [SerializeField] private int rollCountMax = 10;
-    [SerializeField] private float inflateAmount = 0.4f;
+    [SerializeField] private float inflateAmount = 0.3f;
 
     [Header("Movement Settings")]
-    [SerializeField] private float startOffset = 2f;
-    [SerializeField] private float centerRandomRange = 1f;
-    [SerializeField] private float moveDuration = 3f;
+    [SerializeField] private float startOffset = 1f;
+    [SerializeField] private float centerRandomRange = 0.5f;
+    [SerializeField] private float moveDuration = 1.6f;
 
     private int currentIndex = 0;
     private int rollCount = 6;
@@ -82,6 +82,7 @@ public class ApDiceController : MonoBehaviour
         StartCoroutine(MoveDiceOverTime());
         StartCoroutine(ReSizeDiceOverTime());
         StartCoroutine(RollCycle());
+        AudioManager.Instance.PlaySFX("diceRoll");
     }
 
     void SetDiceRoute()
