@@ -29,16 +29,11 @@ public class ActionPointUI : MonoBehaviour
 
     private readonly List<GameObject> apGauges = new();
 
-    // 안전한 이벤트 해제용 캐시
-    private Action<int> onAPChangedHandler;
-    private Action onValueChangedHandler;
-
     // 표시 중인 AP(시각적 수치)
     private int displayedAP = 0;
 
     // 코루틴
     private Coroutine fillRoutine;
-    private Coroutine bindRoutine;
 
     private void Awake()
     {
@@ -125,11 +120,10 @@ public class ActionPointUI : MonoBehaviour
             if (i < apGauges.Count && apGauges[i] != null)
             {
                 apGauges[i].SetActive(true);
-                if (playSfxEachStep && AudioManager.Instance != null)
+                if (AudioManager.Instance != null)
                     AudioManager.Instance.PlaySFX(stepSfxName);
             }
-
-            displayedAP = i + 1;
+            displayedAP = i;
             apText.text = $"AP    : {displayedAP}";
 
             yield return new WaitForSeconds(fillStepDelay);
@@ -149,6 +143,5 @@ public class ActionPointUI : MonoBehaviour
             if (apGauges[i] != null && apGauges[i].activeSelf != active)
                 apGauges[i].SetActive(active);
         }
-
     }
 }
