@@ -434,7 +434,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb244182c59edb94f8ad30166bad2a60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardSize: 13
   boardSizeY: 0
   tilePrefab: {fileID: 2471703998611980718, guid: 23386ab979afcd04f83177db42443585, type: 3}
   boardTransform: {fileID: 667301746}
@@ -3366,6 +3365,52 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7283747787718690763, guid: 525963756276a8c4fa18585b261f8e4c, type: 3}
   m_PrefabInstance: {fileID: 1509104736}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1752180174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1752180176}
+  - component: {fileID: 1752180175}
+  m_Layer: 0
+  m_Name: MissionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1752180175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752180174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dfa1463cf66f654bb275a34d30faf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  findGrayGrassCount: 0
+  alivePawnCount: 0
+--- !u!4 &1752180176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752180174}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 265.28412, y: 649.3615, z: 0.67101955}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1841607689
 GameObject:
   m_ObjectHideFlags: 0
@@ -4025,6 +4070,7 @@ SceneRoots:
   - {fileID: 483505443}
   - {fileID: 1150930150}
   - {fileID: 1211116578}
+  - {fileID: 1752180176}
   - {fileID: 1146015697}
   - {fileID: 1192841543}
   - {fileID: 712134629}

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class ActionPointUI : MonoBehaviour
 {
     [Header("Text")]
+    [SerializeField] private TextMeshProUGUI currentStage;
     [SerializeField] private TextMeshProUGUI currentState;
     [SerializeField] private TextMeshProUGUI currentTurn;
     [SerializeField] private TextMeshProUGUI diceText;
@@ -79,6 +80,7 @@ public class ActionPointUI : MonoBehaviour
 
     public void UpdateActionPointUI()
     {
+        currentStage.text = $"Stage {StageManager.Instance.currentStage.stageNumber}";
         currentState.text = $"State : {StageManager.Instance.GameState}";
         currentTurn.text = $"Turn  : {StageManager.Instance.CurrentTurn}";
         diceText.text = $"Dice  : {StageManager.Instance.DiceValue}";
