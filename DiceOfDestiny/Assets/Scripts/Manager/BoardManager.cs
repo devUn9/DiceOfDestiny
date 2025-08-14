@@ -1,7 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum TileColor
 {
@@ -28,8 +27,11 @@ public class BoardManager : Singletone<BoardManager>
     [SerializeField] public int boardSize = 13;
     public int boardSizeY;
     [SerializeField] private GameObject tilePrefab;
+    [SerializeField] public GameObject boardPosParent;
     [SerializeField] public Transform boardTransform;
+    [SerializeField] public Transform newBoardTransform;
     public Tile[,] Board { get; set; }
+    public Tile[,] TempBoard { get; set; }
 
     [Header("Tile Colors Settings")]
     [SerializeField]
@@ -75,6 +77,25 @@ public class BoardManager : Singletone<BoardManager>
             }
         }
     }
+
+    public void GenerateNextBoard()
+    {
+        TempBoard = new Tile[boardSize, boardSizeY];
+
+        for (int x = 0; x < boardSize; x++)
+        {
+            for (int y = 0; y < boardSizeY; y++)
+            {
+                GameObject tileObject = Instantiate(tilePrefab, new Vector3(newBoardTransform.position.x + x, newBoardTransform.position.y + y, 0), Quaternion.identity, newBoardTransform);
+                tileObject.name = $"Tile_{x}_{y}";
+                Tile tile = tileObject.GetComponent<Tile>();
+                tile.TileColor = TileColor.None;
+                tile.Obstacle = ObstacleType.None;
+                TempBoard[x, y] = tile;
+            }
+        }
+    }
+
 
     public void SetBoard(StageData profile)
     {
@@ -852,5 +873,85 @@ public class BoardManager : Singletone<BoardManager>
         {
             return tileColors[(int)tileColor];
         }
+    }
+
+
+    // 보드 회전
+    public void ShiftBoard()
+    {
+        StartCoroutine(DelectWhiteLineCoroutine());
+    }    
+
+    IEnumerator DelectWhiteLineCoroutine()
+    {
+        for (int x = 0; x < boardSize; x++)
+        {
+            Board[x, 0].gameObject.SetActive(false); // 첫 줄을 비활성화
+            Board[boardSize - 1 - x, boardSizeY - 1].gameObject.SetActive(false); // 마지막 줄을 비활성화
+            yield return new WaitForSeconds(0.1f); // 0.1초 대기
+        }
+
+        StartCoroutine(ShiftBoardCoroutine());
+    }
+
+    IEnumerator ShiftBoardCoroutine()
+    {
+        float duration = 4f; // 이동 시간
+        float time = 0f;
+        float inflateAmount = 0.2f;
+        GenerateNextBoard();
+
+        // 새로운 보드의 맨 윗줄과 맨 아랫줄을 비활성화
+        for (int x = 0; x < boardSize; x++)
+        {
+            TempBoard[x, 0].gameObject.SetActive(false);
+            TempBoard[boardSize - 1 - x, boardSizeY - 1].gameObject.SetActive(false);
+        }
+        
+
+        Vector3 moveDir = Vector3.up;
+
+        float boardHeight = 11f; // 보드의 높이
+
+        newBoardTransform.localScale = Vector3.zero; // 새 보드의 초기 크기를 0으로 설정
+
+        Vector3 contractStartPos = boardTransform.localPosition; // 기존 보드의 시작 위치를 아래로 이동
+        Vector3 expandStartPos = contractStartPos + moveDir * boardHeight * 0.5f; // 새 보드의 시작 위치를 위로 이동
+
+        newBoardTransform.localPosition = expandStartPos; // 새 보드의 시작 위치 설정
+
+        Vector3 parentStartPos = boardPosParent.transform.localPosition;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+
+            float totalScale = 1f + inflateAmount * Mathf.Sin(Mathf.PI * t);
+
+            float contractScale = Mathf.Lerp(1f, 0f, t);
+            float expandScale = totalScale - contractScale;
+
+            newBoardTransform.localScale = new Vector3(1f, expandScale, 1f);
+            boardTransform.localScale = new Vector3(1f, contractScale, 1f);
+
+            float contractHalf = 0.5f * contractScale * boardHeight;
+            float expandHalf =  0.5f * expandScale * boardHeight;
+
+            boardTransform.localPosition = contractStartPos - moveDir * contractHalf;
+            newBoardTransform.localPosition = expandStartPos - moveDir * expandHalf;
+
+            boardPosParent.transform.localPosition = parentStartPos + moveDir * (contractHalf - expandHalf) + moveDir * (0.5f * boardHeight * t);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        // 보드 위치와 크기를 최종적으로 설정
+        newBoardTransform.localScale = Vector3.one; // 새 보드의 크기를 1로 설정
+        newBoardTransform.localPosition = contractStartPos;
+
+        boardPosParent.transform.localPosition = parentStartPos;
+
+        Debug.Log("Board shift completed.");
     }
 }

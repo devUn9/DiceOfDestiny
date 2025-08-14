@@ -714,7 +714,7 @@ public class PieceController : MonoBehaviour
         if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
         {
             BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(null);
-            StageManager.Instance.StageClear();
+            StageManager.Instance.StageClear(this);
 
             Destroy(this.gameObject);
         }

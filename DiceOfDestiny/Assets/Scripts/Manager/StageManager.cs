@@ -8,7 +8,6 @@ public enum GameState
     ReadyToRoll,
     PlayerAction,
 }
-
 public sealed class StageManager : Singletone<StageManager>
 {
     [Header("Stage Settings")]
@@ -79,8 +78,6 @@ public sealed class StageManager : Singletone<StageManager>
         CurrentTurn++;
         ResetTurn();
         UIManager.Instance.UpdateActionPointUI();
-
-
     }
 
     private void ResetTurn()
@@ -98,12 +95,15 @@ public sealed class StageManager : Singletone<StageManager>
         }
     }
 
-    public void StageClear()
+    public void StageClear(PieceController clearPiece = null)
     {
         // 인게임 보드판에 있는 피스들 인벤토리로 돌아가게 하기
         foreach (var piece in PieceManager.Instance.Pieces)
         {
-            Destroy(piece.gameObject);
+            if (piece != clearPiece)
+            {
+                Destroy(piece.gameObject);
+            }
         }
 
         // 피스 리스트에 제거
@@ -115,10 +115,17 @@ public sealed class StageManager : Singletone<StageManager>
         // 피스 선택 테두리 제거
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
 
-        Time.timeScale = 0f;
-
         mainCanvasGroup.SetActive(false);
-        NextStageUI.SetActive(true);
+
+        ShiftToNextStage();
+    }
+
+    public void ShiftToNextStage()
+    {
+        UIManager.Instance.HideUI();
+        stageIndex++;
+
+        BoardManager.Instance. ShiftBoard();
     }
 
     public void ResumeGame()
@@ -172,11 +179,10 @@ public sealed class StageManager : Singletone<StageManager>
             pawnMoveIndex = 0;
             return;
         }
-        
+
         pawnMoveIndex++;
     }
 }
 
 
 
-    

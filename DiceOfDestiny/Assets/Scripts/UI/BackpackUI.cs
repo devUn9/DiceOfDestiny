@@ -135,42 +135,18 @@ public class BackpackUI : MonoBehaviour
             yield break;
         }
 
-        // 피스 생성
-        GameObject piece = Instantiate(PieceManager.Instance.piecePrefabs[currentIndex],
-        new Vector2(BoardManager.Instance.boardTransform.position.x + gridPos.x,
-                    BoardManager.Instance.boardTransform.position.y + gridPos.y),
-        Quaternion.identity);
-
+        // 피스 선택 UI의 기물 윗면 새로고침
         choiceTopFaceWindow.SetActive(false);
-
-        // 현재 조작중인 기물로 초기화
-        PieceController currentPieceController = piece.GetComponent<PieceController>();
-
-        // 보드 판 내부 좌표 초기화
-        currentPieceController.gridPosition = gridPos;
-
-        // 생성된 기물 윗면 초기화
-        currentPieceController.SetTopFace();
-
-        // 생성된 위치의 타일의 피스정보를 저장
-        BoardManager.Instance.Board[gridPos.x, gridPos.y].SetPiece(currentPieceController);
-
-        // 피스 리스트에 추가
-        PieceManager.Instance.Pieces.Add(currentPieceController);
-
-        // 현재 선택 피스
-        PieceManager.Instance.SetCurrentPiece(currentPieceController);
-
-        // 피스 선택 테두리 생성
-        BoardSelectManager.Instance.PieceHighlightTiles(currentPieceController.gridPosition);
-
-        // =====================[ 생성 종료 ]=====================
-
         choicePieceClassImage[currentIndex].sprite = null;
 
+        // 피스 생성
+        PieceManager.Instance.GeneratePiece(currentIndex, gridPos);       
+        
         // 슬롯에 있는 피스 제거
         Debug.Log(currentIndex + "번 피스 제거");
         PieceManager.Instance.pieceDatas[currentIndex] = null;
+
+        
     }
 
 

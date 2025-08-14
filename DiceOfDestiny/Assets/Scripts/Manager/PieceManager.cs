@@ -57,4 +57,34 @@ public class PieceManager : Singletone<PieceManager>
     {
         currentPiece = pieceController;
     }
+
+    public void GeneratePiece(int currentIndex, Vector2Int gridPos)
+    {
+        // 피스 생성
+        GameObject piece = Instantiate(PieceManager.Instance.piecePrefabs[currentIndex],
+        new Vector2(BoardManager.Instance.boardTransform.position.x + gridPos.x,
+                    BoardManager.Instance.boardTransform.position.y + gridPos.y),
+        Quaternion.identity);        
+
+        // 현재 조작중인 기물로 초기화
+        PieceController currentPieceController = piece.GetComponent<PieceController>();
+
+        // 보드 판 내부 좌표 초기화
+        currentPieceController.gridPosition = gridPos;
+
+        // 생성된 기물 윗면 초기화
+        currentPieceController.SetTopFace();
+
+        // 생성된 위치의 타일의 피스정보를 저장
+        BoardManager.Instance.Board[gridPos.x, gridPos.y].SetPiece(currentPieceController);
+
+        // 피스 리스트에 추가
+        Pieces.Add(currentPieceController);
+
+        // 현재 선택 피스
+        SetCurrentPiece(currentPieceController);
+
+        // 피스 선택 테두리 생성
+        BoardSelectManager.Instance.PieceHighlightTiles(currentPieceController.gridPosition);
+    }
 }
