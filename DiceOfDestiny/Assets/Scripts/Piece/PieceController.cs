@@ -21,6 +21,7 @@ public class PieceController : MonoBehaviour
     public bool isMoving { get; private set; } = false; // 이동 중인지 여부
     public bool canControl = true; // 기물 조작 가능 여부
     private bool animPlaying = false; // 애니메이션 재생 중인지 여부
+    public bool isOutStartingLine = false; // 시작 지점에서 벗어났는지 여부
 
     public PieceStatusEffectController statusEffectController;
     public UIFollow uiFollow;
@@ -126,6 +127,14 @@ public class PieceController : MonoBehaviour
                 int DiseaseTurn = statusEffectController.GetRemainingTurn(PieceStatus.Disease);
                 Debug.Log("Piece is diseased!");
                 ToastManager.Instance.ShowToast(message: $"기물이 질병에 걸렸습니다! {DiseaseTurn}턴간 행동이 제한됩니다.", transform);
+                return;
+            }
+
+            // 시작지점으로 다시 돌아가려고 하면
+            if (isOutStartingLine && newPosition.y == 0)
+            {
+                ToastManager.Instance.ShowToast(message: "시작 지점으로 돌아갈 수 없습니다!", transform);
+                RotateHalfBack(moveDirection);
                 return;
             }
 
@@ -322,7 +331,7 @@ public class PieceController : MonoBehaviour
             animationRenderer.gameObject.SetActive(true);
             animator.enabled = true; // Animator 활성화
             animator.Play(animationName, 0, 0f); // 애니메이션 재생
-            
+
 
 
             // currentPiece일 경우 루프 애니메이션 시작
@@ -586,11 +595,21 @@ public class PieceController : MonoBehaviour
 
         isMoving = false;
 
+
+        CheckOutStartingLine();
+
+
         // 스킬 발동
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.TrySkill(gridPosition, this);
-            //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+            // y값이 0이나 14가 아니면
+            if (PieceManager.Instance.currentPiece.gridPosition.y != 0 && PieceManager.Instance.currentPiece.gridPosition.y != 14)
+            {
+                SkillManager.Instance.TrySkill(gridPosition, this);
+                //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+            }
+
+
         }
         else
         {
@@ -822,4 +841,9 @@ public class PieceController : MonoBehaviour
         }
     }
 
+    public void CheckOutStartingLine()
+    {
+        if (this.gridPosition.y == 1)
+            isOutStartingLine = true;
+    }
 }

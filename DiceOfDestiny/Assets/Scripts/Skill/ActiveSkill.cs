@@ -116,7 +116,6 @@ public class ActiveSkill : MonoBehaviour
         }
 
         BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
-
         PieceManager.Instance.SetCurrentPieceControl(true);
     }
 
@@ -124,23 +123,26 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator Plant(PieceController pieceController)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
-
-        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+        
+       yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.HighlightTiles();
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
         SkillManager.Instance.IsSelectingProgress = true;
-        Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
+        Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
+
+        Vector3 effectPosition = new Vector3(
+                   selectPos.x - 5.5f,
+                   selectPos.y - 5f,
+                   0f
+               );
 
         if (demonSkillEffect != null)
         {
             GameObject effect = Instantiate(
                 demonSkillEffect,
-                new Vector3(
-                    BoardManager.Instance.boardTransform.position.x + gridPos.x,
-                    BoardManager.Instance.boardTransform.position.y + gridPos.y,
-                    -1),
+                effectPosition,
                 Quaternion.identity,
                 BoardManager.Instance.boardTransform
             );
@@ -152,10 +154,11 @@ public class ActiveSkill : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
-        BoardManager.Instance.CreateObstacle(gridPos, ObstacleType.PoisonousHerb);
+        BoardManager.Instance.CreateObstacle(selectPos, ObstacleType.PoisonousHerb);
         SkillManager.Instance.IsSelectingProgress = false;
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+        
     }
 
     // 화가 스킬: 색칠하기
@@ -345,12 +348,12 @@ public class ActiveSkill : MonoBehaviour
         BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
 
 
-        bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
+        //bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
 
-        if (!hasObstacle)
-        {
-            BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
-        }
+        //if (!hasObstacle)
+        //{
+        //    BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
+        //}
 
         if (SkillManager.Instance != null)
         {
@@ -407,7 +410,8 @@ public class ActiveSkill : MonoBehaviour
         // 이동 가능한 기물이 없으면 코루틴 종료
         if (!hasMovablePiece)
         {
-            Debug.Log("No movable pieces available. Stopping HelpBaby coroutine.");
+            Debug.Log("아기 스킬 썼지만 발동 가능한 기물이 없네");
+            PieceManager.Instance.SetCurrentPieceControl(true);
             yield break;
         }
 

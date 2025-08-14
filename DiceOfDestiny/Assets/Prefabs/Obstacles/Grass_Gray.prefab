@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7749113738094060414
+--- !u!1 &1256250160630848208
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7680442456460273085}
-  - component: {fileID: 1664445941547185293}
-  - component: {fileID: 8257345008056174196}
-  - component: {fileID: 2091286422239821357}
+  - component: {fileID: 1791777940088389351}
+  - component: {fileID: 8834133519248771960}
+  - component: {fileID: 3346863566557089522}
+  - component: {fileID: 2088978779317428255}
   m_Layer: 0
-  m_Name: PoisonousHerb
+  m_Name: Grass_Gray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7680442456460273085
+--- !u!4 &1791777940088389351
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7749113738094060414}
+  m_GameObject: {fileID: 1256250160630848208}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.28125, y: 3.6647727, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1664445941547185293
+--- !u!212 &8834133519248771960
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7749113738094060414}
+  m_GameObject: {fileID: 1256250160630848208}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -78,44 +78,44 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 8763669871020049466, guid: 68c664b64f83ac04a92966c502ca6628, type: 3}
+  m_Sprite: {fileID: -1181462254548681441, guid: 182354cd5d041b14a99bdc6db18b2364, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.24, y: 10.24}
+  m_Size: {x: 0.78125, y: 0.6875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8257345008056174196
+--- !u!114 &3346863566557089522
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7749113738094060414}
+  m_GameObject: {fileID: 1256250160630848208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8382af9f5df938b4194c58c0cb051362, type: 3}
+  m_Script: {fileID: 11500000, guid: f1181a018c305334bbfeff6963cf00cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleType: 6
+  obstacleType: 7
   nextStep: 4
   obstaclePosition: {x: 0, y: 0}
   isWalkable: 1
---- !u!95 &2091286422239821357
+--- !u!95 &2088978779317428255
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7749113738094060414}
+  m_GameObject: {fileID: 1256250160630848208}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e041b7da256b275498bf8d6222855b17, type: 2}
+  m_Controller: {fileID: 9100000, guid: b9a4a399ab190b943ac3829eeeddc51b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
