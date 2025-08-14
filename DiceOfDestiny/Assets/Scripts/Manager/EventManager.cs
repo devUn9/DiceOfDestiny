@@ -20,6 +20,12 @@ public class EventManager : Singletone<EventManager>
             Debug.Log($"<color=#30ffae>Added Listener ({currentListeners}) on New event ({eventName})</color>");
         }
     }
+    public void AddListener<T>(string eventName, Action<T> listener)
+    {
+        Action<object> wrappedListener = (obj) => listener((T)obj);
+        AddListener(eventName, wrappedListener);
+        Debug.Log($"<color=#30ffae>Added Listener ({listener.Method.Name}) on {eventName}</color>");
+    }
 
     public void RemoveListener(string eventName, Action<object> targetListener)
     {

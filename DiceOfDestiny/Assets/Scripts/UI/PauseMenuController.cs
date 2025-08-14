@@ -13,7 +13,7 @@ public class PauseMenuController : MonoBehaviour
     {
         resumeButton.onClick.AddListener(ClosePauseMenu);
         settingsButton.onClick.AddListener(() => UIManager.Instance.ToggleSettings(true)); // 설정창 띄우기
-        mainMenuButton.onClick.AddListener(() => { SceneManager.LoadScene("MainScene"); }); // 메인씬 이동.
+        mainMenuButton.onClick.AddListener(() => { GameManager.Instance.UnPause(); SceneManager.LoadScene("MainScene"); }); // 메인씬 이동.
         exitButton.onClick.AddListener(() => Application.Quit()); // 프로그램 종료    
     }
 

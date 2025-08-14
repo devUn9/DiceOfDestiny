@@ -4,8 +4,13 @@ using System.Collections;
 
 public class PawnBehaviour : Obstacle, IObstacleBehaviour
 {
+    public int life { get; private set; } = 3;
+
     [SerializeField] private float duration = 0.4f;
     [SerializeField] private GameObject attackEffectPrefab;
+
+    private bool isLeftAttack = false;
+    private bool isRightAttack = false;
 
     private void Start()
     {
@@ -15,11 +20,24 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
     public void DoLogic()
     {
-        if (StageManager.Instance.GetPawnListIndex(gameObject) != StageManager.Instance.pawnMoveIndex)
+        ObstacleManager.Instance.InOrderToMovePawn();
+
+        // 자기 턴이 아니여도 공격 대기
+        DiagonalAttack();
+        if (isLeftAttack || isRightAttack)
+        {
+            isLeftAttack = false;
+            isRightAttack = false;
+
+            return; // 공격이 발생했으면 이동하지 않음
+        }
+
+
+        if (ObstacleManager.Instance.GetPawnListIndex(gameObject) != ObstacleManager.Instance.pawnMoveIndex)
         {
             return;
         }
-        StageManager.Instance.InOrderToMovePawn();
+
 
         // 이동 관련 변수
         Vector2Int direction = Vector2Int.down;
@@ -27,40 +45,27 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
         Vector2Int nextPosition = obstaclePosition + direction;
         Tile nextTile = BoardManager.Instance.GetTile(nextPosition);
 
-        // 공격 관련 변수
-        Vector2Int leftDownDirection = new Vector2Int(-1, -1);
-        Vector2Int rightDownDirection = new Vector2Int(1, -1);
-        Vector2Int leftDownAttackPos = obstaclePosition + leftDownDirection;
-        Vector2Int rightDownAttackPos = obstaclePosition + rightDownDirection;
-        Tile leftDownTile = BoardManager.Instance.GetTile(leftDownAttackPos);
-        Tile rightDownTile = BoardManager.Instance.GetTile(rightDownAttackPos);
-
         // 참조하려는 좌표값이 보드 밖이면 return // 근데 폰이 시작점에 도달하면 끝나는 로직을 추가할 때, 아래 코드 제거 예정
         if (!BoardManager.Instance.IsInsideBoard(nextPosition))
             return;
 
-        Debug.Log("왼쪽 아래 타일 좌표: " + leftDownAttackPos + ", 오른쪽 아래 타일 좌표: " + rightDownAttackPos);
-
-        if (BoardManager.Instance.IsInsideBoard(leftDownAttackPos) && leftDownTile.GetPiece() != null && leftDownTile.Obstacle == ObstacleType.None)
-        {
-            StartCoroutine(PlayAttackEffect(true, leftDownAttackPos, leftDownDirection));
-            StartCoroutine(GoHand(leftDownTile.GetPiece()));
-
-            return;
-        }
-        else if (BoardManager.Instance.IsInsideBoard(rightDownAttackPos) && rightDownTile.GetPiece() != null && rightDownTile.Obstacle == ObstacleType.None)
-        {
-            StartCoroutine(PlayAttackEffect(false, rightDownAttackPos, rightDownDirection));
-            StartCoroutine(GoHand(rightDownTile.GetPiece()));
-
-            return;
-        }
-
         // 다음 타일이 장애물도 없고 피스도 없으면 이동
-        if (nextTile.Obstacle == ObstacleType.None && nextTile.GetPiece() == null)
+        if (nextTile.GetPiece() == null)
         {
-            BoardManager.Instance.MoveObstacle(this, nextPosition);
-            AnimateObstacleMove(direction);
+            if (nextTile.Obstacle == ObstacleType.None || nextTile.Obstacle == ObstacleType.Grass
+                || nextTile.Obstacle == ObstacleType.PoisonousHerb || nextTile.Obstacle == ObstacleType.SlimeDdong
+                || nextTile.Obstacle == ObstacleType.Chest || nextTile.Obstacle == ObstacleType.Puddle)
+            {
+                BoardManager.Instance.MoveObstacle(this, nextPosition);
+                AnimateObstacleMove(direction);
+
+                DiagonalAttack();
+                if (isLeftAttack || isRightAttack)
+                {
+                    isLeftAttack = false;
+                    isRightAttack = false;
+                }
+            }
         }
     }
 
@@ -70,6 +75,8 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
         Vector3 targetPos = startPos + new Vector3(direction.x, direction.y, 0);
 
         Sequence seq = DOTween.Sequence();
+
+        seq.AppendCallback(() => animator.SetTrigger("Walk"));
 
         seq.Append(transform.DOMove(targetPos, duration).SetEase(Ease.InOutSine));
         seq.OnComplete(() =>
@@ -87,7 +94,7 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
     private IEnumerator PlayAttackEffect(bool isLeft, Vector2Int attackPos, Vector2Int dir)
     {
-        float effectDelay = 0.5f;
+        float effectDelay = 0.8f;
 
         animator.SetTrigger("Attack");
 
@@ -106,6 +113,62 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
             BoardManager.Instance.MoveObstacle(this, attackPos);
             AnimateObstacleMove(dir);
+        }
+    }
+
+    private void DiagonalAttack()
+    {
+        // 공격 관련 변수
+        Vector2Int leftDownDirection = new Vector2Int(-1, -1);
+        Vector2Int rightDownDirection = new Vector2Int(1, -1);
+        Vector2Int leftDownAttackPos = obstaclePosition + leftDownDirection;
+        Vector2Int rightDownAttackPos = obstaclePosition + rightDownDirection;
+        Tile leftDownTile = BoardManager.Instance.GetTile(leftDownAttackPos);
+        Tile rightDownTile = BoardManager.Instance.GetTile(rightDownAttackPos);
+
+        if (BoardManager.Instance.IsInsideBoard(leftDownAttackPos) && leftDownTile.GetPiece() != null)
+        {
+            isLeftAttack = true;
+
+        }
+        else if (BoardManager.Instance.IsInsideBoard(rightDownAttackPos) && rightDownTile.GetPiece() != null)
+        {
+            isRightAttack = true;
+        }
+
+        if (isLeftAttack && isRightAttack)
+        {
+            int randomAttack = Random.Range(0, 2);
+            if (randomAttack == 0)
+            {
+                StartCoroutine(PlayAttackEffect(true, leftDownAttackPos, leftDownDirection));
+                StartCoroutine(GoHand(leftDownTile.GetPiece()));
+            }
+            else
+            {
+                StartCoroutine(PlayAttackEffect(false, rightDownAttackPos, rightDownDirection));
+                StartCoroutine(GoHand(rightDownTile.GetPiece()));
+            }
+        }
+        else if (isLeftAttack)
+        {
+            StartCoroutine(PlayAttackEffect(true, leftDownAttackPos, leftDownDirection));
+            StartCoroutine(GoHand(leftDownTile.GetPiece()));
+        }
+        else if (isRightAttack)
+        {
+            StartCoroutine(PlayAttackEffect(false, rightDownAttackPos, rightDownDirection));
+            StartCoroutine(GoHand(rightDownTile.GetPiece()));
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        life -= damage;
+
+        if (life <= 0)
+        {
+            ObstacleManager.Instance.DeathPawn(obstaclePosition);
         }
     }
 }

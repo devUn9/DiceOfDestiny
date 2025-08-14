@@ -25,8 +25,12 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
 
         if (nextTile.GetPiece() == null)
         {
-            if (nextTile.Obstacle == ObstacleType.None)
+            // 좀비가 밟을수 있는거 : 풀 독초 슬라임똥 상자 물웅덩이
+            if (nextTile.Obstacle == ObstacleType.None || nextTile.Obstacle == ObstacleType.Grass
+                || nextTile.Obstacle == ObstacleType.PoisonousHerb || nextTile.Obstacle == ObstacleType.SlimeDdong
+                || nextTile.Obstacle == ObstacleType.Chest || nextTile.Obstacle == ObstacleType.Puddle)
             {
+                // 이동
                 BoardManager.Instance.MoveObstacle(this, nextPosition);
                 AnimateObstacleMove(nextStep);
 

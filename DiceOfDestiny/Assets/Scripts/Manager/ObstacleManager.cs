@@ -21,6 +21,10 @@ public class ObstacleManager : Singletone<ObstacleManager>
 
     public List<GameObject> currentObstacles;
 
+    [Header("Boss Pawn")]
+    private List<GameObject> pawnList = new List<GameObject>();
+    public int pawnMoveIndex { get; private set; } = 0;
+
     public void Initialize()
     {
         obstaclePrefabs = new Dictionary<ObstacleType, GameObject>
@@ -61,7 +65,70 @@ public class ObstacleManager : Singletone<ObstacleManager>
             var behaviour = currentObstacles[i].GetComponent<IObstacleBehaviour>();
 
             if (behaviour != null)
+            {
                 behaviour.DoLogic();
+            }
         }
+    }
+
+    // 보스 폰 함수들
+    public void AddPawnToList(GameObject pawn)
+    {
+        if (pawn != null && !pawnList.Contains(pawn))
+        {
+            pawnList.Add(pawn);
+        }
+    }
+
+    public void RemovePawnToList(GameObject pawn)
+    {
+        pawnList.Remove(pawn);
+
+        MissionManager.Instance.AlivePawnCountCheck(); // 폰이 죽었을 때 미션 카운트 감소
+    }
+
+    public void DeathPawn(Vector2Int gridPos)
+    {
+        if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.Pawn)
+        {
+            // 폰 리스트 상에서의 오브젝트 제거
+            Obstacle pawn = BoardManager.Instance.ReturnObstacleByPosition(gridPos);
+            RemovePawnToList(pawn.gameObject);
+
+            // 현재 장애물 목록에서의 폰 삭제
+            // 실제 폰 오브젝트 삭제
+            // 타일에 장애물 타입 None으로 설정
+            BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
+        }
+    }
+
+    public void HitPawn(Vector2Int gridPos)
+    {
+        if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.Pawn)
+        {
+            Obstacle pawn = BoardManager.Instance.ReturnObstacleByPosition(gridPos);
+
+            PawnBehaviour pawnBehaviour = pawn as PawnBehaviour;
+
+            if (pawnBehaviour != null)
+            {
+                pawnBehaviour.TakeDamage(1);
+            }
+            else
+            {
+                Debug.LogWarning($"PawnBehaviour not found at position {gridPos}");
+            }
+        }
+    }
+
+    public int GetPawnListIndex(GameObject pawn)
+    {
+        return pawnList.IndexOf(pawn);
+    }
+
+    public void InOrderToMovePawn()
+    {
+        int pawnRandomIndex = Random.Range(0, pawnList.Count);
+        pawnMoveIndex = pawnRandomIndex;
     }
 }

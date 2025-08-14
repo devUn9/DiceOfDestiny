@@ -7,7 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class Tile : MonoBehaviour
 {
     [SerializeField] private TileColor tileColor;
-    private ObstacleType obstacle;
+    [SerializeField] private ObstacleType obstacle;
     [SerializeField] private PieceController piece;
     public bool isWalkable { get; set; }
 

@@ -11,9 +11,9 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
         // 만약 미션중에 회색 풀 찾기 미션이 있다면
         StageManager.Instance.currentStage.missions.ForEach(mission =>
         {
-            if (mission is FindGrayGrassSO)
+            if (mission.missionType is MissionType.FindGrayGrass)
             {
-                StageManager.Instance.AddGrayGrassMission();
+                MissionManager.Instance.AddGrayGrassMission();
             }
         });
 

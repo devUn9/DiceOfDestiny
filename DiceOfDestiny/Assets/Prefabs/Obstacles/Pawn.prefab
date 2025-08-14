@@ -105,7 +105,7 @@ MonoBehaviour:
   nextStep: 4
   obstaclePosition: {x: 0, y: 0}
   isWalkable: 0
-  duration: 0.8
+  duration: 1
   attackEffectPrefab: {fileID: 2465335938598337309, guid: 66caa0aadef38544bb408cdbdcea919f, type: 3}
 --- !u!95 &1839094912385742136
 Animator:

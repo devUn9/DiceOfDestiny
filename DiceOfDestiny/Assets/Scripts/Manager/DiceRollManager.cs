@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DiceRollManager : Singletone<DiceRollManager>
 {
@@ -9,6 +8,37 @@ public class DiceRollManager : Singletone<DiceRollManager>
 
     readonly List<ApDiceController> pool = new();
     private bool isRolling;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnEnable()
+    {
+        isRolling = false;
+        if (dicePrefab == null)
+        {
+            dicePrefab = Resources.Load<ApDiceController>("Prefabs/ApDiceController");
+            if (dicePrefab == null)
+            {
+                Debug.LogError("dicePrefab이 할당되지 않았습니다.");
+                return;
+            }
+        }
+        if (pool == null || pool.Count == 0)
+        {
+            var dice = Instantiate(dicePrefab);
+            dice.gameObject.SetActive(false);
+            pool.Add(dice);
+        }
+    }
+
+    private void OnDisable()
+    {
+        DeactivateAllDice();
+    }
 
     public bool TryRoll(Action<int> OnRollEnded)
     {
@@ -35,7 +65,7 @@ public class DiceRollManager : Singletone<DiceRollManager>
     ApDiceController GetDiceFromPool()
     {
         foreach (var d in pool)
-            if (!d.gameObject.activeSelf) return d;
+            if (d != null && !d.gameObject.activeSelf) return d;
 
         var newDice = Instantiate(dicePrefab);
         newDice.gameObject.SetActive(false);

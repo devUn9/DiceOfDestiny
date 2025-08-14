@@ -14,7 +14,7 @@ public class BackpackUI : MonoBehaviour
     private bool isClicked = false;
 
     [Header("Choice Piece")]
-    [SerializeField] private GameObject uIPieceGroup;
+    [SerializeField] private GameObject inventoryPanel;
 
     [Header("Choice Top Face")]
     [SerializeField] private GameObject choiceTopFaceWindow;
@@ -75,7 +75,7 @@ public class BackpackUI : MonoBehaviour
 
     public void onClickBackpackOpenCloseButton()
     {
-        uIPieceGroup.SetActive(!uIPieceGroup.activeSelf);
+        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
 
         isClicked = !isClicked;
         backpackButtonImage.sprite = isClicked ? clickedSprite : defaultSprite;
