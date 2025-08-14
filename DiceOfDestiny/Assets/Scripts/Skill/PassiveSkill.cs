@@ -28,7 +28,7 @@ public class PassiveSkill : MonoBehaviour
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(cardinalList[i]);
             if (obstacle != null &&
-                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie))
+                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie || obstacle.obstacleType == ObstacleType.Pawn))
             {
                 hasTarget = true;
                 Debug.Log($"기사가 공격 대상 찾았어: ({cardinalList[i].x}, {cardinalList[i].y})");
@@ -69,6 +69,10 @@ public class PassiveSkill : MonoBehaviour
 
                     RuleEvents.TriggerRule("Knight_Active_ObstacleMove");
                 }
+                else if(targetObstacle != null && targetObstacle.obstacleType == ObstacleType.Pawn)
+                {
+                    ObstacleManager.Instance.HitPawn(targetPos);
+                }
             }
 
             yield return new WaitForSeconds(0.5f);
@@ -103,7 +107,7 @@ public class PassiveSkill : MonoBehaviour
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(forwardList[i]);
             if (obstacle != null &&
-                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie))
+                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie || obstacle.obstacleType == ObstacleType.Pawn))
             {
                 hasTarget = true;
                 break;
@@ -156,6 +160,10 @@ public class PassiveSkill : MonoBehaviour
 
                     RuleEvents.TriggerRule("Demon_Active_ObstacleMove");
                 }
+                else if (targetObstacle != null && targetObstacle.obstacleType == ObstacleType.Pawn)
+                {
+                    ObstacleManager.Instance.HitPawn(pos);
+                }
             }
 
             // 이펙트 지속 시간 대기
@@ -192,7 +200,7 @@ public class PassiveSkill : MonoBehaviour
         for (int i = 0; i < diagonalList.Count; i++)
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(diagonalList[i]);
-            if (obstacle != null && obstacle.obstacleType == ObstacleType.Slime)
+            if (obstacle != null && obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Pawn)
             {
                 hasTarget = true;
                 Debug.Log($"광신도가 공격 대상 찾음: ({diagonalList[i].x}, {diagonalList[i].y})");
@@ -235,6 +243,10 @@ public class PassiveSkill : MonoBehaviour
                     Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
                     
                     RuleEvents.TriggerRule("Fanatic_Active_ObstacleMove");
+                }
+                else if (targetObstacle != null && targetObstacle.obstacleType == ObstacleType.Pawn)
+                {
+                    ObstacleManager.Instance.HitPawn(pos);
                 }
             }
 

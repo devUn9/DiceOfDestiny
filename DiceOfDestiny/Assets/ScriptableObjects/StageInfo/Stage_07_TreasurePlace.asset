@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b2505132fde72345af474f8fca00a1a, type: 3}
-  m_Name: Stage_04_RiversideField
+  m_Name: Stage_07_TreasurePlace
   m_EditorClassIdentifier: 
-  <StageName>k__BackingField: "\uAC15 \uADFC\uCC98\uC758 \uACF5\uD130"
-  stageNumber: 4
+  <StageName>k__BackingField: "\uBCF4\uBB3C\uC774 \uBB3B\uD78C \uACF3"
+  stageNumber: 7
   missions:
   - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
-  isGrayGrass: 0
-  isGrayTree: 0
-  isGrayPoisonousherb: 0
+  isGrayGrass: 1
+  isGrayTree: 1
+  isGrayPoisonousherb: 1
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1
@@ -29,17 +29,19 @@ MonoBehaviour:
   orangeWeight: 1
   availableObstacle:
   - type: 7
-    weight: 3
+    weight: 10
   - type: 1
-    weight: 3
+    weight: 10
   - type: 6
     weight: 3
   - type: 2
-    weight: 10
+    weight: 3
   - type: 4
-    weight: 20
+    weight: 3
+  - type: 5
+    weight: 15
   - type: 0
-    weight: 3
+    weight: 5
   - type: 8
-    weight: 3
+    weight: 5
   obstacleDensity: 0.2

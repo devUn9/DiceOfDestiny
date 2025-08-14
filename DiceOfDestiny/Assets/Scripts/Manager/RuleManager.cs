@@ -65,6 +65,6 @@ public class RuleManager : MonoBehaviour
     private void RevealRule(RuleData rule)
     {
         Debug.Log($"[규칙 발견] {rule.name} - {rule.ruleDescription}");
-        UIRulebook.Instance.ShowRule(rule); // 필요시 연결
+        EventManager.Instance.TriggerEvent("ShowRule", rule);
     }
 }
