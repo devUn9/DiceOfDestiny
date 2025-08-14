@@ -731,7 +731,6 @@ public class PieceController : MonoBehaviour
         colorRenderer.color = BoardManager.Instance.tileColors[(int)piece.faces[2].color];
     }
 
-
     //public Vector2Int GetGridPosition()
     //{
     //    return gridPosition;

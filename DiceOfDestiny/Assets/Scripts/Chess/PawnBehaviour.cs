@@ -20,6 +20,8 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
     public void DoLogic()
     {
+        ObstacleManager.Instance.InOrderToMovePawn();
+
         // 자기 턴이 아니여도 공격 대기
         DiagonalAttack();
         if (isLeftAttack || isRightAttack)
@@ -30,15 +32,11 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
             return; // 공격이 발생했으면 이동하지 않음
         }
 
-        
-
-        ObstacleManager.Instance.InOrderToMovePawn();
 
         if (ObstacleManager.Instance.GetPawnListIndex(gameObject) != ObstacleManager.Instance.pawnMoveIndex)
         {
             return;
         }
-
 
 
         // 이동 관련 변수
