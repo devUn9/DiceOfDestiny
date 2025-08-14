@@ -92,6 +92,12 @@ public class ActiveSkill : MonoBehaviour
 
         if (!hasObstacle)
         {
+            if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.Pawn)
+            {
+                Obstacle pawn = BoardManager.Instance.ReturnObstacleByPosition(gridPos);
+                ObstacleManager.Instance.RemovePawnToList(pawn.gameObject);
+            }
+
             BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
         }
 
@@ -184,6 +190,8 @@ public class ActiveSkill : MonoBehaviour
                     0f
                 );
 
+                ObstacleManager.Instance.DeathPawn(selectPos);
+
                 GameObject effect = Instantiate(
                     painterSkillEffect,
                     effectPosition,
@@ -206,7 +214,7 @@ public class ActiveSkill : MonoBehaviour
             Debug.LogWarning("PainterActiveSkillUI is not assigned!");
         }
 
-        
+
     }
 
     public IEnumerator ConvertToFanatic(PieceController piece)
@@ -227,7 +235,7 @@ public class ActiveSkill : MonoBehaviour
                     Face face = targetPiece.GetFace(i);
                     if (face.classData.className == "Priest")
                     {
-                       
+
                         targetPiece.ChangeClass(i, "Fanatic");
                         Debug.Log($"Converted Priest to Fanatic on face {i} at position {targetPiece.gridPosition}");
                         converted = true;
@@ -256,7 +264,7 @@ public class ActiveSkill : MonoBehaviour
         }
         else
         {
-            
+
             //ToastManager.Instance.ShowToast("성공", piece.transform);
         }
     }
@@ -418,7 +426,7 @@ public class ActiveSkill : MonoBehaviour
 
         // 기물 선택 UI 생성
         pieceSelectUI.CreateButtonsForPieces();
-        
+
 
         // 화살표 클릭 대기
         yield return moveSkillUI.WaitForArrowClick();

@@ -219,6 +219,7 @@ public class BoardManager : Singletone<BoardManager>
             // 6스테이지
             else if (mission.missionType is MissionType.KillPawn)
             {
+                GrayOutTiles();
                 SetPawn();
             }
         });

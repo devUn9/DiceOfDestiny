@@ -24,7 +24,7 @@ public class MissionData : ScriptableObject
             case MissionType.FindGrayGrass:
                 return MissionManager.Instance.isFindGrayGrass;
             case MissionType.KillPawn:
-                return false;
+                return MissionManager.Instance.isKillTwoPawn;
             default:
                 return false;
         }

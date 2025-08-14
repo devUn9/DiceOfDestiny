@@ -8,11 +8,12 @@ public class MissionManager : Singletone<MissionManager>
     public bool isFinishLine { get; private set; } = false; // 도착 지점인지 여부
 
     [Header("Stage 5 Mission")]
-    private int findGrayGrassCount = 0;
+    [SerializeField] private int findGrayGrassCount = 0;
     public bool isFindGrayGrass { get; private set; } = false;
 
     [Header("Stage 6 Mission")]
-    private int alivePawnCount;
+    [SerializeField] private int alivePawnCount = 0;
+    public bool isKillTwoPawn { get; private set; } = false;
 
     public void IsAllMissionCompleted()
     {
@@ -30,6 +31,10 @@ public class MissionManager : Singletone<MissionManager>
         if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
         {
             isFinishLine = true;
+        }
+        else
+        {
+            isFinishLine = false;
         }
     }
 
@@ -59,5 +64,15 @@ public class MissionManager : Singletone<MissionManager>
 
         if (findGrayGrassCount >= 3)
             isFindGrayGrass = true;
+    }
+
+    public void AlivePawnCountCheck()
+    {
+        alivePawnCount++;
+
+        if(alivePawnCount >= 2)
+        {
+            isKillTwoPawn = true;
+        }
     }
 }
