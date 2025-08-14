@@ -29,10 +29,10 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
             isLeftAttack = false;
             isRightAttack = false;
 
-            return; // 공격이 발생했으면 이동하지 않음
+            return;
         }
 
-
+        Debug.Log("보스 폰 번호 : " + ObstacleManager.Instance.pawnMoveIndex);
         if (ObstacleManager.Instance.GetPawnListIndex(gameObject) != ObstacleManager.Instance.pawnMoveIndex)
         {
             return;
