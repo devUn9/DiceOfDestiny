@@ -82,10 +82,10 @@ public class MoveSkillUI : MonoBehaviour
         Vector2Int upPos = currentPos + Vector2Int.up;
         if (BoardManager.Instance.IsInsideBoard(upPos) &&
             (BoardManager.Instance.IsEmptyTile(upPos) ||
-             BoardManager.Instance.ReturnObstacleByPosition(upPos).isWalkable) && upButton != null)
+            BoardManager.Instance.ReturnObstacleByPosition(upPos).isWalkable) &&
+            BoardManager.Instance.Board[upPos.x, upPos.y].GetPiece() == null)
         {
             upButton.SetActive(true);
-            // upButton과 하위 버튼들에 클릭 이벤트 등록
             RegisterButtonEvents(upButton, () => SelectDirection(Vector2Int.up));
         }
 
@@ -93,7 +93,9 @@ public class MoveSkillUI : MonoBehaviour
         Vector2Int downPos = currentPos + Vector2Int.down;
         if (BoardManager.Instance.IsInsideBoard(downPos) &&
             (BoardManager.Instance.IsEmptyTile(downPos) ||
-             BoardManager.Instance.ReturnObstacleByPosition(downPos).isWalkable) && downButton != null)
+             BoardManager.Instance.ReturnObstacleByPosition(downPos).isWalkable) &&
+             BoardManager.Instance.Board[downPos.x, downPos.y].GetPiece() == null &&
+             BoardManager.Instance.IsMovementArea(downPos))
         {
             downButton.SetActive(true);
             RegisterButtonEvents(downButton, () => SelectDirection(Vector2Int.down));
@@ -103,7 +105,8 @@ public class MoveSkillUI : MonoBehaviour
         Vector2Int leftPos = currentPos + Vector2Int.left;
         if (BoardManager.Instance.IsInsideBoard(leftPos) &&
             (BoardManager.Instance.IsEmptyTile(leftPos) ||
-             BoardManager.Instance.ReturnObstacleByPosition(leftPos).isWalkable) && leftButton != null)
+             BoardManager.Instance.ReturnObstacleByPosition(leftPos).isWalkable) &&
+            BoardManager.Instance.Board[leftPos.x, leftPos.y].GetPiece() == null)
         {
             leftButton.SetActive(true);
             RegisterButtonEvents(leftButton, () => SelectDirection(Vector2Int.left));
@@ -113,7 +116,8 @@ public class MoveSkillUI : MonoBehaviour
         Vector2Int rightPos = currentPos + Vector2Int.right;
         if (BoardManager.Instance.IsInsideBoard(rightPos) &&
             (BoardManager.Instance.IsEmptyTile(rightPos) ||
-             BoardManager.Instance.ReturnObstacleByPosition(rightPos).isWalkable) && rightButton != null)
+             BoardManager.Instance.ReturnObstacleByPosition(rightPos).isWalkable) &&
+            BoardManager.Instance.Board[rightPos.x, rightPos.y].GetPiece() == null)
         {
             rightButton.SetActive(true);
             RegisterButtonEvents(rightButton, () => SelectDirection(Vector2Int.right));

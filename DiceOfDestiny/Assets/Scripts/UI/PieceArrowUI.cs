@@ -24,10 +24,11 @@ public class PieceArrowUI : MonoBehaviour
     public void OnArrowExit()
     {
         arrowImage.color = new Color(arrowImage.color.r, arrowImage.color.g, arrowImage.color.b, TARGET_ALPHA);
-        arrowAnim.speed = 0f;
+        
 
-        if(arrowAnim.isActiveAndEnabled)
+        if(arrowAnim != null && arrowAnim.isActiveAndEnabled)
         {
+            arrowAnim.speed = 0f;
             arrowAnim.Play("Animation", 0, 0f);
         }
             

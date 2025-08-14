@@ -157,7 +157,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 672
+        width: 336
         height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -173,11 +173,33 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Button(336x96)_1
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 336
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5da80c9be0384341ba4e901954af50e
+      internalID: -917168762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 91cab0479f0b3fb499826c2f376b4e61
     internalID: 0
     vertices: []
     indices: 
@@ -188,6 +210,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       Button(336x96)_0: 1669800932625945379
+      Button(336x96)_1: -917168762
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

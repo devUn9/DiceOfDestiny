@@ -47,6 +47,11 @@ public class GameManager : Singletone<GameManager>
         {
             StageManager.Instance.StartStage();
         }
+
+        if (Input.GetKeyDown(KeyCode.R)) // 주사위 굴리기
+        {
+            StageManager.Instance.RollDice();
+        }
     }
 
     private void OnEnable()

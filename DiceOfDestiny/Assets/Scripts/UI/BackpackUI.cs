@@ -14,7 +14,7 @@ public class BackpackUI : MonoBehaviour
     private bool isClicked = false;
 
     [Header("Choice Piece")]
-    [SerializeField] private GameObject uIPieceGroup;
+    [SerializeField] private GameObject inventoryPanel;
 
     [Header("Choice Top Face")]
     [SerializeField] private GameObject choiceTopFaceWindow;
@@ -75,7 +75,7 @@ public class BackpackUI : MonoBehaviour
 
     public void onClickBackpackOpenCloseButton()
     {
-        uIPieceGroup.SetActive(!uIPieceGroup.activeSelf);
+        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
 
         isClicked = !isClicked;
         backpackButtonImage.sprite = isClicked ? clickedSprite : defaultSprite;
@@ -114,6 +114,8 @@ public class BackpackUI : MonoBehaviour
         // 기물 윗면 선택 UI 의 기물 윗면 초기화
         spawnPieceColorImage.color = BoardManager.Instance.GetColor(currentPiece.faces[2].color);
         spawnPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
+
+        BoardSelectManager.Instance.restrictYBoundaries = false;
     }
 
     IEnumerator SpawnPiece()
@@ -125,6 +127,19 @@ public class BackpackUI : MonoBehaviour
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
         // =====================[ 생성 시작 ]=====================
+
+        if (ActionPointManager.Instance.CanUse(1))
+        {
+            ActionPointManager.Instance.RemoveAP(1);
+            BoardSelectManager.Instance.restrictYBoundaries = true;
+        }
+
+        else
+        {
+            //UI 처리
+            yield break;
+
+        }
 
         // 위치 불러오기
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
@@ -171,6 +186,8 @@ public class BackpackUI : MonoBehaviour
         // 슬롯에 있는 피스 제거
         Debug.Log(currentIndex + "번 피스 제거");
         PieceManager.Instance.pieceDatas[currentIndex] = null;
+
+
     }
 
 

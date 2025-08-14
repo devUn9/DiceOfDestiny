@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class UIRulebook : MonoBehaviour
 {
+    [Header("Rulebook UI")]
     [SerializeField] private GameObject ClassRule;
     [SerializeField] private GameObject ObstacleRule;
 

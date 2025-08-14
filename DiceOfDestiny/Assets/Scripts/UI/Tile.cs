@@ -59,15 +59,14 @@ public class Tile : MonoBehaviour
         Mathf.RoundToInt(transform.position.x - BoardManager.Instance.boardTransform.position.x),
         Mathf.RoundToInt(transform.position.y - BoardManager.Instance.boardTransform.position.y));
 
+        // 장애물이 있는 타일에 장애물 제한 트리거가 켜져있으면 저장 X
         if (!BoardManager.Instance.IsEmptyTile(position) && BoardSelectManager.Instance.restrictObstacle)
-            return; // 장애물이 있는 타일에 장애물 제한 트리거가 켜져있으면 저장하지마.
+            return;
 
-        //if (piece != null)
-        //{
-        //    PieceManager.Instance.currentPiece = piece;
-        //    BoardSelectManager.Instance.PieceHighlightTiles(position);
-        //    EventManager.Instance.TriggerEvent("ToggleUIElement");
-        //}
+        // y값이 0 또는 13인 타일에 바운더리 제한이 켜져있으면 저장 X
+        if ((position.y == 0 || position.y == 14) && BoardSelectManager.Instance.restrictYBoundaries)
+            return;
+
         BoardSelectManager.Instance.SetClickedTilePosition(position);
         BoardSelectManager.Instance.ClearAllEffects();
     }
