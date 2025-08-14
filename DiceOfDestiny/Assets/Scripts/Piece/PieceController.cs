@@ -21,7 +21,6 @@ public class PieceController : MonoBehaviour
     public bool isMoving { get; private set; } = false; // 이동 중인지 여부
     public bool canControl = true; // 기물 조작 가능 여부
     private bool animPlaying = false; // 애니메이션 재생 중인지 여부
-    public bool isFinishLine = false; // 도착 지점인지 여부
     public bool isOutStartingLine = false; // 시작 지점에서 벗어났는지 여부
 
     public PieceStatusEffectController statusEffectController;
