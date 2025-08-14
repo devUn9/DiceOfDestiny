@@ -16,15 +16,11 @@ public class GameManager : Singletone<GameManager>
 
     private void Update()
     {
-        if(SceneManager.GetActiveScene().name == "GameScene" || SceneManager.GetActiveScene().name == "GameScene_2.0.1" || SceneManager.GetActiveScene().name == "GameScene_2.0.1hk")
+        if (SceneManager.GetActiveScene().name == "GameScene_2.1")
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (isPaused)
-                {
-                    Pause();
-                }
-                else
                 {
                     if (UIManager.Instance.IsSettingUIOpen())
                     {
@@ -34,6 +30,10 @@ public class GameManager : Singletone<GameManager>
                     {
                         UnPause();
                     }                    
+                }
+                else
+                {
+                    Pause();
                 }
             }
         }
@@ -58,7 +58,7 @@ public class GameManager : Singletone<GameManager>
     {
         Debug.Log($"[GameManager] Active scene changed from {oldScene.name} to {newScene.name}");
 
-        if(newScene.name == "Main")
+        if(newScene.name == "MainScene")
         {
             if(UIManager == null)
             {
@@ -77,7 +77,7 @@ public class GameManager : Singletone<GameManager>
             DiceCustomizeManager.Initialize();
         }
 
-        if (newScene.name == "GameScene" || newScene.name == "GameScene_2.0.1" || newScene.name == "GameScene_2.0.1hk")
+        if (newScene.name == "GameScene_2.1")
         {
             if(UIManager == null)
             {
