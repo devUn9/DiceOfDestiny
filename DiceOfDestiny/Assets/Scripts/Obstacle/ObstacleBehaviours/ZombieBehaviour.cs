@@ -58,6 +58,7 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
                 if (nextTile.GetPiece().GetTopFace().classData.className == "Priest")
                 {
                     Debug.Log("사제는 기절을 무시합니다.");
+                    SkillManager.Instance.PriestPassive();
                     ToastManager.Instance.ShowToast("감히 더러운 <color=grey>언데드</color> 따위가!", nextTile.GetPiece().transform, 1f);
                     return;
                 }
