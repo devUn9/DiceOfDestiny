@@ -23,6 +23,12 @@ public class PieceArrowUI : MonoBehaviour
 
     public void OnArrowExit()
     {
+        if (arrowAnim == null)
+        {
+            Debug.LogWarning("[PieceArrowUI] Arrow Animator is not assigned.");
+            return;
+        }
+
         arrowImage.color = new Color(arrowImage.color.r, arrowImage.color.g, arrowImage.color.b, TARGET_ALPHA);
         
 

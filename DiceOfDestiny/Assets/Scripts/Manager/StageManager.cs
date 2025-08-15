@@ -8,7 +8,6 @@ public enum GameState
     ReadyToRoll,
     PlayerAction,
 }
-
 public sealed class StageManager : Singletone<StageManager>
 {
     [Header("Stage Settings")]
@@ -73,8 +72,6 @@ public sealed class StageManager : Singletone<StageManager>
         CurrentTurn++;
         ResetTurn();
         UIManager.Instance.UpdateActionPointUI();
-
-
     }
 
     private void ResetTurn()
@@ -83,18 +80,37 @@ public sealed class StageManager : Singletone<StageManager>
         GameState = GameState.ReadyToRoll;
     }
 
-    public IEnumerator StageClear()
+    public void StageClear(PieceController clearPiece = null)
     {
-        yield return new WaitForSeconds(1f);
+        var toRemove = new List<PieceController>();
 
         // 인게임 보드판에 있는 피스들 인벤토리로 돌아가게 하기
         foreach (var piece in PieceManager.Instance.Pieces)
         {
-            Destroy(piece.gameObject);
+            if (piece != clearPiece)
+            {
+                toRemove.Add(piece);
+            }
         }
 
-        // 피스 리스트에 제거
-        PieceManager.Instance.Pieces.Clear();
+        foreach (var piece in toRemove)
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                if(PieceManager.Instance.pieceDatas[i] == null)
+                {
+                    PieceManager.Instance.pieceDatas[i] = piece.GetPiece();                }
+            }               
+            Destroy(piece.gameObject);
+            PieceManager.Instance.Pieces.Remove(piece);
+        }
+
+        EventManager.Instance.TriggerEvent("Refresh");
+
+
+
+
+        clearPiece?.MoveClearPiece();
 
         // 현재 선택 피스 null
         PieceManager.Instance.SetCurrentPiece(null);
@@ -102,10 +118,22 @@ public sealed class StageManager : Singletone<StageManager>
         // 피스 선택 테두리 제거
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
 
-        Time.timeScale = 0f;
+        ShiftToNextStage();
+    }
 
-        mainCanvasGroup.SetActive(false);
-        NextStageUI.SetActive(true);
+    public void ShiftToNextStage()
+    {
+        UIManager.Instance.HideUI();
+        stageIndex++;
+
+        BoardManager.Instance. ShiftBoard();
+    }
+
+    public void SetNewStage()
+    {
+        UIManager.Instance.ShowUI();
+
+        StartStage();
     }
 
     public void ResumeGame()
@@ -120,9 +148,8 @@ public sealed class StageManager : Singletone<StageManager>
         // 기물 인벤토리 UI 새로고침
         EventManager.Instance.TriggerEvent("Refresh");
     }
-
-    private void UpdateCurrentStage(StageData stage)
-    {
-        currentStage = stage;
-    }
 }
+
+
+
+
