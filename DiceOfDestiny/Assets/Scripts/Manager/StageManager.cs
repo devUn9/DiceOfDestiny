@@ -26,7 +26,7 @@ public sealed class StageManager : Singletone<StageManager>
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            StartCoroutine(StageClear());
+            StageClear();
         }
     }
 
@@ -93,12 +93,13 @@ public sealed class StageManager : Singletone<StageManager>
 
         foreach (var piece in toRemove)
         {
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
-                if(PieceManager.Instance.pieceDatas[i] == null)
+                if (PieceManager.Instance.pieceDatas[i] == null)
                 {
-                    PieceManager.Instance.pieceDatas[i] = piece.GetPiece();                }
-            }               
+                    PieceManager.Instance.pieceDatas[i] = piece.GetPiece();
+                }
+            }
             Destroy(piece.gameObject);
             PieceManager.Instance.Pieces.Remove(piece);
         }
@@ -124,7 +125,7 @@ public sealed class StageManager : Singletone<StageManager>
         UIManager.Instance.HideUI();
         stageIndex++;
 
-        BoardManager.Instance. ShiftBoard();
+        BoardManager.Instance.ShiftBoard();
     }
 
     public void SetNewStage()
@@ -146,8 +147,9 @@ public sealed class StageManager : Singletone<StageManager>
         // 기물 인벤토리 UI 새로고침
         EventManager.Instance.TriggerEvent("Refresh");
     }
+
+    public void ResetCurrentStage()
+    {
+        stageIndex = 0;
+    }
 }
-
-
-
-

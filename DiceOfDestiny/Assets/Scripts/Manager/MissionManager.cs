@@ -20,7 +20,7 @@ public class MissionManager : Singletone<MissionManager>
         if (StageManager.Instance.currentStage.missions.TrueForAll(m => m.IsCompleted()))
         {
             Debug.Log("복합 미션 완료!");
-            StartCoroutine(StageManager.Instance.StageClear());
+            StageManager.Instance.StageClear();
         }
     }
 
@@ -52,7 +52,7 @@ public class MissionManager : Singletone<MissionManager>
         {
             return true;
         }
-        
+
         return false;
     }
 
