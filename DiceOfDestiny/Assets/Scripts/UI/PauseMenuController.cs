@@ -17,7 +17,7 @@ public class PauseMenuController : MonoBehaviour
         {
             SceneManager.LoadScene("MainScene");
             GameManager.Instance.UnPause(); // 게임 일시정지 해제
-            StageManager.Instance.ResetCurrentStage();
+            StageManager.Instance.Resercurrentstage(); // 스테이지 인덱스 초기화
             ObstacleManager.Instance.RemoveAllObstacle(); // 장애물 제거
         }); // 현재 스테이지 초기화}); // 메인씬 이동.
         exitButton.onClick.AddListener(() => Application.Quit()); // 프로그램 종료    
