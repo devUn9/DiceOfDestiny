@@ -163,9 +163,9 @@ public sealed class StageManager : Singletone<StageManager>
         EventManager.Instance.TriggerEvent("Refresh");
     }
 
-    private void UpdateCurrentStage(StageData stage)
+    public void ResetCurrentStage()
     {
-        currentStage = stage;
+        stageIndex = 0; 
     }
 
     public void AddGrayGrassMission()
