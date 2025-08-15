@@ -106,6 +106,7 @@ public sealed class StageManager : Singletone<StageManager>
         }
 
         EventManager.Instance.TriggerEvent("Refresh");
+        ToastManager.Instance.ClearAllToasts();
 
         BoardManager.Instance.DestroyBorder();
 

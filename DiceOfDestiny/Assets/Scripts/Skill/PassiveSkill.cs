@@ -200,7 +200,7 @@ public class PassiveSkill : MonoBehaviour
         for (int i = 0; i < diagonalList.Count; i++)
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(diagonalList[i]);
-            if (obstacle != null && obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Pawn)
+            if (obstacle != null && (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Pawn))
             {
                 hasTarget = true;
                 Debug.Log($"광신도가 공격 대상 찾음: ({diagonalList[i].x}, {diagonalList[i].y})");

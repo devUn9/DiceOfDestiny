@@ -184,6 +184,58 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d95d5a5ca2e010d499d881b64bc6953c, type: 3}
+--- !u!1 &459198519
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 459198521}
+  - component: {fileID: 459198520}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &459198520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459198519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8810a93770a6674d8a8f57b1597b27a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillSounds:
+  - name: Knight_Skill
+    clip: {fileID: 8300000, guid: 2ac5e248f62d473489ca06c5a2cce8d0, type: 3}
+    loop: 0
+    volume: 0
+    is3D: 0
+  monsterSounds: []
+  poolSize: 10
+--- !u!4 &459198521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459198519}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1107.0164, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &609427569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,3 +1240,4 @@ SceneRoots:
   - {fileID: 1031086977}
   - {fileID: 867981804}
   - {fileID: 1782745191}
+  - {fileID: 459198521}

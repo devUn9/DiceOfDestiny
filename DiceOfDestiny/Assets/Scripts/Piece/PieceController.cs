@@ -22,6 +22,7 @@ public class PieceController : MonoBehaviour
     public bool canControl = true; // 기물 조작 가능 여부
     private bool animPlaying = false; // 애니메이션 재생 중인지 여부
     public bool isOutStartingLine = false; // 시작 지점에서 벗어났는지 여부
+    private TileColor lastTileColor = TileColor.None; // 마지막 타일 색상
 
     public PieceStatusEffectController statusEffectController;
     public UIFollow uiFollow;
@@ -241,6 +242,11 @@ public class PieceController : MonoBehaviour
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
                 BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
+
+                // 현재 타일에 색 적용
+                BoardManager.Instance.Board[gridPosition.x, gridPosition.y].TileColor = lastTileColor;
+                lastTileColor = BoardManager.Instance.Board[newPosition.x, newPosition.y].TileColor;
+                BoardManager.Instance.Board[newPosition.x, newPosition.y].TileColor = piece.faces[2].color;
 
 
 

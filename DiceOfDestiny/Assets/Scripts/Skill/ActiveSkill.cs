@@ -68,6 +68,8 @@ public class ActiveSkill : MonoBehaviour
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 60f);
             }
+
+            SoundManager.Instance.Play("Knight_Skill");
         }
         else
         {
