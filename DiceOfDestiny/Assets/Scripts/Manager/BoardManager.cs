@@ -1072,6 +1072,6 @@ public class BoardManager : Singletone<BoardManager>
             yield return new WaitForSeconds(0.1f); // 0.1초 대기
         }
 
-        StageManager.Instance.Resercurrentstage();
+        StageManager.Instance.ResetCurrentStage();
     }
 }
