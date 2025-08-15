@@ -24,6 +24,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
     [Header("Boss Pawn")]
     private List<GameObject> pawnList = new List<GameObject>();
     public int pawnMoveIndex { get; private set; } = 0;
+    public bool isPawnAttacking { get; private set; } = false;
 
     public void Initialize()
     {
@@ -60,6 +61,12 @@ public class ObstacleManager : Singletone<ObstacleManager>
     }
     public void UpdateObstacleStep()
     {
+        if (pawnList.Count > 0)
+        {
+            // 폰 난수 얻기
+            InOrderToMovePawn();
+        }
+        
         for (int i = currentObstacles.Count - 1; i >= 0; i--)
         {
             var behaviour = currentObstacles[i].GetComponent<IObstacleBehaviour>();
@@ -130,5 +137,10 @@ public class ObstacleManager : Singletone<ObstacleManager>
     {
         int pawnRandomIndex = Random.Range(0, pawnList.Count);
         pawnMoveIndex = pawnRandomIndex;
+    }
+
+    public void SetBoolPawnAttacking(bool isAttacking)
+    {
+        isPawnAttacking = isAttacking;
     }
 }
