@@ -20,7 +20,7 @@ public class MissionManager : Singletone<MissionManager>
         if (StageManager.Instance.currentStage.missions.TrueForAll(m => m.IsCompleted()))
         {
             Debug.Log("복합 미션 완료!");
-            StartCoroutine(StageManager.Instance.StageClear());
+            StageManager.Instance.StageClear();
         }
     }
 
@@ -36,6 +36,24 @@ public class MissionManager : Singletone<MissionManager>
         {
             isFinishLine = false;
         }
+    }
+
+    // 다른 미션이 없거나 다른 미션을 완료하여 도착점에 갈 수 있는지 없는지
+    public bool CanGoFinishLine()
+    {
+        // 미션이 하나만 있다면 무조건 도착점에 갈 수 있음
+        if (StageManager.Instance.currentStage.missions.Count == 1)
+        {
+            return true;
+        }
+
+        // 두 번째 미션이 완료되었다면 도착점에 갈 수 있음
+        if (StageManager.Instance.currentStage.missions[1].IsCompleted())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     // 적을 모두 처치했는지 확인

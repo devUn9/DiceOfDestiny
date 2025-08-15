@@ -114,6 +114,15 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
+            if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
+            {
+                if (!MissionManager.Instance.CanGoFinishLine())
+                {
+                    ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform);
+                    return;
+                }
+            }
+
             if (statusEffectController.IsStatusActive(PieceStatus.Stun))
             {
                 int stunTurn = statusEffectController.GetRemainingTurn(PieceStatus.Stun);

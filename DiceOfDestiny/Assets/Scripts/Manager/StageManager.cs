@@ -27,7 +27,7 @@ public sealed class StageManager : Singletone<StageManager>
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            StartCoroutine(StageClear());
+            StageClear();
         }
     }
 
@@ -90,6 +90,21 @@ public sealed class StageManager : Singletone<StageManager>
         // 인게임 보드판에 있는 피스들 인벤토리로 돌아가게 하기
         foreach (var piece in PieceManager.Instance.Pieces)
         {
+            if (piece != clearPiece)
+            {
+                toRemove.Add(piece);
+            }
+        }
+
+        foreach (var piece in toRemove)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (PieceManager.Instance.pieceDatas[i] == null)
+                {
+                    PieceManager.Instance.pieceDatas[i] = piece.GetPiece();
+                }
+            }
             Destroy(piece.gameObject);
         }
 
@@ -106,8 +121,7 @@ public sealed class StageManager : Singletone<StageManager>
 
         //Time.timeScale = 0f;
 
-        //mainCanvasGroup.SetActive(false);
-        //NextStageUI.SetActive(true);
+        BoardManager.Instance.ShiftBoard();
     }
 
     public void ResumeGame()
@@ -123,12 +137,7 @@ public sealed class StageManager : Singletone<StageManager>
         EventManager.Instance.TriggerEvent("Refresh");
     }
 
-    public void UpdateCurrentStage(StageData stage)
-    {
-        currentStage = stage;
-    }
-
-    public void Resercurrentstage()
+    public void ResetCurrentStage()
     {
         stageIndex = 0;
     }

@@ -20,19 +20,21 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
     public void DoLogic()
     {
-        ObstacleManager.Instance.InOrderToMovePawn();
+        if (ObstacleManager.Instance.isPawnAttacking) return;
 
         // 자기 턴이 아니여도 공격 대기
         DiagonalAttack();
         if (isLeftAttack || isRightAttack)
         {
+            ObstacleManager.Instance.SetBoolPawnAttacking(true);
+
             isLeftAttack = false;
             isRightAttack = false;
 
-            return; // 공격이 발생했으면 이동하지 않음
+            return;
         }
 
-
+        Debug.Log("보스 폰 번호 : " + ObstacleManager.Instance.pawnMoveIndex);
         if (ObstacleManager.Instance.GetPawnListIndex(gameObject) != ObstacleManager.Instance.pawnMoveIndex)
         {
             return;
@@ -62,6 +64,8 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
                 DiagonalAttack();
                 if (isLeftAttack || isRightAttack)
                 {
+                    ObstacleManager.Instance.SetBoolPawnAttacking(true);
+
                     isLeftAttack = false;
                     isRightAttack = false;
                 }
@@ -112,8 +116,11 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
             yield return new WaitForSeconds(effectDelay);
 
             BoardManager.Instance.MoveObstacle(this, attackPos);
+
             AnimateObstacleMove(dir);
         }
+
+        ObstacleManager.Instance.SetBoolPawnAttacking(false);
     }
 
     private void DiagonalAttack()
