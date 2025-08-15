@@ -45,6 +45,8 @@ public sealed class StageManager : Singletone<StageManager>
         DiceValue = 0;
 
         UIManager.Instance.ShowBanner(currentStage.stageNumber, currentStage.StageName);
+
+        BoardManager.Instance.CreateBorderAndBG();
     }
 
     public void RollDice()

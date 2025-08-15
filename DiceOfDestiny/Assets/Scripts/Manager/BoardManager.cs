@@ -29,6 +29,12 @@ public class BoardManager : Singletone<BoardManager>
     public int boardSizeY;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] public Transform boardTransform;
+
+    [SerializeField] private SpriteRenderer borderRenderer; // 보드판
+    [SerializeField] private Sprite[] borderSprites;
+    [SerializeField] private SpriteRenderer backGroundRenderer; // 배경
+    [SerializeField] private Sprite[] backGroundSprites;
+
     public Tile[,] Board { get; set; }
 
     [Header("Tile Colors Settings")]
@@ -51,6 +57,11 @@ public class BoardManager : Singletone<BoardManager>
         GenerateBoard();
     }
 
+    public void CreateBorderAndBG()
+    {
+        GenerateBorder();
+        GenerateBackGround();
+    }
 
     // 보드 경계 체크 함수, 보드 안쪽을 리턴
     private bool IsValidPosition(Vector2Int position)
@@ -75,6 +86,68 @@ public class BoardManager : Singletone<BoardManager>
             }
         }
     }
+    public void GenerateBorder()
+    {
+        DestroyBorder(); // 기존 경계 제거
+        SetBoarder();
+        borderRenderer.gameObject.SetActive(true);
+    }
+
+    public void DestroyBorder()
+    {
+        borderRenderer.sprite = null; // 스프라이트 초기화
+        borderRenderer.gameObject.SetActive(false);
+    }
+
+    public void SetBoarder()
+    {
+        int stageNum = StageManager.Instance.currentStage.stageNumber;
+        
+        if (stageNum == 6)
+            borderRenderer.sprite = borderSprites[1];
+
+        else
+            borderRenderer.sprite = borderSprites[0];
+    }
+
+    public void GenerateBackGround()
+    {
+        DestroyBackGround(); // 기존 배경 제거
+        SetBackground();
+        backGroundRenderer.gameObject.SetActive(true);  
+    }
+
+    public void DestroyBackGround()
+    {
+        backGroundRenderer.sprite = null; // 스프라이트 초기화
+        backGroundRenderer.gameObject.SetActive(false);
+    }
+    public void SetBackground()
+    {
+        
+        int stageNum = StageManager.Instance.currentStage.stageNumber;
+        //backGroundRenderer.sprite = backGroundSprites[stageNum - 1];
+        // 1~2
+        if (stageNum < 2)
+        {
+            backGroundRenderer.sprite = backGroundSprites[0];
+        }
+        // 2~3
+        else if (stageNum >= 2 && stageNum < 4)
+        {
+            backGroundRenderer.sprite = backGroundSprites[1];
+        }
+        // 4~5
+        else if (stageNum >= 4 && stageNum < 6)
+        {
+            backGroundRenderer.sprite = backGroundSprites[2];
+        }
+        else if (stageNum >= 6)
+        {
+            backGroundRenderer.sprite = backGroundSprites[3];
+        }
+    }
+
 
     public void SetBoard(StageData profile)
     {
