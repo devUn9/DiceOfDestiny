@@ -896,7 +896,7 @@ public class BoardManager : Singletone<BoardManager>
 
     IEnumerator ShiftBoardCoroutine()
     {
-        float duration = 4f; // 이동 시간
+        float duration = 2f; // 이동 시간
         float time = 0f;
         float inflateAmount = 0.2f;
         GenerateNextBoard();
@@ -907,7 +907,8 @@ public class BoardManager : Singletone<BoardManager>
             TempBoard[x, 0].gameObject.SetActive(false);
             TempBoard[boardSize - 1 - x, boardSizeY - 1].gameObject.SetActive(false);
         }
-        
+
+        ObstacleManager.Instance.DropAlObstacles();
 
         Vector3 moveDir = Vector3.up;
 
@@ -949,9 +950,50 @@ public class BoardManager : Singletone<BoardManager>
         // 보드 위치와 크기를 최종적으로 설정
         newBoardTransform.localScale = Vector3.one; // 새 보드의 크기를 1로 설정
         newBoardTransform.localPosition = contractStartPos;
-
         boardPosParent.transform.localPosition = parentStartPos;
 
-        Debug.Log("Board shift completed.");
+        // 새로운 보드를 기존 보드로 교체, 기존 보드 삭제
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSizeY; j++)
+            {
+                if (Board[i, j] != null)
+                {
+                    Destroy(Board[i, j].gameObject);
+                }
+            }
+        }
+
+
+        boardTransform.localPosition = contractStartPos; // 기존 보드의 위치를 새 보드의 위치로 설정
+        boardTransform.localScale = Vector3.one; // 기존 보드의 크기를 1로 설정
+
+        Board = TempBoard;
+        TempBoard = new Tile[boardSize, boardSizeY]; // 새 보드 초기화
+
+        for(int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSizeY; j++)
+            {
+                if (Board[i, j] != null)
+                {
+                    Board[i, j].transform.SetParent(boardTransform);
+                }
+            }
+        }
+
+        StartCoroutine(ActivateNewBoardCoroutine());
+    }
+
+    IEnumerator ActivateNewBoardCoroutine()
+    {
+        for (int x = 0; x < boardSize; x++)
+        {
+            Board[x, 0].gameObject.SetActive(true);
+            Board[boardSize - 1 - x, boardSizeY - 1].gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.1f); // 0.1초 대기
+        }
+
+        StageManager.Instance.SetNewStage();
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -54,6 +55,16 @@ public class ObstacleManager : Singletone<ObstacleManager>
         }
         currentObstacles.Clear();
     }
+
+    public void DropAlObstacles()
+    {
+        foreach (GameObject obstacle in currentObstacles)
+        {
+            StartCoroutine(DropGameObject(obstacle));
+        }
+        currentObstacles.Clear();
+    }
+
     public void UpdateObstacleStep()
     {
         for (int i = currentObstacles.Count - 1; i >= 0; i--)
@@ -64,4 +75,39 @@ public class ObstacleManager : Singletone<ObstacleManager>
                 behaviour.DoLogic();
         }
     }
+
+    IEnumerator DropGameObject(GameObject gameObject)
+    {
+        float dropTime = 4f;
+        float timeElapsed = 0f;
+
+        float speed = 0f;
+
+        Vector3 startPosition = gameObject.transform.localPosition;
+
+        while (timeElapsed < dropTime)
+        {
+            
+            float t = timeElapsed / dropTime;
+
+            if (t > 0.3f)
+            {
+                // 중력 가속도 적용
+                gameObject.transform.SetParent(this.transform);
+                speed += 9.8f * Time.deltaTime; // 중력 가속도 적용
+                gameObject.transform.localPosition += Vector3.down * speed * Time.deltaTime; // 속도 조절            
+            }
+            else
+            {
+                gameObject.transform.localPosition = startPosition - new Vector3(0, 2f, 0);
+            }
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        // 드랍이 완료되면 게임 오브젝트를 제거
+        Destroy(gameObject);
+        yield return null;
+    }
+
 }
+    

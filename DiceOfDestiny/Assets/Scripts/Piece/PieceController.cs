@@ -248,6 +248,7 @@ public class PieceController : MonoBehaviour
     // 기물 눌렀을 때 호출, BoardSelectManager에 저장
     private void OnMouseUp()
     {
+        Debug.Log("Piece clicked: " + piece);
         // UI 위 클릭이면 무시
         if (IsPointerOnLayer("BlockUI"))
         {
@@ -267,6 +268,7 @@ public class PieceController : MonoBehaviour
 
         if (piece != null)
         {
+            Debug.Log($"Piece clicked: {piece}, at position: {position}");
             PieceManager.Instance.currentPiece = this;
             BoardSelectManager.Instance.PieceHighlightTiles(position);
             EventManager.Instance.TriggerEvent("ToggleUIElement");
@@ -713,10 +715,7 @@ public class PieceController : MonoBehaviour
         // 도착 지점이라면
         if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
         {
-            BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(null);
             StageManager.Instance.StageClear(this);
-
-            Destroy(this.gameObject);
         }
     }
 
@@ -834,6 +833,63 @@ public class PieceController : MonoBehaviour
         {
             colorRenderer.color = BoardManager.Instance.tileColors[(int)color];
         }
+    }
+
+    public void MoveClearPiece()
+    {
+        StartCoroutine(MoveClearPieceCoroutine());
+    }
+
+    IEnumerator MoveClearPieceCoroutine()
+    {
+        // 기물 확대
+        float duration = BoardManager.Instance.boardSize * 0.1f;
+        float time = 0;
+
+
+        while (time < duration)
+        {
+            this.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 2f, time / duration);
+
+            time += 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // 사이즈 확정 보정
+        this.transform.localScale = Vector3.one * 2f;
+
+        // 기물 이동
+        Vector3 targetPosition = transform.position + new Vector3(0, -BoardManager.Instance.boardSize - 1f, 0f);
+        Vector3 startPositon = transform.position;
+        float moveDuration = 2f;
+
+        float moveTime = 0f;
+
+        while (moveTime < moveDuration)
+        {
+            transform.position = Vector3.Lerp(startPositon, targetPosition, moveTime / moveDuration);
+            moveTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 위치 확정 보정
+        transform.position = targetPosition;
+
+        time = 0;
+        while (time < duration)
+        {
+            this.transform.localScale = Vector3.Lerp(Vector3.one * 2f, Vector3.one, time / duration);
+
+            time += 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // 사이즈 확정 보정
+        this.transform.localScale = Vector3.one;
+
+        // 기물 위치 변경
+        gridPosition = new Vector2Int(gridPosition.x, 0); // 기물 위치 초기화
+        Debug.Log($"Piece moved to clear position: {gridPosition}");
     }
 
 }
