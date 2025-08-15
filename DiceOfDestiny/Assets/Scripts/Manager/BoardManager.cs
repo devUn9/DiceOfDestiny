@@ -1,7 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum TileColor
 {
@@ -28,8 +27,11 @@ public class BoardManager : Singletone<BoardManager>
     [SerializeField] public int boardSize { get; private set; } = 13;
     public int boardSizeY;
     [SerializeField] private GameObject tilePrefab;
+    [SerializeField] public GameObject boardPosParent;
     [SerializeField] public Transform boardTransform;
+    [SerializeField] public Transform newBoardTransform;
     public Tile[,] Board { get; set; }
+    public Tile[,] TempBoard { get; set; }
 
     [Header("Tile Colors Settings")]
     [SerializeField]
@@ -75,6 +77,28 @@ public class BoardManager : Singletone<BoardManager>
             }
         }
     }
+
+    public void GenerateNextBoard()
+    {
+        TempBoard = new Tile[boardSize, boardSizeY];
+
+        for (int x = 0; x < boardSize; x++)
+        {
+            for (int y = 0; y < boardSizeY; y++)
+            {
+                GameObject tileObject = Instantiate(tilePrefab, new Vector3(newBoardTransform.position.x + x, newBoardTransform.position.y + y, 0), Quaternion.identity, newBoardTransform);
+                tileObject.name = $"Tile_{x}_{y}";
+                Tile tile = tileObject.GetComponent<Tile>();
+                tile.TileColor = TileColor.None;
+                tile.Obstacle = ObstacleType.None;
+
+                tile.GetComponent<SpriteRenderer>().color = new Color(114f / 256f, 61f / 256f, 35f / 256f);
+
+                TempBoard[x, y] = tile;
+            }
+        }
+    }
+
 
     public void SetBoard(StageData profile)
     {
@@ -125,37 +149,7 @@ public class BoardManager : Singletone<BoardManager>
         }
 
         // 색칠하는 부분
-        int idx = 0;
-        for (int x = 0; x < boardSize; x++)
-        {
-            for (int y = 1; y < boardSize + 1; y++)
-            {
-                Board[x, y].SetTileColor(tileColors[colorIndices[idx]]);
-                switch (colorIndices[idx])
-                {
-                    case 0: // 빨강
-                        Board[x, y].TileColor = TileColor.Red;
-                        break;
-                    case 1: // 초록
-                        Board[x, y].TileColor = TileColor.Green;
-                        break;
-                    case 2: // 파랑
-                        Board[x, y].TileColor = TileColor.Blue;
-                        break;
-                    case 3: // 노랑
-                        Board[x, y].TileColor = TileColor.Yellow;
-                        break;
-                    case 4: // 보라
-                        Board[x, y].TileColor = TileColor.Purple;
-                        break;
-                    case 5: // 갈색
-                        Board[x, y].TileColor = TileColor.Brown;
-                        break;
-                }
-                idx++;
-            }
-        }
-
+        StartCoroutine(SetColortDelayed());
 
         // 장애물 배치 부분
         obstacleIndices = new List<ObstacleType>();
@@ -187,26 +181,9 @@ public class BoardManager : Singletone<BoardManager>
             (obstacleIndices[i], obstacleIndices[j]) = (obstacleIndices[j], obstacleIndices[i]);
         }
 
-        idx = 0;
-        for (int x = 0; x < boardSize; x++)
-        {
-            for (int y = 1; y < boardSize + 1; y++)
-            {
-                Board[x, y].Obstacle = obstacleIndices[idx];
-                // 장애물 생성
-                if (obstacleIndices[idx] != ObstacleType.None)
-                {
-                    Debug.Log(ObstacleManager.Instance);
-                    GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
-                        new Vector3(boardTransform.position.x + x, boardTransform.position.y + y, 0), Quaternion.identity, boardTransform);
-                    obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(x, y);
-                    ObstacleManager.Instance.SetObstacle(obstacle);
+        // 장애물 생성
 
-                    Board[x, y].isWalkable = obstacle.GetComponent<Obstacle>().isWalkable;
-                }
-                idx++;
-            }
-        }
+        StartCoroutine(SetObstacleDelayed());
 
         // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
         StageManager.Instance.currentStage.missions.ForEach(mission =>
@@ -224,6 +201,66 @@ public class BoardManager : Singletone<BoardManager>
             }
         });
     }
+
+    IEnumerator SetColortDelayed()
+    {
+        int idx = 0;
+        for (int x = 1; x < boardSize + 1; x++)
+        {
+            for (int y = 0; y < boardSize; y++)
+            {
+                Board[y, x].SetTileColor(tileColors[colorIndices[idx]]);
+                switch (colorIndices[idx])
+                {
+                    case 0: // 빨강
+                        Board[y, x].TileColor = TileColor.Red;
+                        break;
+                    case 1: // 초록
+                        Board[y, x].TileColor = TileColor.Green;
+                        break;
+                    case 2: // 파랑
+                        Board[y, x].TileColor = TileColor.Blue;
+                        break;
+                    case 3: // 노랑
+                        Board[y, x].TileColor = TileColor.Yellow;
+                        break;
+                    case 4: // 보라
+                        Board[y, x].TileColor = TileColor.Purple;
+                        break;
+                    case 5: // 갈색
+                        Board[y, x].TileColor = TileColor.Brown;
+                        break;
+                }
+                idx++;
+                yield return new WaitForSeconds(0.01f); // 색상 설정 간 약간의 지연
+            }
+        }
+    }
+    IEnumerator SetObstacleDelayed()
+    {
+        int idx = 0;
+        for (int x = 1; x < boardSize + 1; x++)
+        {
+            for (int y = 0; y < boardSize + 0; y++)
+            {
+                Board[y, x].Obstacle = obstacleIndices[idx];
+                // 장애물 생성
+                if (obstacleIndices[idx] != ObstacleType.None)
+                {
+                    Debug.Log(ObstacleManager.Instance);
+                    GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
+                        new Vector3(boardTransform.position.x + y, boardTransform.position.y + x, 0), Quaternion.identity, boardTransform);
+                    obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(y, x);
+                    ObstacleManager.Instance.SetObstacle(obstacle);
+
+                    Board[y, x].isWalkable = obstacle.GetComponent<Obstacle>().isWalkable;
+                }
+                idx++;
+                yield return new WaitForSeconds(0.01f); // 장애물 설정 간 약간의 지연
+            }
+        }
+    }
+
 
     public Obstacle ReturnObstacleByPosition(Vector2Int position)
     {
@@ -837,5 +874,129 @@ public class BoardManager : Singletone<BoardManager>
         {
             return tileColors[(int)tileColor];
         }
+    }
+
+
+    // 보드 회전
+    public void ShiftBoard()
+    {
+        StartCoroutine(DelectWhiteLineCoroutine());
+    }    
+
+    IEnumerator DelectWhiteLineCoroutine()
+    {
+        for (int x = 0; x < boardSize; x++)
+        {
+            Board[x, 0].gameObject.SetActive(false); // 첫 줄을 비활성화
+            Board[boardSize - 1 - x, boardSizeY - 1].gameObject.SetActive(false); // 마지막 줄을 비활성화
+            yield return new WaitForSeconds(0.1f); // 0.1초 대기
+        }
+
+        StartCoroutine(ShiftBoardCoroutine());
+    }
+
+    IEnumerator ShiftBoardCoroutine()
+    {
+        float duration = 2f; // 이동 시간
+        float time = 0f;
+        float inflateAmount = 0.2f;
+        GenerateNextBoard();
+
+        // 새로운 보드의 맨 윗줄과 맨 아랫줄을 비활성화
+        for (int x = 0; x < boardSize; x++)
+        {
+            TempBoard[x, 0].gameObject.SetActive(false);
+            TempBoard[boardSize - 1 - x, boardSizeY - 1].gameObject.SetActive(false);
+        }
+
+        ObstacleManager.Instance.DropAlObstacles();
+
+        Vector3 moveDir = Vector3.up;
+
+        float boardHeight = 11f; // 보드의 높이
+
+        newBoardTransform.localScale = Vector3.zero; // 새 보드의 초기 크기를 0으로 설정
+
+        Vector3 contractStartPos = boardTransform.localPosition; // 기존 보드의 시작 위치를 아래로 이동
+        Vector3 expandStartPos = contractStartPos + moveDir * boardHeight * 0.5f; // 새 보드의 시작 위치를 위로 이동
+
+        newBoardTransform.localPosition = expandStartPos; // 새 보드의 시작 위치 설정
+
+        Vector3 parentStartPos = boardPosParent.transform.localPosition;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+
+            float totalScale = 1f + inflateAmount * Mathf.Sin(Mathf.PI * t);
+
+            float contractScale = Mathf.Lerp(1f, 0f, t);
+            float expandScale = totalScale - contractScale;
+
+            newBoardTransform.localScale = new Vector3(1f, expandScale, 1f);
+            boardTransform.localScale = new Vector3(1f, contractScale, 1f);
+
+            float contractHalf = 0.5f * contractScale * boardHeight;
+            float expandHalf =  0.5f * expandScale * boardHeight;
+
+            boardTransform.localPosition = contractStartPos - moveDir * contractHalf;
+            newBoardTransform.localPosition = expandStartPos - moveDir * expandHalf;
+
+            boardPosParent.transform.localPosition = parentStartPos + moveDir * (contractHalf - expandHalf) + moveDir * (0.5f * boardHeight * t);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        // 보드 위치와 크기를 최종적으로 설정
+        newBoardTransform.localScale = Vector3.one; // 새 보드의 크기를 1로 설정
+        newBoardTransform.localPosition = contractStartPos;
+        boardPosParent.transform.localPosition = parentStartPos;
+
+        // 새로운 보드를 기존 보드로 교체, 기존 보드 삭제
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSizeY; j++)
+            {
+                if (Board[i, j] != null)
+                {
+                    Destroy(Board[i, j].gameObject);
+                }
+            }
+        }
+
+
+        boardTransform.localPosition = contractStartPos; // 기존 보드의 위치를 새 보드의 위치로 설정
+        boardTransform.localScale = Vector3.one; // 기존 보드의 크기를 1로 설정
+
+        Board = TempBoard;
+        TempBoard = new Tile[boardSize, boardSizeY]; // 새 보드 초기화
+
+        for(int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSizeY; j++)
+            {
+                if (Board[i, j] != null)
+                {
+                    Board[i, j].transform.SetParent(boardTransform);
+                }
+            }
+        }
+
+        StartCoroutine(ActivateNewBoardCoroutine());
+    }
+
+    IEnumerator ActivateNewBoardCoroutine()
+    {
+        for (int x = 0; x < boardSize; x++)
+        {
+            Board[x, 0].GetComponent<SpriteRenderer>().color = Color.white; // 첫 줄의 색상을 흰색으로 설정
+            Board[x, 0].gameObject.SetActive(true);
+            Board[boardSize - 1 - x, boardSizeY - 1].GetComponent<SpriteRenderer>().color = Color.white; // 첫 줄의 색상을 흰색으로 설정
+            Board[boardSize - 1 - x, boardSizeY - 1].gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.1f); // 0.1초 대기
+        }
+
+        StageManager.Instance.SetNewStage();
     }
 }

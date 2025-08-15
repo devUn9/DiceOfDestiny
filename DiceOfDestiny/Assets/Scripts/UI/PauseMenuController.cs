@@ -13,7 +13,13 @@ public class PauseMenuController : MonoBehaviour
     {
         resumeButton.onClick.AddListener(ClosePauseMenu);
         settingsButton.onClick.AddListener(() => UIManager.Instance.ToggleSettings(true)); // 설정창 띄우기
-        mainMenuButton.onClick.AddListener(() => { GameManager.Instance.UnPause(); SceneManager.LoadScene("MainScene"); }); // 메인씬 이동.
+        mainMenuButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("MainScene");
+            GameManager.Instance.UnPause(); // 게임 일시정지 해제
+            StageManager.Instance.ResetCurrentStage();
+            ObstacleManager.Instance.RemoveAllObstacle(); // 장애물 제거
+        }); // 현재 스테이지 초기화}); // 메인씬 이동.
         exitButton.onClick.AddListener(() => Application.Quit()); // 프로그램 종료    
     }
 
@@ -30,6 +36,7 @@ public class PauseMenuController : MonoBehaviour
     private void ClosePauseMenu()
     {
         GameManager.Instance.UnPause();
+
     }
 
 }
