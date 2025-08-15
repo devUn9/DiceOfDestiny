@@ -124,7 +124,7 @@ public class PassiveSkill : MonoBehaviour
             foreach (var pos in forwardList)
             {
                 // 그리드 위치를 월드 위치로 변환 (pieceController.transform.position 사용 유지)
-                Vector3 effectPos = pos + new Vector2(-5.5f, -5.5f); // 타일 중앙 위치
+                Vector3 effectPos = pos + new Vector2(-6f, -6f); // 타일 중앙 위치
 
                 // 타일의 인덱스를 기준으로 회전 각도 설정
                 int index = forwardList.IndexOf(pos);
@@ -224,7 +224,7 @@ public class PassiveSkill : MonoBehaviour
             foreach (var pos in diagonalList)
             {
                 // 그리드 위치를 월드 위치로 변환
-                Vector3 effectPos = pos + new Vector2(-5.5f, -5.5f); // 타일 중앙 위치
+                Vector3 effectPos = pos + new Vector2(-6, -6); // 타일 중앙 위치
 
                 Vector2Int dir = pos - pieceController.gridPosition;
 

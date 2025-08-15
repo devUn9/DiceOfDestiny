@@ -15,7 +15,7 @@ public class PieceSelectPanelUI : MonoBehaviour
     public Button startButton;
     public Button backButton;
 
-    public Piece[] tempSelectedPieces = new Piece[3];
+    public Piece[] tempSelectedPieces = new Piece[4];
     public int tempSelectedPieceCount = 0;
 
     Action StartGame;
@@ -30,7 +30,7 @@ public class PieceSelectPanelUI : MonoBehaviour
         }
         pieceSelectButtons = new List<GameObject>();
         tempSelectedPieceCount = 0;
-        tempSelectedPieces = new Piece[3];
+        tempSelectedPieces = new Piece[4];
         UpdateSelectText();
         startButton.interactable = false;
 
@@ -66,9 +66,9 @@ public class PieceSelectPanelUI : MonoBehaviour
 
     public void UpdateSelectText()
     {
-        pieceSelectText.text = $"모험에 들고 갈 기물을 선택해 주세요!({tempSelectedPieceCount} / 3)";
+        pieceSelectText.text = $"모험에 들고 갈 기물을 선택해 주세요!({tempSelectedPieceCount} / 4)";
 
-        if (tempSelectedPieceCount >= 3)
+        if (tempSelectedPieceCount >= 4)
         {
             startButton.interactable = true;
         }

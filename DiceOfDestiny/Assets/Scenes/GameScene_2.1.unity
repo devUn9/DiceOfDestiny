@@ -436,9 +436,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardSizeY: 0
   tilePrefab: {fileID: 2471703998611980718, guid: 23386ab979afcd04f83177db42443585, type: 3}
-  boardPosParent: {fileID: 0}
   boardTransform: {fileID: 667301746}
-  newBoardTransform: {fileID: 0}
+  borderRenderer: {fileID: 2203548473344061122, guid: d95d5a5ca2e010d499d881b64bc6953c, type: 3}
+  borderSprites:
+  - {fileID: -7427573930565791971, guid: b3832d5493c298d45a013262ef5fce88, type: 3}
+  - {fileID: 9115524600177147531, guid: 5f509fc00bbf0b240910653c9367113a, type: 3}
+  backGroundRenderer: {fileID: 7669249154718540240, guid: 65c665d9605350744aa6362b4b726615, type: 3}
+  backGroundSprites:
+  - {fileID: 4886183185936908277, guid: 6975f63af54b7984a98a5283c63bd70c, type: 3}
+  - {fileID: -3282145457511034884, guid: 4a115beb9eb2ca7479b061a6b8b8d7af, type: 3}
+  - {fileID: 694581369625033639, guid: b9de4ab5d81027a4fab885e3b5f8cf52, type: 3}
+  - {fileID: 5775721574835107146, guid: eca4301773f259f459eb9181794c0f3d, type: 3}
   tileColors:
   - {r: 0.8867924, g: 0.21807823, b: 0.20496619, a: 1}
   - {r: 0.19063722, g: 0.7924528, b: 0.19063722, a: 1}
@@ -2659,8 +2667,10 @@ MonoBehaviour:
   - {fileID: 1324270886440449900, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
   - {fileID: 1324270886440449900, guid: 4af746e0c8666a64d8d7beaf3fd1f63c, type: 3}
   - {fileID: 1324270886440449900, guid: e156fce312521164bad40a610ec80d9d, type: 3}
+  - {fileID: 1324270886440449900, guid: 3308e2bf8f2ce3945a425e8aef819798, type: 3}
   currentPiece: {fileID: 0}
   pieceDatas:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

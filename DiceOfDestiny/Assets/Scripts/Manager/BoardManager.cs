@@ -29,7 +29,15 @@ public class BoardManager : Singletone<BoardManager>
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] public GameObject boardPosParent;
     [SerializeField] public Transform boardTransform;
+
+    [SerializeField] private SpriteRenderer borderRenderer; // 보드판
+    [SerializeField] private Sprite[] borderSprites;
+    [SerializeField] private SpriteRenderer backGroundRenderer; // 배경
+    [SerializeField] private Sprite[] backGroundSprites;
+
+
     [SerializeField] public Transform newBoardTransform;
+
     public Tile[,] Board { get; set; }
     public Tile[,] TempBoard { get; set; }
 
@@ -53,6 +61,11 @@ public class BoardManager : Singletone<BoardManager>
         GenerateBoard();
     }
 
+    public void CreateBorderAndBG()
+    {
+        GenerateBorder();
+        GenerateBackGround();
+    }
 
     // 보드 경계 체크 함수, 보드 안쪽을 리턴
     private bool IsValidPosition(Vector2Int position)
@@ -77,6 +90,68 @@ public class BoardManager : Singletone<BoardManager>
             }
         }
     }
+    public void GenerateBorder()
+    {
+        DestroyBorder(); // 기존 경계 제거
+        SetBoarder();
+        borderRenderer.gameObject.SetActive(true);
+    }
+
+    public void DestroyBorder()
+    {
+        borderRenderer.sprite = null; // 스프라이트 초기화
+        borderRenderer.gameObject.SetActive(false);
+    }
+
+    public void SetBoarder()
+    {
+        int stageNum = StageManager.Instance.currentStage.stageNumber;
+        
+        if (stageNum == 6)
+            borderRenderer.sprite = borderSprites[1];
+
+        else
+            borderRenderer.sprite = borderSprites[0];
+    }
+
+    public void GenerateBackGround()
+    {
+        DestroyBackGround(); // 기존 배경 제거
+        SetBackground();
+        backGroundRenderer.gameObject.SetActive(true);  
+    }
+
+    public void DestroyBackGround()
+    {
+        backGroundRenderer.sprite = null; // 스프라이트 초기화
+        backGroundRenderer.gameObject.SetActive(false);
+    }
+    public void SetBackground()
+    {
+        
+        int stageNum = StageManager.Instance.currentStage.stageNumber;
+        //backGroundRenderer.sprite = backGroundSprites[stageNum - 1];
+        // 1~2
+        if (stageNum < 2)
+        {
+            backGroundRenderer.sprite = backGroundSprites[0];
+        }
+        // 2~3
+        else if (stageNum >= 2 && stageNum < 4)
+        {
+            backGroundRenderer.sprite = backGroundSprites[1];
+        }
+        // 4~5
+        else if (stageNum >= 4 && stageNum < 6)
+        {
+            backGroundRenderer.sprite = backGroundSprites[2];
+        }
+        else if (stageNum >= 6)
+        {
+            backGroundRenderer.sprite = backGroundSprites[3];
+        }
+    }
+
 
     public void GenerateNextBoard()
     {
@@ -92,7 +167,7 @@ public class BoardManager : Singletone<BoardManager>
                 tile.TileColor = TileColor.None;
                 tile.Obstacle = ObstacleType.None;
 
-                tile.GetComponent<SpriteRenderer>().color = new Color(114f / 256f, 61f / 256f, 35f / 256f);
+                tile.GetComponent<SpriteRenderer>().color = new Color(241 / 256f, 214f / 256f, 200f / 256f);
 
                 TempBoard[x, y] = tile;
             }
@@ -235,6 +310,8 @@ public class BoardManager : Singletone<BoardManager>
                 yield return new WaitForSeconds(0.01f); // 색상 설정 간 약간의 지연
             }
         }
+
+        GenerateBorder();
     }
     IEnumerator SetObstacleDelayed()
     {

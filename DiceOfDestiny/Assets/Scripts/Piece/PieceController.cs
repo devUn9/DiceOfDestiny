@@ -737,7 +737,7 @@ public class PieceController : MonoBehaviour
         isMoving = false;
     }
 
-    private IEnumerator CheckStageClearAfterMove(Vector2Int newPosition)
+    public IEnumerator CheckStageClearAfterMove(Vector2Int newPosition)
     {
         // 이동 애니메이션이 끝날 때까지 대기
         while (isMoving)
@@ -746,7 +746,7 @@ public class PieceController : MonoBehaviour
         // 도착 지점이라면
         if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
         {
-            StageManager.Instance.StageClear(this);
+            StageManager.Instance.StageClear();
         }
     }
 

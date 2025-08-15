@@ -44,6 +44,7 @@ public sealed class StageManager : Singletone<StageManager>
         DiceValue = 0;
 
         UIManager.Instance.ShowBanner(currentStage.stageNumber, currentStage.StageName);
+        BoardManager.Instance.CreateBorderAndBG();
     }
 
     public void RollDice()
@@ -106,7 +107,7 @@ public sealed class StageManager : Singletone<StageManager>
 
         EventManager.Instance.TriggerEvent("Refresh");
 
-
+        BoardManager.Instance.DestroyBorder();
 
 
         clearPiece?.MoveClearPiece();
