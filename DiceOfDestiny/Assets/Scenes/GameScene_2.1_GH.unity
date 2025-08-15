@@ -3038,6 +3038,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2761713909704265828, guid: 71f253f5541141449928ed5d45e7a726, type: 3}
+      propertyPath: stageFailedUIPrefab
+      value: 
+      objectReference: {fileID: 3859621477007818782, guid: 68ba792bccc3978419edb66e14433c95, type: 3}
     - target: {fileID: 5986193197909993458, guid: 71f253f5541141449928ed5d45e7a726, type: 3}
       propertyPath: m_Name
       value: UIManger
@@ -3629,7 +3633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageIndex: 0
   stageProfiles:
-  - {fileID: 11400000, guid: 60f221dfb72b1b84aa4272684d5f262c, type: 2}
+  - {fileID: 11400000, guid: c2c391696bc63994b898d9be7e4a7456, type: 2}
   - {fileID: 11400000, guid: cfd912d1b69670743b9bd885b9536f75, type: 2}
   - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
   - {fileID: 11400000, guid: 6828c2986df7d6e4aabc87941897539e, type: 2}

@@ -20,14 +20,10 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
     public void DoLogic()
     {
-        if (ObstacleManager.Instance.isPawnAttacking) return;
-
         // 자기 턴이 아니여도 공격 대기
         DiagonalAttack();
         if (isLeftAttack || isRightAttack)
         {
-            ObstacleManager.Instance.SetBoolPawnAttacking(true);
-
             isLeftAttack = false;
             isRightAttack = false;
 
@@ -64,10 +60,15 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
                 DiagonalAttack();
                 if (isLeftAttack || isRightAttack)
                 {
-                    ObstacleManager.Instance.SetBoolPawnAttacking(true);
-
                     isLeftAttack = false;
                     isRightAttack = false;
+                }
+
+                if (obstaclePosition.y == 0)
+                {
+                    PieceManager.Instance.ResetPieces();
+                    UIManager.Instance.ShowStageFailedUI();
+                    return;
                 }
             }
         }
@@ -113,14 +114,19 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
             Destroy(effect, effectDelay); // 효과는 1초 후에 제거
 
-            yield return new WaitForSeconds(effectDelay);
-
             BoardManager.Instance.MoveObstacle(this, attackPos);
 
-            AnimateObstacleMove(dir);
-        }
+            yield return new WaitForSeconds(effectDelay);
 
-        ObstacleManager.Instance.SetBoolPawnAttacking(false);
+            AnimateObstacleMove(dir);
+
+            Debug.Log("Pawn Ypos : " + obstaclePosition.y);
+            if (obstaclePosition.y <= 1)
+            {
+                PieceManager.Instance.ResetPieces();
+                UIManager.Instance.ShowStageFailedUI();
+            }
+        }
     }
 
     private void DiagonalAttack()
@@ -133,12 +139,14 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
         Tile leftDownTile = BoardManager.Instance.GetTile(leftDownAttackPos);
         Tile rightDownTile = BoardManager.Instance.GetTile(rightDownAttackPos);
 
-        if (BoardManager.Instance.IsInsideBoard(leftDownAttackPos) && leftDownTile.GetPiece() != null)
+        if (BoardManager.Instance.IsInsideBoard(leftDownAttackPos) && leftDownTile.GetPiece() != null &&
+            BoardManager.Instance.Board[leftDownAttackPos.x, leftDownAttackPos.y].Obstacle != ObstacleType.Pawn)
         {
             isLeftAttack = true;
 
         }
-        else if (BoardManager.Instance.IsInsideBoard(rightDownAttackPos) && rightDownTile.GetPiece() != null)
+        else if (BoardManager.Instance.IsInsideBoard(rightDownAttackPos) && rightDownTile.GetPiece() != null &&
+                 BoardManager.Instance.Board[rightDownAttackPos.x, rightDownAttackPos.y].Obstacle != ObstacleType.Pawn)
         {
             isRightAttack = true;
         }

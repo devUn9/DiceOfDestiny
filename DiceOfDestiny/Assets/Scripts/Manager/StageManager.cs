@@ -12,15 +12,11 @@ public sealed class StageManager : Singletone<StageManager>
 {
     [Header("Stage Settings")]
     [SerializeField] private int stageIndex = 0;
-    [SerializeField] private StageData[] stageProfiles = new StageData[5];
+    [SerializeField] private StageData[] stageProfiles = new StageData[6];
     public StageData currentStage { get; private set; }
     public GameState GameState { get; private set; }
     public int CurrentTurn { get; private set; } = 1;
     public int DiceValue { get; private set; }
-
-    [Header("Next Stage Info")]
-    [SerializeField] private GameObject NextStageUI;
-    [SerializeField] private GameObject mainCanvasGroup;
 
     private void Update()
     {
@@ -35,6 +31,7 @@ public sealed class StageManager : Singletone<StageManager>
         currentStage = stageProfiles[stageIndex];
 
         UIManager.Instance.SetStageName(currentStage.StageName);
+        UIManager.Instance.UpdateActionPointUI();
 
         ObstacleManager.Instance.RemoveAllObstacle();
         BoardManager.Instance.SetBoard(currentStage);
@@ -69,6 +66,9 @@ public sealed class StageManager : Singletone<StageManager>
         }
         PieceManager.Instance.DecreaseDebuffAllPieces(); // 모든 말의 디버프 감소
         CurrentTurn++;
+
+        if (CheckMissionFailed()) return; // 현재 턴이 최대 턴을 초과했는지 확인
+
         ResetTurn();
         UIManager.Instance.UpdateActionPointUI();
     }
@@ -94,7 +94,7 @@ public sealed class StageManager : Singletone<StageManager>
 
         foreach (var piece in toRemove)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (PieceManager.Instance.pieceDatas[i] == null)
                 {
@@ -136,21 +136,21 @@ public sealed class StageManager : Singletone<StageManager>
         StartStage();
     }
 
-    public void ResumeGame()
-    {
-        Time.timeScale = 1f;
-
-        NextStageUI.SetActive(false);
-        mainCanvasGroup.SetActive(true);
-
-        // 기물 인벤토리 초기화
-
-        // 기물 인벤토리 UI 새로고침
-        EventManager.Instance.TriggerEvent("Refresh");
-    }
-
     public void ResetCurrentStage()
     {
         stageIndex = 0;
+    }
+
+    public bool CheckMissionFailed()
+    {
+        // 최대 턴 넘으면 실패
+        if (CurrentTurn > currentStage.maxTurn)
+        {
+            PieceManager.Instance.ResetPieces();
+            UIManager.Instance.ShowStageFailedUI();
+            return true;
+        }
+
+        return false;
     }
 }   

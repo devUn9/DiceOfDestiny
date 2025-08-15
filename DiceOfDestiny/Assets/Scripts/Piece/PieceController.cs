@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -236,7 +237,6 @@ public class PieceController : MonoBehaviour
                 {
                     ActionPointManager.Instance.RemoveAP(); // 질병 상태라면 추가로 행동력 감소
                 }
-
 
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);

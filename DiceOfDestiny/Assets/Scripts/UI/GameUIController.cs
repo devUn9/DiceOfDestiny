@@ -11,6 +11,7 @@ public class GameUIController : MonoBehaviour
     private GameObject bannerUI;
 
     [SerializeField] private GameObject stageNameUI;
+    [SerializeField] private GameObject stageFailedUI;
 
     public void Initialize()
     {
@@ -28,6 +29,12 @@ public class GameUIController : MonoBehaviour
 
     public void ShowBanner(int stageNumber, string stageName)
     {
-        bannerUI.GetComponent<StageBannerController>().Show(stageNumber,stageName);
+        bannerUI.GetComponent<StageBannerController>().Show(stageNumber, stageName);
+    }
+    
+    public void ShowStageFailedUI()
+    {
+        stageFailedUI.SetActive(true);
+        stageFailedUI.GetComponent<StageFailedUI>().ShowUI();
     }
 }
