@@ -11,7 +11,7 @@ public class GameManager : Singletone<GameManager>
     public StageManager StageManager { get; private set; }
     public ObstacleManager ObstacleManager { get; private set; }
 
-    public Piece[] selectedPieces = new Piece[3];
+    public Piece[] selectedPieces = new Piece[4];
     public bool isPaused { get; private set; }
 
     private void Update()

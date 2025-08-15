@@ -2666,8 +2666,10 @@ MonoBehaviour:
   - {fileID: 1324270886440449900, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
   - {fileID: 1324270886440449900, guid: 4af746e0c8666a64d8d7beaf3fd1f63c, type: 3}
   - {fileID: 1324270886440449900, guid: e156fce312521164bad40a610ec80d9d, type: 3}
+  - {fileID: 1324270886440449900, guid: 3308e2bf8f2ce3945a425e8aef819798, type: 3}
   currentPiece: {fileID: 0}
   pieceDatas:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

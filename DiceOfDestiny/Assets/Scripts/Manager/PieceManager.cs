@@ -18,7 +18,7 @@ public class PieceManager : Singletone<PieceManager>
 
     [SerializeField] public PieceController currentPiece; // 현재 내가 조종중인 말
 
-    public Piece[] pieceDatas = new Piece[3]; // 이번 게임동안 내가 가져온 말
+    public Piece[] pieceDatas = new Piece[4]; // 이번 게임동안 내가 가져온 말
 
     protected override void Awake()
     {

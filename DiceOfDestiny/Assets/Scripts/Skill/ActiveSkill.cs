@@ -133,8 +133,8 @@ public class ActiveSkill : MonoBehaviour
         Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
 
         Vector3 effectPosition = new Vector3(
-                   selectPos.x - 5.5f,
-                   selectPos.y - 5f,
+                   selectPos.x - 6f,
+                   selectPos.y - 6f,
                    0f
                );
 
@@ -188,8 +188,8 @@ public class ActiveSkill : MonoBehaviour
             {
                 Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
                 Vector3 effectPosition = new Vector3(
-                    selectPos.x - 5.5f,
-                    selectPos.y - 5.8f,
+                    selectPos.x - 6f,
+                    selectPos.y - 6.5f,
                     0f
                 );
 

@@ -80,9 +80,9 @@ public class ActionPointUI : MonoBehaviour
 
     public void UpdateActionPointUI()
     {
-        currentStage.text = $"Stage {StageManager.Instance.currentStage.stageNumber}";
+        currentStage.text = $"스테이지 {StageManager.Instance.currentStage.stageNumber}";
         currentState.text = $"State : {StageManager.Instance.GameState}";
-        currentTurn.text = $"Turn  : {StageManager.Instance.CurrentTurn}";
+        currentTurn.text = $"{StageManager.Instance.CurrentTurn} / 50";
         diceText.text = $"Dice  : {StageManager.Instance.DiceValue}";
         apText.text = $"AP    : {ActionPointManager.Instance.GetAP()}";
 
