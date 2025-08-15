@@ -152,4 +152,4 @@ public sealed class StageManager : Singletone<StageManager>
     {
         stageIndex = 0;
     }
-}
+}   
