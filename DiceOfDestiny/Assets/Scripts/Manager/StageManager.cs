@@ -22,19 +22,11 @@ public sealed class StageManager : Singletone<StageManager>
     [SerializeField] private GameObject NextStageUI;
     [SerializeField] private GameObject mainCanvasGroup;
 
-    [Header("Stage 5 Mission")]
-    private int findGrayGrassCount = 0;
-    public bool isFindGrayGrass { get; private set; } = false;
-
-    [Header("Stage 6 Mission")]
-    private List<GameObject> pawnList = new List<GameObject>();
-    public int pawnMoveIndex { get; private set; } = 0;
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            StageClear();
+            StartCoroutine(StageClear());
         }
     }
 
@@ -86,19 +78,11 @@ public sealed class StageManager : Singletone<StageManager>
         GameState = GameState.ReadyToRoll;
     }
 
-    public void IsAllMissionCompleted()
-    {
-        if (currentStage.missions.TrueForAll(m => m.IsMissionCompleted()))
-        {
-            Debug.Log("복합 미션 완료!");
-            StageClear();
-        }
-    }
-
     public void StageClear(PieceController clearPiece = null)
     {
         var toRemove = new List<PieceController>();
 
+        // 인게임 보드판에 있는 피스들 인벤토리로 돌아가게 하기
         foreach (var piece in PieceManager.Instance.Pieces)
         {
             if (piece != clearPiece)
@@ -162,49 +146,8 @@ public sealed class StageManager : Singletone<StageManager>
         // 기물 인벤토리 UI 새로고침
         EventManager.Instance.TriggerEvent("Refresh");
     }
-
-    public void ResetCurrentStage()
-    {
-        stageIndex = 0; 
-    }
-
-    public void AddGrayGrassMission()
-    {
-        findGrayGrassCount++;
-
-        if (findGrayGrassCount >= 3)
-            isFindGrayGrass = true;
-    }
-
-    public void AddPawnToList(GameObject pawn)
-    {
-        if (pawn != null && !pawnList.Contains(pawn))
-        {
-            pawnList.Add(pawn);
-        }
-    }
-
-    public void RemovePawn(GameObject pawn)
-    {
-        pawnList.Remove(pawn);
-    }
-
-    public int GetPawnListIndex(GameObject pawn)
-    {
-        return pawnList.IndexOf(pawn);
-    }
-
-    public void InOrderToMovePawn()
-    {
-        if (pawnMoveIndex >= 6)
-        {
-            pawnMoveIndex = 0;
-            return;
-        }
-
-        pawnMoveIndex++;
-    }
 }
+
 
 
 

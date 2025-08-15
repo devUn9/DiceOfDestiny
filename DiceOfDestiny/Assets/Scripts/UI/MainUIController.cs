@@ -20,7 +20,7 @@ public class MainUIController : MonoBehaviour
     [Header("Piece Select")]
     [SerializeField] GameObject pieceSelectPanel;
 
-    void Start()
+    void OnEnable()
     {
         continueButton.onClick.AddListener(OnContinueClicked);
         newGameButton.onClick.AddListener(OnNewGameClicked);

@@ -7,7 +7,7 @@ public class StageData : ScriptableObject
     [field: SerializeField] public string StageName { get; private set; }
     public int stageNumber = 1;
     [Header("Stage Missions")]
-    public List<MissionSO> missions;
+    [SerializeReference] public List<MissionData> missions;
     public bool isGrayGrass = false;
     public bool isGrayTree = false;
     public bool isGrayPoisonousherb = false;

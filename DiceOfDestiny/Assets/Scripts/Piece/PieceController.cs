@@ -18,10 +18,10 @@ public class PieceController : MonoBehaviour
     [SerializeField] public SpriteRenderer colorRenderer;
     [SerializeField] private SpriteRenderer animationRenderer;
 
-    public bool isMoving = false; // 이동 중인지 여부
+    public bool isMoving { get; private set; } = false; // 이동 중인지 여부
     public bool canControl = true; // 기물 조작 가능 여부
     private bool animPlaying = false; // 애니메이션 재생 중인지 여부
-    public bool isFinishLine = false; // 도착 지점인지 여부
+    public bool isOutStartingLine = false; // 시작 지점에서 벗어났는지 여부
 
     public PieceStatusEffectController statusEffectController;
     public UIFollow uiFollow;
@@ -130,6 +130,14 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
+            // 시작지점으로 다시 돌아가려고 하면
+            if (isOutStartingLine && newPosition.y == 0)
+            {
+                ToastManager.Instance.ShowToast(message: "시작 지점으로 돌아갈 수 없습니다!", transform);
+                RotateHalfBack(moveDirection);
+                return;
+            }
+
             // 이동하는 곳에 장애물이 있으면
             Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
             if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None ||
@@ -234,8 +242,12 @@ public class PieceController : MonoBehaviour
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
 
-                StartCoroutine(CheckStageClearAfterMove(newPosition));
+                // 도착점 체크
+                MissionManager.Instance.CheckStageClearAfterMove(newPosition);
+                // 모든 미션완료 상태 체크
+                MissionManager.Instance.IsAllMissionCompleted();
 
+                // 모든 장애물 기믹 동작
                 ObstacleManager.Instance.UpdateObstacleStep();
             }
             else
@@ -321,7 +333,7 @@ public class PieceController : MonoBehaviour
             animationRenderer.gameObject.SetActive(true);
             animator.enabled = true; // Animator 활성화
             animator.Play(animationName, 0, 0f); // 애니메이션 재생
-            
+
 
 
             // currentPiece일 경우 루프 애니메이션 시작
@@ -585,11 +597,21 @@ public class PieceController : MonoBehaviour
 
         isMoving = false;
 
+
+        CheckOutStartingLine();
+
+
         // 스킬 발동
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.TrySkill(gridPosition, this);
-            //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+            // y값이 0이나 14가 아니면
+            if (PieceManager.Instance.currentPiece.gridPosition.y != 0 && PieceManager.Instance.currentPiece.gridPosition.y != 14)
+            {
+                SkillManager.Instance.TrySkill(gridPosition, this);
+                //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+            }
+
+
         }
         else
         {
@@ -743,7 +765,6 @@ public class PieceController : MonoBehaviour
         colorRenderer.color = BoardManager.Instance.tileColors[(int)piece.faces[2].color];
     }
 
-
     //public Vector2Int GetGridPosition()
     //{
     //    return gridPosition;
@@ -892,4 +913,9 @@ public class PieceController : MonoBehaviour
         Debug.Log($"Piece moved to clear position: {gridPosition}");
     }
 
+    public void CheckOutStartingLine()
+    {
+        if (this.gridPosition.y == 1)
+            isOutStartingLine = true;
+    }
 }

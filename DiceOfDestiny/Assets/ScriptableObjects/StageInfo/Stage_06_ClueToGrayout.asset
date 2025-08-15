@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Stage_06_ClueToGrayout
   m_EditorClassIdentifier: 
   <StageName>k__BackingField: "\uD68C\uC0C9\uD654\uC758 \uB2E8\uC11C"
+  stageNumber: 6
   missions:
-  - {fileID: 11400000, guid: 8b7aabaad09513640bf6ade8d548c0a5, type: 2}
-  - {fileID: 11400000, guid: e6a93ad1884e47e45917f4bf6cfbe37a, type: 2}
+  - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
+  - {fileID: 11400000, guid: 5c02658de12d4ae41939d7f1556638e7, type: 2}
   isGrayGrass: 1
   isGrayTree: 1
   isGrayPoisonousherb: 1
@@ -45,5 +46,3 @@ MonoBehaviour:
   - type: 8
     weight: 1
   obstacleDensity: 0.2
-  stageNumber: 6
-  stageTitle: "\uD68C\uC0C9\uD654\uC758 \uB2E8\uC11C"

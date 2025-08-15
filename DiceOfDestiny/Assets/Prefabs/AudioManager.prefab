@@ -359,3 +359,4 @@ MonoBehaviour:
   sfxClips:
   - {fileID: 8300000, guid: c19dd998362d67f4b9a1d6991eb081c9, type: 3}
   - {fileID: 8300000, guid: 527fa41148384454dbee3e07ab84f45f, type: 3}
+  - {fileID: 8300000, guid: b0483bcd5910ffb4db8279f21e9ade83, type: 3}

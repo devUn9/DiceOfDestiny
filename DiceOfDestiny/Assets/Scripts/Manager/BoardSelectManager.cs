@@ -17,6 +17,9 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     // 장애물 타일 클릭 제한 여부 (true면 장애물 타일 클릭 불가, false면 가능)
     public bool restrictObstacle = true;
 
+    // y값 0, 13 제한 트리거
+    public bool restrictYBoundaries = true;
+
     private Dictionary<Vector2Int, GameObject> activeEffects; // 활성화된 이펙트 저장
     private List<GameObject> activePieceEffects = new List<GameObject>();
     private BoardManager boardManager;
@@ -207,10 +210,10 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     }
 
     // 장애물 타일 클릭 제한 설정
-    public void SetRestrictToEmptyTiles(bool restrict)
-    {
-        restrictObstacle = restrict;
-    }
+    //public void SetRestrictToEmptyTiles(bool restrict)
+    //{
+    //    restrictObstacle = restrict;
+    //}
 
     public void SetClickedTilePosition(Vector2Int position)
     {
