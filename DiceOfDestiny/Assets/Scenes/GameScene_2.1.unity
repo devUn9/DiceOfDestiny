@@ -436,7 +436,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardSizeY: 0
   tilePrefab: {fileID: 2471703998611980718, guid: 23386ab979afcd04f83177db42443585, type: 3}
+  boardPosParent: {fileID: 0}
   boardTransform: {fileID: 667301746}
+  newBoardTransform: {fileID: 0}
   tileColors:
   - {r: 0.8867924, g: 0.21807823, b: 0.20496619, a: 1}
   - {r: 0.19063722, g: 0.7924528, b: 0.19063722, a: 1}
@@ -3728,7 +3730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageIndex: 0
   stageProfiles:
-  - {fileID: 11400000, guid: 60f221dfb72b1b84aa4272684d5f262c, type: 2}
+  - {fileID: 11400000, guid: c2c391696bc63994b898d9be7e4a7456, type: 2}
   - {fileID: 11400000, guid: cfd912d1b69670743b9bd885b9536f75, type: 2}
   - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
   - {fileID: 11400000, guid: 6828c2986df7d6e4aabc87941897539e, type: 2}
