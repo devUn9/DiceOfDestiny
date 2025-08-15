@@ -167,7 +167,7 @@ public class BoardManager : Singletone<BoardManager>
                 tile.TileColor = TileColor.None;
                 tile.Obstacle = ObstacleType.None;
 
-                tile.GetComponent<SpriteRenderer>().color = new Color(114f / 256f, 61f / 256f, 35f / 256f);
+                tile.GetComponent<SpriteRenderer>().color = new Color(241 / 256f, 214f / 256f, 200f / 256f);
 
                 TempBoard[x, y] = tile;
             }
@@ -310,6 +310,8 @@ public class BoardManager : Singletone<BoardManager>
                 yield return new WaitForSeconds(0.01f); // 색상 설정 간 약간의 지연
             }
         }
+
+        GenerateBorder();
     }
     IEnumerator SetObstacleDelayed()
     {
@@ -1072,6 +1074,6 @@ public class BoardManager : Singletone<BoardManager>
             yield return new WaitForSeconds(0.1f); // 0.1초 대기
         }
 
-        StageManager.Instance.ResetCurrentStage();
+        StageManager.Instance.SetNewStage();
     }
 }
