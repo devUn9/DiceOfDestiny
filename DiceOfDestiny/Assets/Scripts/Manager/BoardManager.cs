@@ -91,6 +91,9 @@ public class BoardManager : Singletone<BoardManager>
                 Tile tile = tileObject.GetComponent<Tile>();
                 tile.TileColor = TileColor.None;
                 tile.Obstacle = ObstacleType.None;
+
+                tile.GetComponent<SpriteRenderer>().color = new Color(114f / 256f, 61f / 256f, 35f / 256f);
+
                 TempBoard[x, y] = tile;
             }
         }
@@ -146,37 +149,7 @@ public class BoardManager : Singletone<BoardManager>
         }
 
         // 색칠하는 부분
-        int idx = 0;
-        for (int x = 0; x < boardSize; x++)
-        {
-            for (int y = 1; y < boardSize + 1; y++)
-            {
-                Board[x, y].SetTileColor(tileColors[colorIndices[idx]]);
-                switch (colorIndices[idx])
-                {
-                    case 0: // 빨강
-                        Board[x, y].TileColor = TileColor.Red;
-                        break;
-                    case 1: // 초록
-                        Board[x, y].TileColor = TileColor.Green;
-                        break;
-                    case 2: // 파랑
-                        Board[x, y].TileColor = TileColor.Blue;
-                        break;
-                    case 3: // 노랑
-                        Board[x, y].TileColor = TileColor.Yellow;
-                        break;
-                    case 4: // 보라
-                        Board[x, y].TileColor = TileColor.Purple;
-                        break;
-                    case 5: // 갈색
-                        Board[x, y].TileColor = TileColor.Brown;
-                        break;
-                }
-                idx++;
-            }
-        }
-
+        StartCoroutine(SetColortDelayed());
 
         // 장애물 배치 부분
         obstacleIndices = new List<ObstacleType>();
@@ -208,26 +181,9 @@ public class BoardManager : Singletone<BoardManager>
             (obstacleIndices[i], obstacleIndices[j]) = (obstacleIndices[j], obstacleIndices[i]);
         }
 
-        idx = 0;
-        for (int x = 0; x < boardSize; x++)
-        {
-            for (int y = 1; y < boardSize + 1; y++)
-            {
-                Board[x, y].Obstacle = obstacleIndices[idx];
-                // 장애물 생성
-                if (obstacleIndices[idx] != ObstacleType.None)
-                {
-                    Debug.Log(ObstacleManager.Instance);
-                    GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
-                        new Vector3(boardTransform.position.x + x, boardTransform.position.y + y, 0), Quaternion.identity, boardTransform);
-                    obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(x, y);
-                    ObstacleManager.Instance.SetObstacle(obstacle);
+        // 장애물 생성
 
-                    Board[x, y].isWalkable = obstacle.GetComponent<Obstacle>().isWalkable;
-                }
-                idx++;
-            }
-        }
+        StartCoroutine(SetObstacleDelayed());
 
         // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
         StageManager.Instance.currentStage.missions.ForEach(mission =>
@@ -242,6 +198,66 @@ public class BoardManager : Singletone<BoardManager>
             }
         });
     }
+
+    IEnumerator SetColortDelayed()
+    {
+        int idx = 0;
+        for (int x = 1; x < boardSize + 1; x++)
+        {
+            for (int y = 0; y < boardSize; y++)
+            {
+                Board[y, x].SetTileColor(tileColors[colorIndices[idx]]);
+                switch (colorIndices[idx])
+                {
+                    case 0: // 빨강
+                        Board[y, x].TileColor = TileColor.Red;
+                        break;
+                    case 1: // 초록
+                        Board[y, x].TileColor = TileColor.Green;
+                        break;
+                    case 2: // 파랑
+                        Board[y, x].TileColor = TileColor.Blue;
+                        break;
+                    case 3: // 노랑
+                        Board[y, x].TileColor = TileColor.Yellow;
+                        break;
+                    case 4: // 보라
+                        Board[y, x].TileColor = TileColor.Purple;
+                        break;
+                    case 5: // 갈색
+                        Board[y, x].TileColor = TileColor.Brown;
+                        break;
+                }
+                idx++;
+                yield return new WaitForSeconds(0.01f); // 색상 설정 간 약간의 지연
+            }
+        }
+    }
+    IEnumerator SetObstacleDelayed()
+    {
+        int idx = 0;
+        for (int x = 1; x < boardSize + 1; x++)
+        {
+            for (int y = 0; y < boardSize + 0; y++)
+            {
+                Board[y, x].Obstacle = obstacleIndices[idx];
+                // 장애물 생성
+                if (obstacleIndices[idx] != ObstacleType.None)
+                {
+                    Debug.Log(ObstacleManager.Instance);
+                    GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
+                        new Vector3(boardTransform.position.x + y, boardTransform.position.y + x, 0), Quaternion.identity, boardTransform);
+                    obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(y, x);
+                    ObstacleManager.Instance.SetObstacle(obstacle);
+
+                    Board[y, x].isWalkable = obstacle.GetComponent<Obstacle>().isWalkable;
+                }
+                idx++;
+                yield return new WaitForSeconds(0.01f); // 장애물 설정 간 약간의 지연
+            }
+        }
+    }
+
 
     public Obstacle ReturnObstacleByPosition(Vector2Int position)
     {
@@ -989,7 +1005,9 @@ public class BoardManager : Singletone<BoardManager>
     {
         for (int x = 0; x < boardSize; x++)
         {
+            Board[x, 0].GetComponent<SpriteRenderer>().color = Color.white; // 첫 줄의 색상을 흰색으로 설정
             Board[x, 0].gameObject.SetActive(true);
+            Board[boardSize - 1 - x, boardSizeY - 1].GetComponent<SpriteRenderer>().color = Color.white; // 첫 줄의 색상을 흰색으로 설정
             Board[boardSize - 1 - x, boardSizeY - 1].gameObject.SetActive(true);
             yield return new WaitForSeconds(0.1f); // 0.1초 대기
         }

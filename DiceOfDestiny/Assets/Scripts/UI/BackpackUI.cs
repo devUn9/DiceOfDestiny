@@ -144,9 +144,7 @@ public class BackpackUI : MonoBehaviour
         
         // 슬롯에 있는 피스 제거
         Debug.Log(currentIndex + "번 피스 제거");
-        PieceManager.Instance.pieceDatas[currentIndex] = null;
-
-        
+        PieceManager.Instance.pieceDatas[currentIndex] = null;        
     }
 
 

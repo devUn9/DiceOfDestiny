@@ -90,7 +90,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
             
             float t = timeElapsed / dropTime;
 
-            if (t > 0.3f)
+            if (t > 0.39f)
             {
                 // 중력 가속도 적용
                 gameObject.transform.SetParent(this.transform);
@@ -99,7 +99,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
             }
             else
             {
-                gameObject.transform.localPosition = startPosition - new Vector3(0, 2f, 0);
+                gameObject.transform.localPosition = startPosition - new Vector3(0, t * 2f, 0);
             }
             timeElapsed += Time.deltaTime;
             yield return null;

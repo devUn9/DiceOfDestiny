@@ -109,9 +109,20 @@ public sealed class StageManager : Singletone<StageManager>
 
         foreach (var piece in toRemove)
         {
+            for(int i = 0; i < 3; i++)
+            {
+                if(PieceManager.Instance.pieceDatas[i] == null)
+                {
+                    PieceManager.Instance.pieceDatas[i] = piece.GetPiece();                }
+            }               
             Destroy(piece.gameObject);
             PieceManager.Instance.Pieces.Remove(piece);
         }
+
+        EventManager.Instance.TriggerEvent("Refresh");
+
+
+
 
         clearPiece?.MoveClearPiece();
 
