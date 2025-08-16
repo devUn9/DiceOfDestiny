@@ -3,6 +3,8 @@ using DG.Tweening;
 
 public class ZombieBehaviour : Obstacle, IObstacleBehaviour
 {
+    private ObstacleType lastObstacleType = ObstacleType.None;
+
     public void DoLogic()
     {
         if (nextStep == NextStep.None)
@@ -31,7 +33,7 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
                 || nextTile.Obstacle == ObstacleType.Chest || nextTile.Obstacle == ObstacleType.Puddle)
             {
                 // 이동
-                BoardManager.Instance.MoveObstacle(this, nextPosition);
+                BoardManager.Instance.MoveObstacle(this, nextPosition, ref lastObstacleType);
                 AnimateObstacleMove(nextStep);
 
                 RuleEvents.TriggerRule("Zombie_Move");

@@ -30,12 +30,10 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
             return;
         }
 
-        Debug.Log("보스 폰 번호 : " + ObstacleManager.Instance.pawnMoveIndex);
         if (ObstacleManager.Instance.GetPawnListIndex(gameObject) != ObstacleManager.Instance.pawnMoveIndex)
         {
             return;
         }
-
 
         // 이동 관련 변수
         Vector2Int direction = Vector2Int.down;
@@ -120,7 +118,6 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
             AnimateObstacleMove(dir);
 
-            Debug.Log("Pawn Ypos : " + obstaclePosition.y);
             if (obstaclePosition.y <= 1)
             {
                 PieceManager.Instance.ResetPieces();

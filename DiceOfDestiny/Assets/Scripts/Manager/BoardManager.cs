@@ -384,6 +384,15 @@ public class BoardManager : Singletone<BoardManager>
         obstacle.obstaclePosition = nextPos; // 장애물의 위치 업데이트
     }
 
+    public void MoveObstacle(Obstacle obstacle, Vector2Int nextPos, ref ObstacleType lastObstacleType)
+    {
+        Vector2Int currentPos = obstacle.obstaclePosition;
+        GetTile(currentPos).Obstacle = lastObstacleType; // 현재 타일의 장애물 제거
+        lastObstacleType = GetTile(nextPos).Obstacle; // 마지막 장애물 타입 업데이트
+        GetTile(nextPos).Obstacle = obstacle.obstacleType; // 다음 타일에 장애물 설정
+        obstacle.obstaclePosition = nextPos; // 장애물의 위치 업데이트
+    }
+
     // 주변 8칸 중 윗면과 같은 색이 몇개인지 카운팅하는 함수
     public int CountMatchingColors(Vector2Int position, TileColor targetColor, ref bool isDdongBlind)
     {
