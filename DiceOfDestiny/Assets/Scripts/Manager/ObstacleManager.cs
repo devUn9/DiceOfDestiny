@@ -18,6 +18,10 @@ public class ObstacleManager : Singletone<ObstacleManager>
 
     [SerializeField] private GameObject pawnPrefab;
 
+    [SerializeField] private RuntimeAnimatorController grayGarassAnimator;
+    [SerializeField] private RuntimeAnimatorController grayTreeAnimator;
+    [SerializeField] private RuntimeAnimatorController grayPoisonousHerbAnimator;
+
     public Dictionary<ObstacleType, GameObject> obstaclePrefabs;
 
     public List<GameObject> currentObstacles;
@@ -76,7 +80,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
             // 폰 난수 얻기
             InOrderToMovePawn();
         }
-        
+
         for (int i = currentObstacles.Count - 1; i >= 0; i--)
         {
             var behaviour = currentObstacles[i].GetComponent<IObstacleBehaviour>();
@@ -99,7 +103,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
 
         while (timeElapsed < dropTime)
         {
-            
+
             float t = timeElapsed / dropTime;
 
             if (t > 0.39f)
@@ -180,6 +184,19 @@ public class ObstacleManager : Singletone<ObstacleManager>
     {
         int pawnRandomIndex = Random.Range(0, pawnList.Count);
         pawnMoveIndex = pawnRandomIndex;
+    }
+
+    public RuntimeAnimatorController GetGrayGrassAnimator()
+    {
+        return grayGarassAnimator;
+    }
+    public RuntimeAnimatorController GetGrayTreeAnimator()
+    {
+        return grayTreeAnimator;
+    }
+    public RuntimeAnimatorController GetGrayPoisonousHerbAnimator()
+    {
+        return grayPoisonousHerbAnimator;
     }
 }
     

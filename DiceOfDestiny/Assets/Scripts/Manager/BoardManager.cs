@@ -106,7 +106,7 @@ public class BoardManager : Singletone<BoardManager>
     public void SetBoarder()
     {
         int stageNum = StageManager.Instance.currentStage.stageNumber;
-        
+
         if (stageNum == 6)
             borderRenderer.sprite = borderSprites[1];
 
@@ -118,7 +118,7 @@ public class BoardManager : Singletone<BoardManager>
     {
         DestroyBackGround(); // 기존 배경 제거
         SetBackground();
-        backGroundRenderer.gameObject.SetActive(true);  
+        backGroundRenderer.gameObject.SetActive(true);
     }
 
     public void DestroyBackGround()
@@ -128,7 +128,7 @@ public class BoardManager : Singletone<BoardManager>
     }
     public void SetBackground()
     {
-        
+
         int stageNum = StageManager.Instance.currentStage.stageNumber;
         //backGroundRenderer.sprite = backGroundSprites[stageNum - 1];
         // 1~2
@@ -235,17 +235,30 @@ public class BoardManager : Singletone<BoardManager>
             obstacleIndices.Add(ObstacleType.None);
         }
 
+        // 가중치에 의한 장애물 추가를 위한 반복문
         List<ObstacleType> availableObstacleWeight = new List<ObstacleType>();
         for (int i = 0; i < profile.availableObstacle.Count; i++) // 장애물 타입을 인덱스에 추가
         {
-            for (int j = 0; j < profile.availableObstacle[i].weight * 10; j++)
+            for (int j = 0; j < profile.availableObstacle[i].weight * 10; j++) // 가중치에 10을 곱하여 리스트에 저장
             {
                 availableObstacleWeight.Add(profile.availableObstacle[i].type);
             }
         }
 
+        // 정확한 개수에 의한 장애물 추가를 위한 반복문
+        for (int i = 0; i < profile.exactObstacle.Count; i++) // 정확한 장애물 개수를 따르는 장애물의 개수
+        {
+            for (int j = 0; j < profile.exactObstacle[i].weight; j++) // 장애물 정확한 개수를 리스트에 저장
+            {
+                obstacleIndices.Add(profile.exactObstacle[i].type);
+                obstacleCount--; // 장애물 개수 감소
+            }
+        }
+
+        // 장애물 개수 만큼 반복
         for (int i = 0; i < obstacleCount; i++) // 장애물이 있는 타일
         {
+            // 가중치에 따른 저장한 장애물 리스트들 중 랜덤으로,,, 실제 장애물 리스트에 저장
             int randIndex = Random.Range(0, availableObstacleWeight.Count);
             obstacleIndices.Add(availableObstacleWeight[randIndex]);
         }
@@ -259,22 +272,6 @@ public class BoardManager : Singletone<BoardManager>
         // 장애물 생성
 
         StartCoroutine(SetObstacleDelayed());
-
-        // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
-        StageManager.Instance.currentStage.missions.ForEach(mission =>
-        {
-            // 5스테이지
-            if (mission.missionType is MissionType.FindGrayGrass)
-            {
-                GrayOutTiles();
-            }
-            // 6스테이지
-            else if (mission.missionType is MissionType.KillPawn)
-            {
-                GrayOutTiles();
-                SetPawn();
-            }
-        });
     }
 
     IEnumerator SetColortDelayed()
@@ -324,7 +321,7 @@ public class BoardManager : Singletone<BoardManager>
                 // 장애물 생성
                 if (obstacleIndices[idx] != ObstacleType.None)
                 {
-                    Debug.Log(ObstacleManager.Instance);
+                    //Debug.Log(ObstacleManager.Instance);
                     GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
                         new Vector3(boardTransform.position.x + y, boardTransform.position.y + x, 0), Quaternion.identity, boardTransform);
                     obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(y, x);
@@ -336,6 +333,8 @@ public class BoardManager : Singletone<BoardManager>
                 yield return new WaitForSeconds(0.01f); // 장애물 설정 간 약간의 지연
             }
         }
+
+        AddSpecialStageSetting();
     }
 
 
@@ -841,27 +840,53 @@ public class BoardManager : Singletone<BoardManager>
         return false;
     }
 
-    public void GrayOutTiles()
+    public void ChangeGrayTiles(int count = 5)
     {
-        for (int x = 0; x < boardSize; x++)
+        for (int i = 0; i < count; i++)
         {
-            for (int y = 1; y < boardSize + 1; y++)
+            int x = Random.Range(0, boardSize);
+            int y = Random.Range(1, boardSize + 1);
+
+            Board[x, y].SetTileColor(Color.gray);
+            Board[x, y].TileColor = TileColor.Gray;
+        }
+    }
+
+    public void ChangeGrayObstacles(int count = 3)
+    {
+        int grayGrassCount = count;
+        int grayTreeCount = count;
+        int grayPoisonousherbCount = count;
+
+        foreach (GameObject obstacle in ObstacleManager.Instance.currentObstacles)
+        {
+            var obstacleComp = obstacle.GetComponent<Obstacle>();
+
+            if (StageManager.Instance.currentStage.isGrayGrass &&
+                obstacleComp.obstacleType == ObstacleType.Grass &&
+                grayGrassCount > 0)
             {
-                if (Board[x, y].Obstacle == ObstacleType.Grass && StageManager.Instance.currentStage.isGrayGrass)
-                {
-                    Board[x, y].SetTileColor(Color.gray); // 회색으로 설정
-                    Board[x, y].TileColor = TileColor.Gray; // TileColor도 회색으로 설정
-                }
-                else if (Board[x, y].Obstacle == ObstacleType.Tree && StageManager.Instance.currentStage.isGrayTree)
-                {
-                    Board[x, y].SetTileColor(Color.gray); // 회색으로 설정
-                    Board[x, y].TileColor = TileColor.Gray; // TileColor도 회색으로 설정
-                }
-                else if (Board[x, y].Obstacle == ObstacleType.PoisonousHerb && StageManager.Instance.currentStage.isGrayPoisonousherb)
-                {
-                    Board[x, y].SetTileColor(Color.gray); // 회색으로 설정
-                    Board[x, y].TileColor = TileColor.Gray; // TileColor도 회색으로 설정
-                }
+                Debug.Log("풀 회색화");
+                obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayGrassAnimator();
+                grayGrassCount--;
+            }
+
+            if (StageManager.Instance.currentStage.isGrayTree &&
+                obstacleComp.obstacleType == ObstacleType.Tree &&
+                grayTreeCount > 0)
+            {
+                Debug.Log("나무 회색화");
+                obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayTreeAnimator();
+                grayTreeCount--;
+            }
+
+            if (StageManager.Instance.currentStage.isGrayPoisonousherb &&
+                obstacleComp.obstacleType == ObstacleType.PoisonousHerb &&
+                grayPoisonousherbCount > 0)
+            {
+                Debug.Log("독초 회색화");
+                obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayPoisonousHerbAnimator();
+                grayPoisonousherbCount--;
             }
         }
     }
@@ -967,7 +992,7 @@ public class BoardManager : Singletone<BoardManager>
     public void ShiftBoard()
     {
         StartCoroutine(DelectWhiteLineCoroutine());
-    }    
+    }
 
     IEnumerator DelectWhiteLineCoroutine()
     {
@@ -1023,7 +1048,7 @@ public class BoardManager : Singletone<BoardManager>
             boardTransform.localScale = new Vector3(1f, contractScale, 1f);
 
             float contractHalf = 0.5f * contractScale * boardHeight;
-            float expandHalf =  0.5f * expandScale * boardHeight;
+            float expandHalf = 0.5f * expandScale * boardHeight;
 
             boardTransform.localPosition = contractStartPos - moveDir * contractHalf;
             newBoardTransform.localPosition = expandStartPos - moveDir * expandHalf;
@@ -1058,7 +1083,7 @@ public class BoardManager : Singletone<BoardManager>
         Board = TempBoard;
         TempBoard = new Tile[boardSize, boardSizeY]; // 새 보드 초기화
 
-        for(int i = 0; i < boardSize; i++)
+        for (int i = 0; i < boardSize; i++)
         {
             for (int j = 0; j < boardSizeY; j++)
             {
@@ -1084,5 +1109,27 @@ public class BoardManager : Singletone<BoardManager>
         }
 
         StageManager.Instance.SetNewStage();
+    }
+
+    private void AddSpecialStageSetting()
+    {
+        // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
+        StageManager.Instance.currentStage.missions.ForEach(mission =>
+        {
+            // 5스테이지
+            if (mission.missionType is MissionType.FindGrayGrass)
+            {
+                ChangeGrayTiles();
+                ChangeGrayObstacles();
+            }
+            // 6스테이지
+            else if (mission.missionType is MissionType.KillPawn)
+            {
+                ChangeGrayTiles();
+                ChangeGrayObstacles();
+
+                SetPawn();
+            }
+        });
     }
 }

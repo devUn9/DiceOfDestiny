@@ -34,10 +34,11 @@ MonoBehaviour:
     weight: 15
   - type: 1
     weight: 5
+  exactObstacle:
   - type: 2
-    weight: 5
+    weight: 2
   - type: 4
-    weight: 19
+    weight: 3
   - type: 0
     weight: 2
   - type: 8

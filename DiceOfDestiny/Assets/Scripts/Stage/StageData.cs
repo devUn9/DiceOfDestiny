@@ -25,7 +25,8 @@ public class StageData : ScriptableObject
 
     [Header("Obstacle Settings")]
     public List<ObstacleWeight> availableObstacle;
-    [Range(0,1)] public float obstacleDensity = 0.2f;
+    public List<ObstacleWeight> exactObstacle;
+    [Range(0, 1)] public float obstacleDensity = 0.2f;
 }
 
 [System.Serializable]
