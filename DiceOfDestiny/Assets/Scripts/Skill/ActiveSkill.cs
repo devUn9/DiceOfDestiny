@@ -36,10 +36,12 @@ public class ActiveSkill : MonoBehaviour
         }
 
         Vector2Int gridPos = pieceController.gridPosition;
-        gridPos += moveDirection;
-        pieceController.gridPosition = gridPos;
+        //gridPos += moveDirection;
+        Vector2Int newPos = gridPos + moveDirection;
 
-        if (gridPos.y == BoardManager.Instance.boardSizeY - 1)
+        pieceController.gridPosition = newPos;
+
+        if (newPos.y == BoardManager.Instance.boardSizeY - 1)
         {
             if (!MissionManager.Instance.CanGoFinishLine())
             {
@@ -47,6 +49,10 @@ public class ActiveSkill : MonoBehaviour
                 yield break;
             }
         }
+
+        BoardManager.Instance.Board[gridPos.x, gridPos.y].TileColor = pieceController.lastTileColor;
+        pieceController.lastTileColor = BoardManager.Instance.Board[newPos.x, newPos.y].TileColor;
+        BoardManager.Instance.Board[newPos.x, newPos.y].TileColor = pieceController.GetPiece().faces[2].color;
 
         Vector3 moveVec = new Vector3(moveDirection.x, moveDirection.y, 0);
         float moveDuration = 0.4f;
@@ -100,22 +106,22 @@ public class ActiveSkill : MonoBehaviour
 
         
 
-        bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
+        bool hasObstacle = BoardManager.Instance.IsEmptyTile(newPos);
 
         if (!hasObstacle)
         {
-            if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.Pawn)
+            if (BoardManager.Instance.Board[newPos.x, newPos.y].Obstacle == ObstacleType.Pawn)
             {
-                Obstacle pawn = BoardManager.Instance.ReturnObstacleByPosition(gridPos);
+                Obstacle pawn = BoardManager.Instance.ReturnObstacleByPosition(newPos);
                 ObstacleManager.Instance.RemovePawnToList(pawn.gameObject);
             }
 
-            BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
+            BoardManager.Instance.RemoveObstacleAtPosition(newPos);
         }
 
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.TrySkill(gridPos, pieceController);
+            SkillManager.Instance.TrySkill(newPos, pieceController);
         }
         else
         {
@@ -127,11 +133,11 @@ public class ActiveSkill : MonoBehaviour
             Destroy(skillEffect, 0.5f);
         }
 
-        BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
+        BoardSelectManager.Instance.PieceHighlightTiles(newPos);
         PieceManager.Instance.SetCurrentPieceControl(true);
 
         // 도착점 체크
-        MissionManager.Instance.CheckStageClearAfterMove(gridPos);
+        MissionManager.Instance.CheckStageClearAfterMove(newPos);
         // 모든 미션완료 상태 체크
         MissionManager.Instance.IsAllMissionCompleted(pieceController);
     }
@@ -141,7 +147,7 @@ public class ActiveSkill : MonoBehaviour
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
         
-       yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.HighlightTiles();
         yield return BoardSelectManager.Instance.WaitForTileClick();
@@ -182,6 +188,7 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator Paint(PieceController pieceController)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.AllHighlightTiles();
@@ -239,6 +246,8 @@ public class ActiveSkill : MonoBehaviour
 
     public IEnumerator ConvertToFanatic(PieceController piece)
     {
+        PieceManager.Instance.SetCurrentPieceControl(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         List<Vector2Int> surroundList = BoardManager.Instance.GetTilePositions(DirectionType.Eight, piece.gridPosition);
@@ -287,6 +296,8 @@ public class ActiveSkill : MonoBehaviour
 
             //ToastManager.Instance.ShowToast("성공", piece.transform);
         }
+
+        PieceManager.Instance.SetCurrentPieceControl(true);
     }
 
     // 사제 스킬
@@ -316,12 +327,14 @@ public class ActiveSkill : MonoBehaviour
         }
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+
     }
 
     // 도적 스킬 : 이동 UI 띄우기
     public IEnumerator FastMove(PieceController piece)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
         moveSkillUI.Initialize(piece); // 추가
         yield return moveSkillUI.WaitForArrowClick();
@@ -373,6 +386,11 @@ public class ActiveSkill : MonoBehaviour
         // 보드 
         Vector2Int PiecePosition = PieceManager.Instance.currentPiece.gridPosition;
         Vector2Int lastPosition = PieceManager.Instance.currentPiece.gridPosition - moveDirection;
+
+        // 기존 SetPiece 코드 위에 타일 색상 처리 추가
+        BoardManager.Instance.Board[lastPosition.x, lastPosition.y].TileColor = pieceController.lastTileColor;
+        pieceController.lastTileColor = BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].TileColor;
+        BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].TileColor = pieceController.GetPiece().faces[2].color;
 
         BoardManager.Instance.Board[lastPosition.x, lastPosition.y].SetPiece(null);
         BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
