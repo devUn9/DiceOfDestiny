@@ -18,10 +18,7 @@ public class MouseClickSound : MonoBehaviour
         {
             lastClickTime = Time.unscaledTime;
 
-
             AudioManager.Instance.PlaySFX("Click_POP");
-            Debug.Log("클릭사운드 났어");
-
         }
     }
 }

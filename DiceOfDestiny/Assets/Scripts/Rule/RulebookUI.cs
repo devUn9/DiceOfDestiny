@@ -3,18 +3,58 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class UIRulebook : MonoBehaviour
+public class RulebookUI : MonoBehaviour
 {
+    [Header("Button")]
+    [SerializeField] private Button ruleBookOpenCloseButton;
+    [SerializeField] private Image ruleBookImage;
+    [SerializeField] private Sprite defaultSprite;
+    [SerializeField] private Sprite clickedSprite;
+    [SerializeField] private GameObject scrollView;
+
     [Header("Rulebook UI")]
     [SerializeField] private GameObject ClassRule;
     [SerializeField] private GameObject ObstacleRule;
 
     [SerializeField] private GameObject RuleTextPrefab;
 
+    private bool isOpen = false;
+
     private void Start()
     {
+        // 초기 상태 동기화
+        SetOpen(true);
+
+        // 버튼 리스너 연결
+        if (ruleBookOpenCloseButton != null)
+            ruleBookOpenCloseButton.onClick.AddListener(ToggleRuleBook);
+
         // Refresh 함수 구독
         EventManager.Instance.AddListener<RuleData>("ShowRule", ShowRule);
+    }
+    private void ToggleRuleBook()
+    {
+        SetOpen(!isOpen);
+    }
+
+    private void SetOpen(bool open)
+    {
+        isOpen = open;
+        if (scrollView != null)
+            scrollView.SetActive(isOpen);
+        UpdateVisual();
+    }
+
+    private void UpdateVisual()
+    {
+        if (ruleBookImage != null)
+            ruleBookImage.sprite = isOpen ? defaultSprite : clickedSprite;
+    }
+
+    // 기존 onClick 메서드는 제거(혹은 아래처럼 안전하게 변경)
+    public void onClickRuleBookOpenCloseButton()
+    {
+        ToggleRuleBook();
     }
 
     public void ShowRule(RuleData rule)
