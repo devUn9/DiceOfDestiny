@@ -3755,7 +3755,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageIndex: 0
   stageProfiles:
-  - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
+  - {fileID: 11400000, guid: c2c391696bc63994b898d9be7e4a7456, type: 2}
   - {fileID: 11400000, guid: cfd912d1b69670743b9bd885b9536f75, type: 2}
   - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
   - {fileID: 11400000, guid: 6828c2986df7d6e4aabc87941897539e, type: 2}
