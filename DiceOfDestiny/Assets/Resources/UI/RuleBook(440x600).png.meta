@@ -158,10 +158,10 @@ TextureImporter:
       name: RuleBook(440x600)_0
       rect:
         serializedVersion: 2
-        x: 25
-        y: 5
-        width: 382
-        height: 582
+        x: 0
+        y: 0
+        width: 440
+        height: 600
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -180,10 +180,10 @@ TextureImporter:
       name: RuleBook(440x600)_1
       rect:
         serializedVersion: 2
-        x: 465
-        y: 453
-        width: 382
-        height: 134
+        x: 440
+        y: 0
+        width: 440
+        height: 600
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,7 +202,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f1b6a120f6bdc9e4ca887ffc43694144
     internalID: 0
     vertices: []
     indices: 

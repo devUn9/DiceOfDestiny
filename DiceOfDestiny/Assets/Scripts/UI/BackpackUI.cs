@@ -41,7 +41,7 @@ public class BackpackUI : MonoBehaviour
     private readonly int[] rightRotateTransition = new int[] { 0, 4, 2, 5, 3, 1 }; // 오른쪽으로 회전
 
     private bool isMove = false;
-    private bool isChoice = false;
+    //private bool isChoice = false;
 
     private void Start()
     {
