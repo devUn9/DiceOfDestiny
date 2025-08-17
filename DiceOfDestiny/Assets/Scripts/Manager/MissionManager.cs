@@ -7,16 +7,37 @@ public class MissionManager : Singletone<MissionManager>
     [Header("FinishLine Mission")]
     public bool isFinishLine { get; private set; } = false; // 도착 지점인지 여부
 
+    [Header("Stage 3 Mission")]
+    public int killEnemyCount { get; private set; } = 0;
+    public bool isAllKillEnemy { get; private set; } = false;
+
     [Header("Stage 5 Mission")]
-    [SerializeField] private int findGrayGrassCount = 0;
+    public int findGrayGrassCount { get; private set; } = 0;
     public bool isFindGrayGrass { get; private set; } = false;
 
     [Header("Stage 6 Mission")]
-    [SerializeField] private int alivePawnCount = 0;
+    public int alivePawnCount { get; private set; } = 0;
     public bool isKillTwoPawn { get; private set; } = false;
 
-    public void IsAllMissionCompleted()
+    private void Start()
     {
+        killEnemyCount = 0;
+        findGrayGrassCount = 0;
+        alivePawnCount = 0;
+
+        isFinishLine = false;
+        isAllKillEnemy = false;
+        isFindGrayGrass = false;
+        isKillTwoPawn = false;
+    }
+
+    public IEnumerator IsAllMissionCompleted()
+    {
+        while (PieceManager.Instance.currentPiece.isMoving)
+            yield return null;
+
+        UIManager.Instance.UpdateMissionUI();
+
         if (StageManager.Instance.currentStage.missions.TrueForAll(m => m.IsCompleted()))
         {
             Debug.Log("복합 미션 완료!");
@@ -57,22 +78,30 @@ public class MissionManager : Singletone<MissionManager>
     }
 
     // 적을 모두 처치했는지 확인
-    public bool HasMovingEnemyObstacles()
+    // public bool HasMovingEnemyObstacles()
+    // {
+    //     int count = 0;
+
+    //     for (int x = 0; x < BoardManager.Instance.boardSize; x++)
+    //     {
+    //         for (int y = 1; y < BoardManager.Instance.boardSize + 1; y++)
+    //         {
+    //             if (BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Slime || BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Zombie)
+    //             {
+    //                 ++count;
+    //             }
+    //         }
+    //     }
+
+    //     return count <= 0;
+    // }
+
+    public void KillEnemyCount()
     {
-        int count = 0;
+        killEnemyCount++;
 
-        for (int x = 0; x < BoardManager.Instance.boardSize; x++)
-        {
-            for (int y = 1; y < BoardManager.Instance.boardSize + 1; y++)
-            {
-                if (BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Slime || BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Zombie)
-                {
-                    ++count;
-                }
-            }
-        }
-
-        return count <= 0;
+        if (killEnemyCount >= 10)
+            isAllKillEnemy = true;
     }
 
     // 회색 풀 밟기 미션에 대해 카운팅

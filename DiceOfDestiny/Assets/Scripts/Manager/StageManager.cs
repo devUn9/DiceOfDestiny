@@ -22,6 +22,8 @@ public sealed class StageManager : Singletone<StageManager>
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
+            UIManager.Instance.UpdateMissionUI();
+
             StageClear();
         }
     }

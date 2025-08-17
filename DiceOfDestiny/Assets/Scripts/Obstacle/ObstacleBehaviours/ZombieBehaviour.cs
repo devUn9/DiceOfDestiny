@@ -165,8 +165,6 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
 
     private void AnimateZombieNyamNyam(NextStep nextStep)
     {
-        Vector2Int direction = GetDirection(nextStep);
-
         Vector3 startPos = transform.position;
         Quaternion startRot = transform.rotation;
 
@@ -204,5 +202,18 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
         // 원래 회전, 위치 복귀
         seq.Append(transform.DORotateQuaternion(startRot, 0.2f).SetEase(Ease.InOutSine));
         seq.Join(transform.DOMove(startPos, 0.2f).SetEase(Ease.InOutSine));
+    }
+
+    private void OnDestroy()
+    {
+        // 만약 미션중에 몬스터 처치 미션이 있다면
+        StageManager.Instance.currentStage.missions.ForEach(mission =>
+        {
+            if (mission.missionType is MissionType.KillAllMonsters)
+            {
+                Debug.Log("좀비 처치");
+                MissionManager.Instance.KillEnemyCount();
+            }
+        });
     }
 }
