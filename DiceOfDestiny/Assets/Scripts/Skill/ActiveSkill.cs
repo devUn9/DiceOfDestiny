@@ -35,6 +35,19 @@ public class ActiveSkill : MonoBehaviour
             yield break;
         }
 
+        Vector2Int gridPos = pieceController.gridPosition;
+        gridPos += moveDirection;
+        pieceController.gridPosition = gridPos;
+
+        if (gridPos.y == BoardManager.Instance.boardSizeY - 1)
+        {
+            if (!MissionManager.Instance.CanGoFinishLine())
+            {
+                ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform);
+                yield break;
+            }
+        }
+
         Vector3 moveVec = new Vector3(moveDirection.x, moveDirection.y, 0);
         float moveDuration = 0.4f;
         float time = 0f;
@@ -68,7 +81,9 @@ public class ActiveSkill : MonoBehaviour
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 60f);
             }
-        }
+
+            SoundManager.Instance.Play("Knight_Skill");
+        }   
         else
         {
             Debug.LogWarning("Skill effect prefab is not assigned!");
@@ -84,9 +99,8 @@ public class ActiveSkill : MonoBehaviour
         }
 
         pieceController.transform.position = endPos;
-        Vector2Int gridPos = pieceController.gridPosition;
-        gridPos += moveDirection;
-        pieceController.gridPosition = gridPos;
+
+        
 
         bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
 
@@ -320,6 +334,20 @@ public class ActiveSkill : MonoBehaviour
             yield break;
         }
 
+        Vector2Int gridPos = pieceController.gridPosition;
+        gridPos += moveDirection;
+        pieceController.gridPosition = gridPos;
+
+        if (gridPos.y == BoardManager.Instance.boardSizeY - 1)
+        {
+            if (!MissionManager.Instance.CanGoFinishLine())
+            {
+                ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform);
+                yield break;
+            }
+        }
+
+        // 스프라이트 이동
         Vector3 moveVec = new Vector3(moveDirection.x, moveDirection.y, 0);
         float moveDuration = 0.4f;
         float time = 0f;
@@ -337,14 +365,13 @@ public class ActiveSkill : MonoBehaviour
         }
 
         pieceController.transform.position = endPos;
-        Vector2Int gridPos = pieceController.gridPosition;
-        gridPos += moveDirection;
-        pieceController.gridPosition = gridPos;
+        
 
+        // 보드 
         Vector2Int PiecePosition = PieceManager.Instance.currentPiece.gridPosition;
         Vector2Int lastPosition = PieceManager.Instance.currentPiece.gridPosition - moveDirection;
+
         BoardManager.Instance.Board[lastPosition.x, lastPosition.y].SetPiece(null);
-        //Vector2Int newPosition2 = PieceManager.Instance.currentPiece.gridPosition + moveDirection;
         BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
 
 
@@ -364,6 +391,10 @@ public class ActiveSkill : MonoBehaviour
             Debug.LogError("SkillManager.Instance is null!");
         }
 
+        // 도착점 체크
+        MissionManager.Instance.CheckStageClearAfterMove(gridPos);
+        // 모든 미션완료 상태 체크
+        MissionManager.Instance.IsAllMissionCompleted();
 
         BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
 
@@ -438,6 +469,8 @@ public class ActiveSkill : MonoBehaviour
         // 기물 선택 UI 종료
         pieceSelectUI.ClearButtons();
 
+       
+        
         // 하이라이트 타일 제거 및 현재 기물 위치 하이라이트
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
         PieceManager.Instance.currentPiece = pieceController;

@@ -17,6 +17,7 @@ public class ToastManager : Singletone<ToastManager>
     [SerializeField] private float pixelYOffset = 20f;
 
     private readonly List<RectTransform> activeToasts = new List<RectTransform>();
+    private readonly List<GameObject> toastInstances = new List<GameObject>(); // 토스트 인스턴스 추적
 
     private void Awake()
     {
@@ -55,6 +56,7 @@ public class ToastManager : Singletone<ToastManager>
         toastInstance.SetActive(true);
 
         activeToasts.Add(toastRect);
+        toastInstances.Add(toastInstance);
         int orderIndex = activeToasts.Count - 1;
 
         float elapsed = 0f;
@@ -84,6 +86,23 @@ public class ToastManager : Singletone<ToastManager>
             yield return null;               // 다음 프레임
         }
         activeToasts.Remove(toastRect);
+        toastInstances.Remove(toastInstance);
+
         Destroy(toastInstance);
+    }
+
+    public void ClearAllToasts()
+    {
+
+        // 모든 토스트 인스턴스 파괴
+        foreach (var toast in toastInstances)
+        {
+            if (toast != null)
+                Destroy(toast);
+        }
+
+        // 리스트 초기화
+        activeToasts.Clear();
+        toastInstances.Clear();
     }
 }

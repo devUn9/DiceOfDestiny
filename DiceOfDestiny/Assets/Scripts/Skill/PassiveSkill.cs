@@ -48,6 +48,7 @@ public class PassiveSkill : MonoBehaviour
             };
 
             ToastManager.Instance.ShowToast("기사 패시브 발동! 주변 4방향을 공격합니다.", pieceController.transform);
+            SoundManager.Instance.Play("Knight_Attack");
 
             foreach (var (dir, rotationZ) in directions)
             {
@@ -200,7 +201,7 @@ public class PassiveSkill : MonoBehaviour
         for (int i = 0; i < diagonalList.Count; i++)
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(diagonalList[i]);
-            if (obstacle != null && obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Pawn)
+            if (obstacle != null && (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Pawn))
             {
                 hasTarget = true;
                 Debug.Log($"광신도가 공격 대상 찾음: ({diagonalList[i].x}, {diagonalList[i].y})");

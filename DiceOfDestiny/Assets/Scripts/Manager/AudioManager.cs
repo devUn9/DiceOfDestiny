@@ -22,11 +22,6 @@ public class AudioManager : Singletone<AudioManager>
     private Dictionary<string, AudioClip> bgmDict;
     private Dictionary<string, AudioClip> sfxDict;
 
-    [Header("Click Sound Settings")]
-    private float lastClickTime = 0f;
-    private float clickCooldown = 0.05f; // 50ms
-    public static bool IsClickSoundEnabled = true;
-
     protected override void Awake()
     {
         base.Awake();
@@ -40,21 +35,6 @@ public class AudioManager : Singletone<AudioManager>
         sfxDict = sfxClips.ToDictionary(c => c.name, c => c);
 
         ApplySavedAudioSettings();
-    }
-
-    void Update()
-    {
-        if (!IsClickSoundEnabled) return;
-
-        if (Input.GetMouseButtonDown(0) && Time.time - lastClickTime > clickCooldown)
-        {
-            lastClickTime = Time.time;
-
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                AudioManager.Instance?.PlaySFX("Click");
-            }
-        }
     }
 
     public void SetVolume(string exposedParam, float linearValue)
