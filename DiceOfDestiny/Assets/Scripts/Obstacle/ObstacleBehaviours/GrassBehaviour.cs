@@ -32,14 +32,7 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
             SkillManager.Instance.PriestPassive();
             return;
         }
-
-        if (className == "Baby")
-        {
-            Debug.Log("아기는 풀을 밟지 못 합니다.");
-            ToastManager.Instance.ShowToast("아기는 풀을 밟지 못 합니다.", piece.transform, 1f);
-            return;
-        }
-
+        
         int rand = Random.Range(0, 10);
 
         if (className == "Knight")
@@ -66,9 +59,7 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
 
         if (rand == 0)
         {
-            Debug.Log("10%의 확률로 질병에 걸렸습니다.");
             ToastManager.Instance.ShowToast("10%의 확률로 질병에 걸렸습니다.", piece.transform, 1f);
-
 
             if (className == "Baby")
             {

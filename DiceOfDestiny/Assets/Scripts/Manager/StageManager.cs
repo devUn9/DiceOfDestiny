@@ -22,6 +22,8 @@ public sealed class StageManager : Singletone<StageManager>
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
+            UIManager.Instance.UpdateMissionUI();
+
             StageClear();
         }
     }
@@ -38,6 +40,9 @@ public sealed class StageManager : Singletone<StageManager>
         GameState = GameState.ReadyToRoll;
         CurrentTurn = 1;
         DiceValue = 0;
+        
+        UIManager.Instance.InitMissionUI();
+        UIManager.Instance.UpdateMissionUI();
 
         UIManager.Instance.UpdateActionPointUI();
         UIManager.Instance.ShowBanner(currentStage.stageNumber, currentStage.StageName);
@@ -121,8 +126,7 @@ public sealed class StageManager : Singletone<StageManager>
 
         ToastManager.Instance.ClearAllToasts();
 
-        BoardManager.Instance.DestroyBorder();
-
+        
         clearPiece?.MoveClearPiece();
 
         ShiftToNextStage();
@@ -130,7 +134,7 @@ public sealed class StageManager : Singletone<StageManager>
 
     public void ShiftToNextStage()
     {
-        UIManager.Instance.HideUI();
+        
         stageIndex++;
 
         BoardManager.Instance.ShiftBoard();
@@ -146,6 +150,11 @@ public sealed class StageManager : Singletone<StageManager>
     public void ResetCurrentStage()
     {
         stageIndex = 0;
+    }
+    
+    public int GetCurrentStage()
+    {
+        return stageIndex;
     }
 
     public bool CheckMissionFailed()

@@ -23,7 +23,7 @@ public class PieceController : MonoBehaviour
     public bool canControl = true; // 기물 조작 가능 여부
     private bool animPlaying = false; // 애니메이션 재생 중인지 여부
     public bool isOutStartingLine = false; // 시작 지점에서 벗어났는지 여부
-    private TileColor lastTileColor = TileColor.None; // 마지막 타일 색상
+    public TileColor lastTileColor = TileColor.None; // 마지막 타일 색상
 
     public PieceStatusEffectController statusEffectController;
     public UIFollow uiFollow;
@@ -260,7 +260,7 @@ public class PieceController : MonoBehaviour
                 // 도착점 체크
                 MissionManager.Instance.CheckStageClearAfterMove(newPosition);
                 // 모든 미션완료 상태 체크
-                MissionManager.Instance.IsAllMissionCompleted(this);
+                StartCoroutine(MissionManager.Instance.IsAllMissionCompleted(this));
 
                 // 모든 장애물 기믹 동작
                 ObstacleManager.Instance.UpdateObstacleStep();
@@ -743,6 +743,19 @@ public class PieceController : MonoBehaviour
         isMoving = false;
     }
 
+    // public IEnumerator CheckStageClearAfterMove(Vector2Int newPosition)
+    // {
+    //     // 이동 애니메이션이 끝날 때까지 대기
+    //     while (isMoving)
+    //         yield return null;
+
+    //     // 도착 지점이라면
+    //     if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
+    //     {
+    //         StageManager.Instance.StageClear();
+    //     }
+    // }
+
     public Face GetFace(int index)
     {
         if (index >= 0 && index < 6)
@@ -825,7 +838,7 @@ public class PieceController : MonoBehaviour
         }
 
         // 새로운 클래스 데이터 찾기 (ClassData는 ScriptableObject로 가정)
-        ClassData newClassData = Resources.Load<ClassData>($"Data/Class/{newClassName}");
+        ClassData newClassData = Resources.Load<ClassData>($"Class/Class/{newClassName}");
         if (newClassData == null)
         {
             Debug.LogError($"ClassData for {newClassName} not found!");

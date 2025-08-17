@@ -3425,8 +3425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dfa1463cf66f654bb275a34d30faf74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  findGrayGrassCount: 0
-  alivePawnCount: 0
 --- !u!4 &1752180176
 Transform:
   m_ObjectHideFlags: 0

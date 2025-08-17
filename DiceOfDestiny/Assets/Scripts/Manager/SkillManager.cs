@@ -111,10 +111,12 @@ public class SkillManager : Singletone<SkillManager>
             if (isDdongBlind)
                 RuleEvents.TriggerRule("Slime_Ddong_BlindColor");
                 
-            DoActiveSkill(piece.GetTopFace().classData);
+            
             List<Vector2Int> matchingTile = BoardManager.Instance.GetMatchingColorTiles(position, piece.GetTopFace().color);
 
-            yield return StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile));
+            StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile,piece));
+
+            DoActiveSkill(piece.GetTopFace().classData);
         }
         else
         {
@@ -215,13 +217,16 @@ public class SkillManager : Singletone<SkillManager>
 
     #region 스킬 발동 시 깜빡임, 보드 색상 재배치 코루틴
 
-    private IEnumerator SkillEffectCoroutine(SpriteRenderer pieceRenderer, Vector2Int position, List<Vector2Int> matchingTiles)
+    private IEnumerator SkillEffectCoroutine(SpriteRenderer pieceRenderer, Vector2Int position, List<Vector2Int> matchingTiles,PieceController pieceController)
     {
         if (PieceManager.Instance == null /*|| PieceManager.Instance.GetPiece() == null*/)
         {
             Debug.LogError("PieceManager or Piece is null!");
             yield break;
         }
+
+        PieceManager.Instance.currentPiece.canControl = false;
+        
 
         // 스킬이 발동된 타일과 매칭된 타일들의 SpriteRenderer 수집
         List<(SpriteRenderer renderer, Color originalColor)> renderers = new List<(SpriteRenderer, Color)>();
@@ -237,8 +242,8 @@ public class SkillManager : Singletone<SkillManager>
         }
 
         // 스킬이 발동된 타일의 SpriteRenderer 추가
-        if (position.x >= 0 && position.x < BoardManager.Instance.boardSize &&
-            position.y >= 0 && position.y < BoardManager.Instance.boardSize &&
+        if (position.x >= 0 && position.x <= BoardManager.Instance.boardSize &&
+            position.y >= 0 && position.y <= BoardManager.Instance.boardSize &&
             BoardManager.Instance.Board[position.x, position.y] != null)
         {
             SpriteRenderer tileRenderer = BoardManager.Instance.Board[position.x, position.y].GetComponent<SpriteRenderer>();
@@ -259,8 +264,15 @@ public class SkillManager : Singletone<SkillManager>
         // 매칭된 타일들의 SpriteRenderer 추가
         foreach (Vector2Int tilePos in matchingTiles)
         {
-            if (tilePos.x >= 0 && tilePos.x < BoardManager.Instance.boardSize &&
-                tilePos.y >= 0 && tilePos.y < BoardManager.Instance.boardSize &&
+            //// tilePos가 null인 경우 무시하고 다음 반복으로 이동
+            //if (tilePos == null)
+            //{
+            //    Debug.LogWarning($"tilePos is null, skipping...");
+            //    continue;
+            //}
+
+            if (tilePos.x >= 0 && tilePos.x <= BoardManager.Instance.boardSize &&
+                tilePos.y >= 0 && tilePos.y <= BoardManager.Instance.boardSize &&
                 BoardManager.Instance.Board[tilePos.x, tilePos.y] != null)
             {
                 SpriteRenderer tileRenderer = BoardManager.Instance.Board[tilePos.x, tilePos.y].GetComponent<SpriteRenderer>();
@@ -315,7 +327,9 @@ public class SkillManager : Singletone<SkillManager>
             renderer.color = originalColor;
         }
 
-        BoardManager.Instance.ReassignMatchingColorTiles(position, PieceManager.Instance.currentPiece.GetTopFace().color);
+        BoardManager.Instance.ReassignMatchingColorTiles(position, pieceController.GetTopFace().color);
+
+        
     }
     #endregion
 }

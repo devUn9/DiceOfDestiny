@@ -7,16 +7,36 @@ public class MissionManager : Singletone<MissionManager>
     [Header("FinishLine Mission")]
     public bool isFinishLine { get; private set; } = false; // 도착 지점인지 여부
 
+    [Header("Stage 3 Mission")]
+    public int killEnemyCount { get; private set; } = 0;
+
     [Header("Stage 5 Mission")]
-    [SerializeField] private int findGrayGrassCount = 0;
+    public int findGrayGrassCount { get; private set; } = 0;
     public bool isFindGrayGrass { get; private set; } = false;
 
     [Header("Stage 6 Mission")]
-    [SerializeField] private int alivePawnCount = 0;
+    public int alivePawnCount { get; private set; } = 0;
     public bool isKillTwoPawn { get; private set; } = false;
 
-    public void IsAllMissionCompleted(PieceController clearPiece)
+    public void Start()
     {
+        killEnemyCount = 0;
+        findGrayGrassCount = 0;
+        alivePawnCount = 0;
+
+        isFinishLine = false;
+        isFindGrayGrass = false;
+        isKillTwoPawn = false;
+    }
+
+    public IEnumerator IsAllMissionCompleted(PieceController clearPiece)
+    {
+        while (PieceManager.Instance.currentPiece.isMoving)
+            yield return null;
+
+        UpdateKillEnemyCount();
+        UIManager.Instance.UpdateMissionUI();
+
         if (StageManager.Instance.currentStage.missions.TrueForAll(m => m.IsCompleted()))
         {
             Debug.Log("복합 미션 완료!");
@@ -56,10 +76,9 @@ public class MissionManager : Singletone<MissionManager>
         return false;
     }
 
-    // 적을 모두 처치했는지 확인
-    public bool HasMovingEnemyObstacles()
+    private void UpdateKillEnemyCount(int count = 0)
     {
-        int count = 0;
+        killEnemyCount = 6;
 
         for (int x = 0; x < BoardManager.Instance.boardSize; x++)
         {
@@ -71,6 +90,16 @@ public class MissionManager : Singletone<MissionManager>
                 }
             }
         }
+
+        killEnemyCount -= count;
+    }
+
+    //적을 모두 처치했는지 확인
+    public bool HasMovingEnemyObstacles()
+    {
+        int count = 0;
+
+        UpdateKillEnemyCount(count);
 
         return count <= 0;
     }
