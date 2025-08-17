@@ -16,7 +16,7 @@ public class ActionPointManager : Singletone<ActionPointManager>
     {
         if (CanUse(amount))
         {
-            ToastManager.Instance.ShowToast("행동력이 없습니다.", transform);
+            ToastManager.Instance.ShowToast("행동력이 없습니다.", transform, 0f);
         }
         actionPoint -= amount;
         if (actionPoint == 0)

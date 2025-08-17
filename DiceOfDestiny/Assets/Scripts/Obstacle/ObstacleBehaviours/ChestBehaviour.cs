@@ -20,7 +20,7 @@ public class ChestBehaviour : Obstacle, IObstacleBehaviour
                 
                 string item = InventoryManager.Instance.GetRandomItem();
 
-                ToastManager.Instance.ShowToast(item, this.transform);
+                ToastManager.Instance.ShowToast(item, this.transform, 1f);
 
                 BoardManager.Instance.RemoveObstacle(this);
 
