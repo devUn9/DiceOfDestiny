@@ -2353,6 +2353,9 @@ MonoBehaviour:
   slimePrefab: {fileID: 2465335938598337309, guid: 2a6ce1ef19d36e64684f0baf6f13cd5e, type: 3}
   slimeDdongPrefab: {fileID: 5239956457780272049, guid: fb256067f7bba754cb8c7031d1842fd4, type: 3}
   pawnPrefab: {fileID: 2465335938598337309, guid: a3f4b156df2deab45a8922a6cb66fd15, type: 3}
+  grayGarassAnimator: {fileID: 9100000, guid: b9a4a399ab190b943ac3829eeeddc51b, type: 2}
+  grayTreeAnimator: {fileID: 9100000, guid: 786b7fb7d1e46894b9cb3ff74b7709d4, type: 2}
+  grayPoisonousHerbAnimator: {fileID: 9100000, guid: e6db9b90f357be34e883bcf8f14c1887, type: 2}
   currentObstacles: []
 --- !u!1 &1146971578
 GameObject:
@@ -3038,10 +3041,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2761713909704265828, guid: 71f253f5541141449928ed5d45e7a726, type: 3}
-      propertyPath: stageFailedUIPrefab
-      value: 
-      objectReference: {fileID: 3859621477007818782, guid: 68ba792bccc3978419edb66e14433c95, type: 3}
     - target: {fileID: 5986193197909993458, guid: 71f253f5541141449928ed5d45e7a726, type: 3}
       propertyPath: m_Name
       value: UIManger
