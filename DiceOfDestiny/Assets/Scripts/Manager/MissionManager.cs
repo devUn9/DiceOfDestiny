@@ -19,7 +19,7 @@ public class MissionManager : Singletone<MissionManager>
     public int alivePawnCount { get; private set; } = 0;
     public bool isKillTwoPawn { get; private set; } = false;
 
-    private void Start()
+    public void Start()
     {
         killEnemyCount = 0;
         findGrayGrassCount = 0;
@@ -31,7 +31,7 @@ public class MissionManager : Singletone<MissionManager>
         isKillTwoPawn = false;
     }
 
-    public IEnumerator IsAllMissionCompleted()
+    public IEnumerator IsAllMissionCompleted(PieceController clearPiece)
     {
         while (PieceManager.Instance.currentPiece.isMoving)
             yield return null;
@@ -41,7 +41,7 @@ public class MissionManager : Singletone<MissionManager>
         if (StageManager.Instance.currentStage.missions.TrueForAll(m => m.IsCompleted()))
         {
             Debug.Log("복합 미션 완료!");
-            StageManager.Instance.StageClear();
+            StageManager.Instance.StageClear(clearPiece);
         }
     }
 

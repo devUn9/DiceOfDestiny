@@ -16,7 +16,7 @@ public class SkillManager : Singletone<SkillManager>
 
     public bool IsSelectingProgress { get; set; } = false;
 
-    private void Awake()
+    private void Start()
     {
         activeSkill = GetComponent<ActiveSkill>();
         passiveSkill = GetComponent<PassiveSkill>();
