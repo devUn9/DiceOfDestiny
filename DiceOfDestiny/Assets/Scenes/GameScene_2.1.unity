@@ -1508,6 +1508,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &635617270
 GameObject:
   m_ObjectHideFlags: 0
@@ -1958,7 +1959,7 @@ MonoBehaviour:
   blueButton: {fileID: 277443439}
   yellowButton: {fileID: 1395148978}
   purpleButton: {fileID: 2101212407}
-  brownButton: {fileID: 0}
+  brownButton: {fileID: 885577661}
   paletteImage: {fileID: 1282756431}
 --- !u!114 &830614875
 MonoBehaviour:

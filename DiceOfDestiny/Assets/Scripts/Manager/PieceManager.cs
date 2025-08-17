@@ -87,4 +87,33 @@ public class PieceManager : Singletone<PieceManager>
         // 피스 선택 테두리 생성
         BoardSelectManager.Instance.PieceHighlightTiles(currentPieceController.gridPosition);
     }
+    public void ResetPieces(PieceController clearPiece = null)
+    {
+        var toRemove = new List<PieceController>();
+
+        // 인게임 보드판에 있는 피스들 인벤토리로 돌아가게 하기
+        foreach (var piece in Pieces)
+        {
+            if (piece != clearPiece)
+            {
+                toRemove.Add(piece);
+            }
+        }
+
+        foreach (var piece in toRemove)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (pieceDatas[i] == null)
+                {
+                    pieceDatas[i] = piece.GetPiece();
+                }
+            }
+            Destroy(piece.gameObject);
+            Pieces.Remove(piece);
+        }
+
+        // 현재 선택 피스 null
+        SetCurrentPiece(null);
+    }
 }

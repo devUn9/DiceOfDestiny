@@ -70,7 +70,7 @@ public class ActiveSkill : MonoBehaviour
             }
 
             SoundManager.Instance.Play("Knight_Skill");
-        }
+        }   
         else
         {
             Debug.LogWarning("Skill effect prefab is not assigned!");

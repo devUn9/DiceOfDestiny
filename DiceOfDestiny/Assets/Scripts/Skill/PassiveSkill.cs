@@ -48,6 +48,7 @@ public class PassiveSkill : MonoBehaviour
             };
 
             ToastManager.Instance.ShowToast("기사 패시브 발동! 주변 4방향을 공격합니다.", pieceController.transform);
+            SoundManager.Instance.Play("Knight_Attack");
 
             foreach (var (dir, rotationZ) in directions)
             {

@@ -24,8 +24,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     private List<GameObject> activePieceEffects = new List<GameObject>();
     private BoardManager boardManager;
 
-
-    private void Awake()
+    private void Start()
     {
         activeEffects = new Dictionary<Vector2Int, GameObject>();
         boardManager = BoardManager.Instance;

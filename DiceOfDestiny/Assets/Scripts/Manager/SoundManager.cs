@@ -15,7 +15,7 @@ public class SoundManager : Singletone<SoundManager>
 {
     [Header("사운드 리스트")]
     public List<Sound> skillSounds;
-    public List<Sound> monsterSounds;
+    public List<Sound> gameSounds;
     
 
     private Dictionary<string, Sound> soundDict = new();
@@ -29,7 +29,7 @@ public class SoundManager : Singletone<SoundManager>
     private void Start()
     {
         RegisterSounds(skillSounds);
-        RegisterSounds(monsterSounds);
+        RegisterSounds(gameSounds);
       
         bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.loop = true;
