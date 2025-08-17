@@ -1812,6 +1812,10 @@ PrefabInstance:
       propertyPath: 'sprites.Array.data[3]'
       value: 
       objectReference: {fileID: -564201037, guid: 2a8c2784be9c78b42a59ab03e6eb6c09, type: 3}
+    - target: {fileID: 4660989795884663218, guid: 27b0466fde70bc945b3cc6ebdc9daf85, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7012714660426381153, guid: 27b0466fde70bc945b3cc6ebdc9daf85, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

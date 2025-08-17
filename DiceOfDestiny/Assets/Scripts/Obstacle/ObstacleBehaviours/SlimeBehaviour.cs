@@ -131,16 +131,4 @@ public class SlimeBehaviour : Obstacle, IObstacleBehaviour
             });
         }
     }
-    private void OnDestroy()
-    {
-        // 만약 미션중에 몬스터 처치 미션이 있다면
-        StageManager.Instance.currentStage.missions.ForEach(mission =>
-        {
-            if (mission.missionType is MissionType.KillAllMonsters)
-            {
-                Debug.Log("슬라임 처치");
-                MissionManager.Instance.KillEnemyCount();
-            }
-        });
-    }
 }

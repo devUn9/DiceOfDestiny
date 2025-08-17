@@ -20,7 +20,7 @@ public class MissionData : ScriptableObject
             case MissionType.ReachFinishLine:
                 return MissionManager.Instance.isFinishLine;
             case MissionType.KillAllMonsters:
-                return MissionManager.Instance.isAllKillEnemy;
+                return MissionManager.Instance.HasMovingEnemyObstacles();
             case MissionType.FindGrayGrass:
                 return MissionManager.Instance.isFindGrayGrass;
             case MissionType.KillPawn:

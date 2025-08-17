@@ -9,7 +9,6 @@ public class MissionManager : Singletone<MissionManager>
 
     [Header("Stage 3 Mission")]
     public int killEnemyCount { get; private set; } = 0;
-    public bool isAllKillEnemy { get; private set; } = false;
 
     [Header("Stage 5 Mission")]
     public int findGrayGrassCount { get; private set; } = 0;
@@ -26,7 +25,6 @@ public class MissionManager : Singletone<MissionManager>
         alivePawnCount = 0;
 
         isFinishLine = false;
-        isAllKillEnemy = false;
         isFindGrayGrass = false;
         isKillTwoPawn = false;
     }
@@ -36,6 +34,7 @@ public class MissionManager : Singletone<MissionManager>
         while (PieceManager.Instance.currentPiece.isMoving)
             yield return null;
 
+        UpdateKillEnemyCount();
         UIManager.Instance.UpdateMissionUI();
 
         if (StageManager.Instance.currentStage.missions.TrueForAll(m => m.IsCompleted()))
@@ -77,31 +76,32 @@ public class MissionManager : Singletone<MissionManager>
         return false;
     }
 
-    // 적을 모두 처치했는지 확인
-    // public bool HasMovingEnemyObstacles()
-    // {
-    //     int count = 0;
-
-    //     for (int x = 0; x < BoardManager.Instance.boardSize; x++)
-    //     {
-    //         for (int y = 1; y < BoardManager.Instance.boardSize + 1; y++)
-    //         {
-    //             if (BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Slime || BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Zombie)
-    //             {
-    //                 ++count;
-    //             }
-    //         }
-    //     }
-
-    //     return count <= 0;
-    // }
-
-    public void KillEnemyCount()
+    private void UpdateKillEnemyCount(int count = 0)
     {
-        killEnemyCount++;
+        killEnemyCount = 6;
 
-        if (killEnemyCount >= 10)
-            isAllKillEnemy = true;
+        for (int x = 0; x < BoardManager.Instance.boardSize; x++)
+        {
+            for (int y = 1; y < BoardManager.Instance.boardSize + 1; y++)
+            {
+                if (BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Slime || BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Zombie)
+                {
+                    ++count;
+                }
+            }
+        }
+
+        killEnemyCount -= count;
+    }
+
+    //적을 모두 처치했는지 확인
+    public bool HasMovingEnemyObstacles()
+    {
+        int count = 0;
+
+        UpdateKillEnemyCount(count);
+
+        return count <= 0;
     }
 
     // 회색 풀 밟기 미션에 대해 카운팅

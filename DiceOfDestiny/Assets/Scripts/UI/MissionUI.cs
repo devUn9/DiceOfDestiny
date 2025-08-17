@@ -76,7 +76,7 @@ public class MissionUI : MonoBehaviour
             // 3스테이지
             if (mission.missionType is MissionType.KillAllMonsters)
             {
-                ProgressText.text = $"{MissionManager.Instance.killEnemyCount} / 10";
+                ProgressText.text = $"{MissionManager.Instance.killEnemyCount} / 6";
             }
             // 5스테이지
             else if (mission.missionType is MissionType.FindGrayGrass)

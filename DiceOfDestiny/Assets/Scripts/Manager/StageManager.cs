@@ -40,6 +40,9 @@ public sealed class StageManager : Singletone<StageManager>
         GameState = GameState.ReadyToRoll;
         CurrentTurn = 1;
         DiceValue = 0;
+        
+        UIManager.Instance.InitMissionUI();
+        UIManager.Instance.UpdateMissionUI();
 
         UIManager.Instance.UpdateActionPointUI();
         UIManager.Instance.ShowBanner(currentStage.stageNumber, currentStage.StageName);
