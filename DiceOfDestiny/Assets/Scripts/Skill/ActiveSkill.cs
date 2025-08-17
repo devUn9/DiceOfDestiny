@@ -397,7 +397,7 @@ public class ActiveSkill : MonoBehaviour
         // 도착점 체크
         MissionManager.Instance.CheckStageClearAfterMove(gridPos);
         // 모든 미션완료 상태 체크
-        MissionManager.Instance.IsAllMissionCompleted();
+        MissionManager.Instance.IsAllMissionCompleted(pieceController);
 
         BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
 
