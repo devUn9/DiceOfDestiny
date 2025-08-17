@@ -81,8 +81,6 @@ public class ActiveSkill : MonoBehaviour
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 60f);
             }
-
-            SoundManager.Instance.Play("Knight_Skill");
         }   
         else
         {
@@ -131,6 +129,11 @@ public class ActiveSkill : MonoBehaviour
 
         BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
         PieceManager.Instance.SetCurrentPieceControl(true);
+
+        // 도착점 체크
+        MissionManager.Instance.CheckStageClearAfterMove(gridPos);
+        // 모든 미션완료 상태 체크
+        MissionManager.Instance.IsAllMissionCompleted(pieceController);
     }
 
     // 악마 스킬: 독초 심기
@@ -324,7 +327,7 @@ public class ActiveSkill : MonoBehaviour
         yield return moveSkillUI.WaitForArrowClick();
     }
 
-    // 도적 스킬 : 앞으로 이동
+    // 도적이랑 아기가 사용. 앞으로 이동
     public IEnumerator MoveForward(PieceController pieceController, Vector2Int moveDirection)
     {
         if (moveDirection != Vector2Int.up && moveDirection != Vector2Int.down &&
