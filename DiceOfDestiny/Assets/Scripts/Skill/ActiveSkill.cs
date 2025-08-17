@@ -36,10 +36,12 @@ public class ActiveSkill : MonoBehaviour
         }
 
         Vector2Int gridPos = pieceController.gridPosition;
-        gridPos += moveDirection;
-        pieceController.gridPosition = gridPos;
+        //gridPos += moveDirection;
+        Vector2Int newPos = gridPos + moveDirection;
 
-        if (gridPos.y == BoardManager.Instance.boardSizeY - 1)
+        pieceController.gridPosition = newPos;
+
+        if (newPos.y == BoardManager.Instance.boardSizeY - 1)
         {
             if (!MissionManager.Instance.CanGoFinishLine())
             {
@@ -47,6 +49,10 @@ public class ActiveSkill : MonoBehaviour
                 yield break;
             }
         }
+
+        BoardManager.Instance.Board[gridPos.x, gridPos.y].TileColor = pieceController.lastTileColor;
+        pieceController.lastTileColor = BoardManager.Instance.Board[newPos.x, newPos.y].TileColor;
+        BoardManager.Instance.Board[newPos.x, newPos.y].TileColor = pieceController.GetPiece().faces[2].color;
 
         Vector3 moveVec = new Vector3(moveDirection.x, moveDirection.y, 0);
         float moveDuration = 0.4f;
@@ -100,22 +106,22 @@ public class ActiveSkill : MonoBehaviour
 
         
 
-        bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
+        bool hasObstacle = BoardManager.Instance.IsEmptyTile(newPos);
 
         if (!hasObstacle)
         {
-            if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.Pawn)
+            if (BoardManager.Instance.Board[newPos.x, newPos.y].Obstacle == ObstacleType.Pawn)
             {
-                Obstacle pawn = BoardManager.Instance.ReturnObstacleByPosition(gridPos);
+                Obstacle pawn = BoardManager.Instance.ReturnObstacleByPosition(newPos);
                 ObstacleManager.Instance.RemovePawnToList(pawn.gameObject);
             }
 
-            BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
+            BoardManager.Instance.RemoveObstacleAtPosition(newPos);
         }
 
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.TrySkill(gridPos, pieceController);
+            SkillManager.Instance.TrySkill(newPos, pieceController);
         }
         else
         {
@@ -127,11 +133,11 @@ public class ActiveSkill : MonoBehaviour
             Destroy(skillEffect, 0.5f);
         }
 
-        BoardSelectManager.Instance.PieceHighlightTiles(gridPos);
+        BoardSelectManager.Instance.PieceHighlightTiles(newPos);
         PieceManager.Instance.SetCurrentPieceControl(true);
 
         // 도착점 체크
-        MissionManager.Instance.CheckStageClearAfterMove(gridPos);
+        MissionManager.Instance.CheckStageClearAfterMove(newPos);
         // 모든 미션완료 상태 체크
         MissionManager.Instance.IsAllMissionCompleted(pieceController);
     }

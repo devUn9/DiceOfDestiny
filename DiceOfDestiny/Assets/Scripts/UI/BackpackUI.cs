@@ -12,6 +12,7 @@ public class BackpackUI : MonoBehaviour
     [SerializeField] private Sprite clickedSprite;
 
     private bool isClicked = false;
+    private bool oneChance = true;
 
     [Header("Choice Piece")]
     [SerializeField] private GameObject inventoryPanel;
@@ -127,8 +128,13 @@ public class BackpackUI : MonoBehaviour
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
         // =====================[ 생성 시작 ]=====================
-
-        if (ActionPointManager.Instance.CanUse(1))
+        if (oneChance)
+        {
+            BoardSelectManager.Instance.restrictYBoundaries = true;
+            oneChance = false;
+        }
+        
+        else if (ActionPointManager.Instance.CanUse(1))
         {
             ActionPointManager.Instance.RemoveAP(1);
             BoardSelectManager.Instance.restrictYBoundaries = true;

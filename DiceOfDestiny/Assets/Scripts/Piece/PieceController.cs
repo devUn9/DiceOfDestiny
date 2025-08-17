@@ -23,7 +23,7 @@ public class PieceController : MonoBehaviour
     public bool canControl = true; // 기물 조작 가능 여부
     private bool animPlaying = false; // 애니메이션 재생 중인지 여부
     public bool isOutStartingLine = false; // 시작 지점에서 벗어났는지 여부
-    private TileColor lastTileColor = TileColor.None; // 마지막 타일 색상
+    public TileColor lastTileColor = TileColor.None; // 마지막 타일 색상
 
     public PieceStatusEffectController statusEffectController;
     public UIFollow uiFollow;
@@ -825,7 +825,7 @@ public class PieceController : MonoBehaviour
         }
 
         // 새로운 클래스 데이터 찾기 (ClassData는 ScriptableObject로 가정)
-        ClassData newClassData = Resources.Load<ClassData>($"Data/Class/{newClassName}");
+        ClassData newClassData = Resources.Load<ClassData>($"Class/Class/{newClassName}");
         if (newClassData == null)
         {
             Debug.LogError($"ClassData for {newClassName} not found!");

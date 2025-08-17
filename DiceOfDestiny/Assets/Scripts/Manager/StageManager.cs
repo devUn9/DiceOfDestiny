@@ -147,6 +147,11 @@ public sealed class StageManager : Singletone<StageManager>
     {
         stageIndex = 0;
     }
+    
+    public int GetCurrentStage()
+    {
+        return stageIndex;
+    }
 
     public bool CheckMissionFailed()
     {
