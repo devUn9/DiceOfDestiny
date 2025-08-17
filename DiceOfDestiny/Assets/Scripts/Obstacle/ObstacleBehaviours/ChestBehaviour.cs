@@ -17,6 +17,11 @@ public class ChestBehaviour : Obstacle, IObstacleBehaviour
                 RuleEvents.TriggerRule("Thief_Passive_OpenBox");
 
                 SkillManager.Instance.ThiefPassive();
+                
+                string item = InventoryManager.Instance.GetRandomItem();
+
+                ToastManager.Instance.ShowToast(item, this.transform);
+
                 BoardManager.Instance.RemoveObstacle(this);
 
                 return;

@@ -81,6 +81,12 @@ public sealed class StageManager : Singletone<StageManager>
 
     public void StageClear(PieceController clearPiece = null)
     {
+        // 현재 선택 피스 null
+        PieceManager.Instance.SetCurrentPiece(null);
+
+        // 피스 선택 테두리 제거
+        BoardSelectManager.Instance.DestroyPieceHighlightTile();
+
         var toRemove = new List<PieceController>();
 
         // 인게임 보드판에 있는 피스들 인벤토리로 돌아가게 하기
@@ -105,19 +111,19 @@ public sealed class StageManager : Singletone<StageManager>
             PieceManager.Instance.Pieces.Remove(piece);
         }
 
+        if(clearPiece != null)
+        {
+            clearPiece.isOutStartingLine = false;
+        }
+
+
         EventManager.Instance.TriggerEvent("Refresh");
+
         ToastManager.Instance.ClearAllToasts();
 
         BoardManager.Instance.DestroyBorder();
 
-
         clearPiece?.MoveClearPiece();
-
-        // 현재 선택 피스 null
-        PieceManager.Instance.SetCurrentPiece(null);
-
-        // 피스 선택 테두리 제거
-        BoardSelectManager.Instance.DestroyPieceHighlightTile();
 
         ShiftToNextStage();
     }
