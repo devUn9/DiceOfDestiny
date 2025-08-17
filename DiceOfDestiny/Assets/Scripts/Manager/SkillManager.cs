@@ -135,7 +135,7 @@ public class SkillManager : Singletone<SkillManager>
                 // 아기 스킬 : 원하는 말 한 칸 이동
                 StartCoroutine(activeSkill.HelpBaby(currentPiece));
 
-                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말 한 칸 이동합니다.", currentPiece.transform); // 나중에 스킬 메서드 생기면 그리로 이동
+                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말을 한 칸 이동합니다.", currentPiece.transform, 1f); // 나중에 스킬 메서드 생기면 그리로 이동
                 RuleEvents.TriggerRule("Baby_Active_ColorMatch");
 
                 break;
@@ -144,7 +144,7 @@ public class SkillManager : Singletone<SkillManager>
                 // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
 
                 StartCoroutine(activeSkill.Plant(currentPiece));
-                ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", currentPiece.transform);
+                ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", currentPiece.transform, 1f);
                 RuleEvents.TriggerRule("Demon_Active_ColorMatch");
 
                 break;
@@ -153,7 +153,7 @@ public class SkillManager : Singletone<SkillManager>
                 // 광신도 스킬 : 주변에 있는 사제를 광신도로 만듬
 
                 StartCoroutine(activeSkill.ConvertToFanatic(currentPiece));
-                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", currentPiece.transform);
+                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", currentPiece.transform, 1f);
                 RuleEvents.TriggerRule("Fanatic_Active_ColorMatch");
 
                 break;
@@ -164,7 +164,7 @@ public class SkillManager : Singletone<SkillManager>
                 Vector2Int lastDirection = currentPiece.GetLastMoveDirection();
 
                 StartCoroutine(activeSkill.KnightMoveForward(currentPiece, lastDirection));
-                ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", currentPiece.transform);
+                ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", currentPiece.transform, 1f);
                 RuleEvents.TriggerRule("Knight_Active_ColorMatch");
 
                 BoardManager.Instance.Board[currentPiece.gridPosition.x, currentPiece.gridPosition.y].SetPiece(null);
@@ -181,7 +181,7 @@ public class SkillManager : Singletone<SkillManager>
 
                 ActionPointManager.Instance.AddAP(1);
                 StartCoroutine(activeSkill.HealAP());
-                ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", currentPiece.transform);
+                ToastManager.Instance.ShowToast($"사제 스킬 발동! AP를 추가로 {ActionPointManager.Instance.GetAP()}만큼 더 얻습니다.", currentPiece.transform, 1f);
                 RuleEvents.TriggerRule("Priest_Active_ColorMatch");
 
                 break;
@@ -189,7 +189,7 @@ public class SkillManager : Singletone<SkillManager>
             case "Thief":
                 // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
                 StartCoroutine(activeSkill.FastMove(currentPiece));
-                ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", currentPiece.transform);
+                ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", currentPiece.transform, 1f);
                 RuleEvents.TriggerRule("Thief_Active_ColorMatch");
 
                 break;
@@ -198,7 +198,7 @@ public class SkillManager : Singletone<SkillManager>
                 // 화가 스킬: 원하는 보드 한칸에 색깔을 칠함
 
                 StartCoroutine(activeSkill.Paint(currentPiece));
-                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", currentPiece.transform);
+                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", currentPiece.transform, 1f);
                 RuleEvents.TriggerRule("Painter_Active_ColorMatch");
 
                 break;

@@ -13,14 +13,15 @@ public class ToastManager : Singletone<ToastManager>
 
     [Header("Toast Settings")]
     [SerializeField] private float toastDuration = 2f; 
-    [SerializeField] private float worldYOffset = 0f; 
-    [SerializeField] private float pixelYOffset = 20f;
+    [SerializeField] private float worldYOffset = 0f;
+    [SerializeField] private float pixelYOffset = 15f;
 
     private readonly List<RectTransform> activeToasts = new List<RectTransform>();
     private readonly List<GameObject> toastInstances = new List<GameObject>(); // 토스트 인스턴스 추적
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (uiCanvas == null)
         {
             uiCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();

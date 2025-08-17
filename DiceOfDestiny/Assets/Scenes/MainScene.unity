@@ -1011,10 +1011,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4211292564527545661, guid: a891c206bbba03e44ac30bedd04b0af3, type: 3}
-      propertyPath: 'sfxClips.Array.data[0]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 59e3e702e23d07d40b3c06fdf261c223, type: 3}
     - target: {fileID: 4684015225654220259, guid: a891c206bbba03e44ac30bedd04b0af3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1128.7488
@@ -1054,10 +1050,6 @@ PrefabInstance:
     - target: {fileID: 4684015225654220259, guid: a891c206bbba03e44ac30bedd04b0af3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8546442730714171782, guid: a891c206bbba03e44ac30bedd04b0af3, type: 3}
-      propertyPath: soundName
-      value: Click_POP
       objectReference: {fileID: 0}
     - target: {fileID: 9125245484404714641, guid: a891c206bbba03e44ac30bedd04b0af3, type: 3}
       propertyPath: m_Name

@@ -45,7 +45,7 @@ public class ActiveSkill : MonoBehaviour
         {
             if (!MissionManager.Instance.CanGoFinishLine())
             {
-                ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform);
+                ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform, 1f);
                 yield break;
             }
         }
@@ -289,7 +289,7 @@ public class ActiveSkill : MonoBehaviour
 
         if (!converted)
         {
-            ToastManager.Instance.ShowToast("주변에 사제가 없어 아무 일도 일어나지 않았습니다.", piece.transform);
+            ToastManager.Instance.ShowToast("주변에 사제가 없어 아무 일도 일어나지 않았습니다.", piece.transform, 1.5f);
         }
         else
         {
@@ -358,7 +358,7 @@ public class ActiveSkill : MonoBehaviour
         {
             if (!MissionManager.Instance.CanGoFinishLine())
             {
-                ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform);
+                ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform, 1f);
                 yield break;
             }
         }
@@ -463,6 +463,7 @@ public class ActiveSkill : MonoBehaviour
         if (!hasMovablePiece)
         {
             Debug.Log("아기 스킬 썼지만 발동 가능한 기물이 없네");
+            ToastManager.Instance.ShowToast("아기쪽으로 이동 가능한 기물이 없습니다.", pieceController.transform, 1f);
             PieceManager.Instance.SetCurrentPieceControl(true);
             yield break;
         }
