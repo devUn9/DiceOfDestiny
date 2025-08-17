@@ -59,7 +59,6 @@ public class ObstacleManager : Singletone<ObstacleManager>
         foreach (GameObject obstacle in currentObstacles)
         {
             Destroy(obstacle);
-
         }
         currentObstacles.Clear();
     }

@@ -12,6 +12,8 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
     private bool isLeftAttack = false;
     private bool isRightAttack = false;
 
+    private ObstacleType lastObstacleType = ObstacleType.None;
+
     private void Start()
     {
         BoardManager.Instance.Board[obstaclePosition.x, obstaclePosition.y].TileColor = TileColor.Gray;
@@ -52,7 +54,7 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
                 || nextTile.Obstacle == ObstacleType.PoisonousHerb || nextTile.Obstacle == ObstacleType.SlimeDdong
                 || nextTile.Obstacle == ObstacleType.Chest || nextTile.Obstacle == ObstacleType.Puddle)
             {
-                BoardManager.Instance.MoveObstacle(this, nextPosition);
+                BoardManager.Instance.MoveObstacle(this, nextPosition, ref lastObstacleType);
                 AnimateObstacleMove(direction);
 
                 DiagonalAttack();
@@ -62,12 +64,7 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
                     isRightAttack = false;
                 }
 
-                if (obstaclePosition.y == 0)
-                {
-                    PieceManager.Instance.ResetPieces();
-                    UIManager.Instance.ShowStageFailedUI();
-                    return;
-                }
+                ArriveStartLine();
             }
         }
     }
@@ -112,17 +109,13 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
 
             Destroy(effect, effectDelay); // 효과는 1초 후에 제거
 
-            BoardManager.Instance.MoveObstacle(this, attackPos);
+            BoardManager.Instance.MoveObstacle(this, attackPos, ref lastObstacleType);
 
             yield return new WaitForSeconds(effectDelay);
 
             AnimateObstacleMove(dir);
 
-            if (obstaclePosition.y <= 1)
-            {
-                PieceManager.Instance.ResetPieces();
-                UIManager.Instance.ShowStageFailedUI();
-            }
+            ArriveStartLine();
         }
     }
 
@@ -181,6 +174,15 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
         if (life <= 0)
         {
             ObstacleManager.Instance.DeathPawn(obstaclePosition);
+        }
+    }
+
+    private void ArriveStartLine()
+    {
+        if (obstaclePosition.y <= 1)
+        {
+            PieceManager.Instance.ResetPieces();
+            UIManager.Instance.ShowStageFailedUI();
         }
     }
 }

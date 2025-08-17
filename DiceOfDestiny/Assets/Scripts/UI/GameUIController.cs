@@ -13,6 +13,7 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private GameObject stageNameUI;
     [SerializeField] private GameObject stageFailedUI;
 
+    [SerializeField] private GameObject missionUI;
     public void Initialize()
     {
         pauseMenuUI.SetActive(false);
@@ -31,10 +32,20 @@ public class GameUIController : MonoBehaviour
     {
         bannerUI.GetComponent<StageBannerController>().Show(stageNumber, stageName);
     }
-    
+
     public void ShowStageFailedUI()
     {
         stageFailedUI.SetActive(true);
         stageFailedUI.GetComponent<StageFailedUI>().ShowUI();
+    }
+
+    public void InitMissionUI()
+    {
+        missionUI.GetComponent<MissionUI>().Init();
+    }
+
+    public void UpdateMissionUI()
+    {
+        missionUI.GetComponent<MissionUI>().UpdateProgressText();
     }
 }

@@ -165,8 +165,6 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
 
     private void AnimateZombieNyamNyam(NextStep nextStep)
     {
-        Vector2Int direction = GetDirection(nextStep);
-
         Vector3 startPos = transform.position;
         Quaternion startRot = transform.rotation;
 
