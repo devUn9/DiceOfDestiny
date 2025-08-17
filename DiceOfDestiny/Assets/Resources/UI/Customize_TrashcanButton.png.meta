@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8ed53df5529a69f4aa29acdec1032703
+guid: b2a6edc705226a7488ef2c0c01ab92d3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6002527614776627570
-    second: Background_customize_Panel_0
+      213: 8662728528251160350
+    second: Customize_TrashcanButton_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Background_customize_Panel_0
+      name: Customize_TrashcanButton_0
       rect:
         serializedVersion: 2
-        x: 91
-        y: 103
-        width: 1734
-        height: 610
+        x: 0
+        y: 0
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e8e24c6efecb2bca0800000000000000
-      internalID: -6002527614776627570
+      spriteID: e178d0803b1383870800000000000000
+      internalID: 8662728528251160350
       vertices: []
       indices: 
       edges: []
@@ -173,8 +173,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Background_customize_Panel_0: -6002527614776627570
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Customize_CubeButton_0: 1069327098509916955
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
