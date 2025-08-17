@@ -64,7 +64,7 @@ public class PieceManager : Singletone<PieceManager>
         GameObject piece = Instantiate(PieceManager.Instance.piecePrefabs[currentIndex],
         new Vector2(BoardManager.Instance.boardTransform.position.x + gridPos.x,
                     BoardManager.Instance.boardTransform.position.y + gridPos.y),
-        Quaternion.identity,this.transform);        
+        Quaternion.identity, this.transform);
 
         // 현재 조작중인 기물로 초기화
         PieceController currentPieceController = piece.GetComponent<PieceController>();
@@ -87,6 +87,7 @@ public class PieceManager : Singletone<PieceManager>
         // 피스 선택 테두리 생성
         BoardSelectManager.Instance.PieceHighlightTiles(currentPieceController.gridPosition);
     }
+
     public void ResetPieces(PieceController clearPiece = null)
     {
         var toRemove = new List<PieceController>();

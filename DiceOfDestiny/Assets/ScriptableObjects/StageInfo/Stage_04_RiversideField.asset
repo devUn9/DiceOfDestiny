@@ -16,6 +16,7 @@ MonoBehaviour:
   stageNumber: 4
   missions:
   - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
+  maxTurn: 30
   isGrayGrass: 0
   isGrayTree: 0
   isGrayPoisonousherb: 0
@@ -32,6 +33,7 @@ MonoBehaviour:
     weight: 3
   - type: 1
     weight: 3
+  exactObstacle:
   - type: 6
     weight: 3
   - type: 2
@@ -42,4 +44,4 @@ MonoBehaviour:
     weight: 3
   - type: 8
     weight: 3
-  obstacleDensity: 0.2
+  obstacleDensity: 0.25

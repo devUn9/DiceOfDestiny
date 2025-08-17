@@ -8,6 +8,7 @@ public class StageData : ScriptableObject
     public int stageNumber = 1;
     [Header("Stage Missions")]
     [SerializeReference] public List<MissionData> missions;
+    public int maxTurn = 30;
     public bool isGrayGrass = false;
     public bool isGrayTree = false;
     public bool isGrayPoisonousherb = false;
@@ -24,7 +25,8 @@ public class StageData : ScriptableObject
 
     [Header("Obstacle Settings")]
     public List<ObstacleWeight> availableObstacle;
-    [Range(0,1)] public float obstacleDensity = 0.2f;
+    public List<ObstacleWeight> exactObstacle;
+    [Range(0, 1)] public float obstacleDensity = 0.2f;
 }
 
 [System.Serializable]

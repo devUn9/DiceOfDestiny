@@ -18,6 +18,10 @@ public class ObstacleManager : Singletone<ObstacleManager>
 
     [SerializeField] private GameObject pawnPrefab;
 
+    [SerializeField] private RuntimeAnimatorController grayGarassAnimator;
+    [SerializeField] private RuntimeAnimatorController grayTreeAnimator;
+    [SerializeField] private RuntimeAnimatorController grayPoisonousHerbAnimator;
+
     public Dictionary<ObstacleType, GameObject> obstaclePrefabs;
 
     public List<GameObject> currentObstacles;
@@ -25,7 +29,6 @@ public class ObstacleManager : Singletone<ObstacleManager>
     [Header("Boss Pawn")]
     private List<GameObject> pawnList = new List<GameObject>();
     public int pawnMoveIndex { get; private set; } = 0;
-    public bool isPawnAttacking { get; private set; } = false;
 
     public void Initialize()
     {
@@ -77,7 +80,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
             // 폰 난수 얻기
             InOrderToMovePawn();
         }
-        
+
         for (int i = currentObstacles.Count - 1; i >= 0; i--)
         {
             var behaviour = currentObstacles[i].GetComponent<IObstacleBehaviour>();
@@ -100,7 +103,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
 
         while (timeElapsed < dropTime)
         {
-            
+
             float t = timeElapsed / dropTime;
 
             if (t > 0.39f)
@@ -183,9 +186,17 @@ public class ObstacleManager : Singletone<ObstacleManager>
         pawnMoveIndex = pawnRandomIndex;
     }
 
-    public void SetBoolPawnAttacking(bool isAttacking)
+    public RuntimeAnimatorController GetGrayGrassAnimator()
     {
-        isPawnAttacking = isAttacking;
+        return grayGarassAnimator;
+    }
+    public RuntimeAnimatorController GetGrayTreeAnimator()
+    {
+        return grayTreeAnimator;
+    }
+    public RuntimeAnimatorController GetGrayPoisonousHerbAnimator()
+    {
+        return grayPoisonousHerbAnimator;
     }
 }
     

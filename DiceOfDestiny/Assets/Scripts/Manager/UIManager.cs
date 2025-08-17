@@ -74,6 +74,11 @@ public class UIManager : Singletone<UIManager>
         currentUIRoot.GetComponent<GameUIController>().ShowBanner(stageNumber, stageName);
     }
 
+    public void ShowStageFailedUI()
+    {
+        currentUIRoot.GetComponent<GameUIController>().ShowStageFailedUI();
+    }
+
     public void HideUI()
     {
         currentUIRoot.SetActive(false);
