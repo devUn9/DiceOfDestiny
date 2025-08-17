@@ -168,4 +168,48 @@ public class InventoryManager : Singletone<InventoryManager>
             Debug.LogWarning($"스티커 제거 실패 - 스티커를 찾을 수 없음: {sticker.classData.name}");
         }
     }
+
+    public void GetRandomItem()
+    {
+        float random = Random.Range(0.0f, 1.0f);
+
+        if (random > 0.9f)
+        {
+            var item = GenerateRandomPieceNet();
+            AddPieceNet(item);
+        }
+        else
+        {
+            var item = GenerateRandomSticker();
+            AddSticker(item);
+        }
+    }
+
+    public ClassSticker GenerateRandomSticker()
+    {
+        List<ClassData> classDataList = new List<ClassData>
+        {
+            knightClassData,
+            demonClassData,
+            babyClassData,
+            fanaticClassData,
+            thiefClassData,
+            preistClassData,
+            painterClassData
+        };
+        int randomIndex = Random.Range(0, classDataList.Count);
+        ClassSticker sticker = new ClassSticker { classData = classDataList[randomIndex] };
+        return sticker;
+    }
+
+    public PieceNet GenerateRandomPieceNet()
+    {
+        PieceNet pieceNet = new PieceNet();
+        for (int i = 0; i < 6; i++)
+        {
+            pieceNet.faces[i].color = (TileColor)Random.Range(0, System.Enum.GetValues(typeof(TileColor)).Length);
+        }
+        return pieceNet;
+
+    }
 }
