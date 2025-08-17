@@ -15,12 +15,12 @@ public class MissionManager : Singletone<MissionManager>
     [SerializeField] private int alivePawnCount = 0;
     public bool isKillTwoPawn { get; private set; } = false;
 
-    public void IsAllMissionCompleted()
+    public void IsAllMissionCompleted(PieceController clearPiece)
     {
         if (StageManager.Instance.currentStage.missions.TrueForAll(m => m.IsCompleted()))
         {
             Debug.Log("복합 미션 완료!");
-            StageManager.Instance.StageClear();
+            StageManager.Instance.StageClear(clearPiece);
         }
     }
 
