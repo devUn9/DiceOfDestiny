@@ -387,6 +387,11 @@ public class ActiveSkill : MonoBehaviour
         Vector2Int PiecePosition = PieceManager.Instance.currentPiece.gridPosition;
         Vector2Int lastPosition = PieceManager.Instance.currentPiece.gridPosition - moveDirection;
 
+        // 기존 SetPiece 코드 위에 타일 색상 처리 추가
+        BoardManager.Instance.Board[lastPosition.x, lastPosition.y].TileColor = pieceController.lastTileColor;
+        pieceController.lastTileColor = BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].TileColor;
+        BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].TileColor = pieceController.GetPiece().faces[2].color;
+
         BoardManager.Instance.Board[lastPosition.x, lastPosition.y].SetPiece(null);
         BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
 

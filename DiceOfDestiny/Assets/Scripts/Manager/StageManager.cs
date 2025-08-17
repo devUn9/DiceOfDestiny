@@ -121,8 +121,7 @@ public sealed class StageManager : Singletone<StageManager>
 
         ToastManager.Instance.ClearAllToasts();
 
-        BoardManager.Instance.DestroyBorder();
-
+        
         clearPiece?.MoveClearPiece();
 
         ShiftToNextStage();
@@ -130,7 +129,7 @@ public sealed class StageManager : Singletone<StageManager>
 
     public void ShiftToNextStage()
     {
-        UIManager.Instance.HideUI();
+        
         stageIndex++;
 
         BoardManager.Instance.ShiftBoard();
