@@ -302,7 +302,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f391367d04fb7b4c8a9c8f43fa8f8c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundName: Click
+  soundName: Click_POP
+  IsClickSoundEnabled: 1
 --- !u!1 &9125245484404714641
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,6 +358,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f1a6ec5e7615cc34da2c4663f94e08e0, type: 3}
   - {fileID: 8300000, guid: 3e437ba8949baae4299a22cb66902f17, type: 3}
   sfxClips:
-  - {fileID: 8300000, guid: c19dd998362d67f4b9a1d6991eb081c9, type: 3}
+  - {fileID: 8300000, guid: 59e3e702e23d07d40b3c06fdf261c223, type: 3}
   - {fileID: 8300000, guid: 527fa41148384454dbee3e07ab84f45f, type: 3}
   - {fileID: 8300000, guid: b0483bcd5910ffb4db8279f21e9ade83, type: 3}

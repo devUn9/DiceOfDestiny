@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2399550750306443916}
   - component: {fileID: 2090777829953116654}
   - component: {fileID: 2648537067952092600}
-  - component: {fileID: 5135919297675481868}
   m_Layer: 5
   m_Name: Toast
   m_TagString: Untagged
@@ -77,23 +76,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5135919297675481868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 569366315313829650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 215df21cd9c749543b4329490278b8f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toastPrefab: {fileID: 569366315313829650}
-  uiCanvas: {fileID: 0}
-  toastDuration: 2
-  worldYOffset: 0
-  pixelYOffset: 10
 --- !u!1 &8833940191713730514
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +144,7 @@ MonoBehaviour:
   m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a22eb4cb13469e44dbaab3e071b6cf54, type: 2}
-  m_sharedMaterial: {fileID: -8984440737036626692, guid: a22eb4cb13469e44dbaab3e071b6cf54, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 0884f1e1c6593644aac7a7fbd85099cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

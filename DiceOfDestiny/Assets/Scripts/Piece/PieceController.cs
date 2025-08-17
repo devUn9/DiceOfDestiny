@@ -106,7 +106,7 @@ public class PieceController : MonoBehaviour
             // 행동력이 0이면 행동 불가
             if (!ActionPointManager.Instance.CanUse())
             {
-                ToastManager.Instance.ShowToast("행동력이 부족합니다.", transform);
+                ToastManager.Instance.ShowToast("행동력이 부족합니다.", transform, 0f);
                 return;
             }
 
@@ -120,7 +120,7 @@ public class PieceController : MonoBehaviour
             {
                 if (!MissionManager.Instance.CanGoFinishLine())
                 {
-                    ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform);
+                    ToastManager.Instance.ShowToast("추가 미션을 완료해야 도착점에 갈 수 있습니다.", transform, 1f);
                     return;
                 }
             }
@@ -129,7 +129,7 @@ public class PieceController : MonoBehaviour
             {
                 int stunTurn = statusEffectController.GetRemainingTurn(PieceStatus.Stun);
                 Debug.Log("Piece is stunned!");
-                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {stunTurn}턴간 이동할 수 없습니다.", transform);
+                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {stunTurn}턴간 이동할 수 없습니다.", transform, 1f);
                 return;
             }
 
@@ -137,14 +137,14 @@ public class PieceController : MonoBehaviour
             {
                 int DiseaseTurn = statusEffectController.GetRemainingTurn(PieceStatus.Disease);
                 Debug.Log("Piece is diseased!");
-                ToastManager.Instance.ShowToast(message: $"기물이 질병에 걸렸습니다! {DiseaseTurn}턴간 행동이 제한됩니다.", transform);
+                ToastManager.Instance.ShowToast(message: $"기물이 질병에 걸렸습니다! {DiseaseTurn}턴간 행동이 제한됩니다.", transform, 1f);
                 return;
             }
 
             // 시작지점으로 다시 돌아가려고 하면
             if (isOutStartingLine && newPosition.y == 0)
             {
-                ToastManager.Instance.ShowToast(message: "시작 지점으로 돌아갈 수 없습니다!", transform);
+                ToastManager.Instance.ShowToast(message: "시작 지점으로 돌아갈 수 없습니다!", transform, 1f);
                 RotateHalfBack(moveDirection);
                 return;
             }
@@ -187,7 +187,7 @@ public class PieceController : MonoBehaviour
                         if (surroundList.Contains(newPosition))
                         {
                             Debug.Log("Cannot move to a position near a Priest due to Demon face!");
-                            ToastManager.Instance.ShowToast(message: "악마와 사제는 공존할 수 없습니다!", transform);
+                            ToastManager.Instance.ShowToast("악마와 사제는 공존할 수 없습니다!", transform, 1f);
                             RotateHalfBack(moveDirection);
                             return;
                         }
@@ -209,7 +209,7 @@ public class PieceController : MonoBehaviour
                         if (surroundList.Contains(newPosition))
                         {
                             Debug.Log("Cannot move to a position near a Priest due to Demon face!");
-                            ToastManager.Instance.ShowToast(message: "악마와 사제는 공존할 수 없습니다!", transform);
+                            ToastManager.Instance.ShowToast("악마와 사제는 공존할 수 없습니다!", transform, 1f);
                             RotateHalfBack(moveDirection);
                             return;
                         }
