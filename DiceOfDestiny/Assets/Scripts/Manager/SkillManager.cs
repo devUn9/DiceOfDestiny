@@ -329,7 +329,7 @@ public class SkillManager : Singletone<SkillManager>
 
         BoardManager.Instance.ReassignMatchingColorTiles(position, pieceController.GetTopFace().color);
 
-        PieceManager.Instance.currentPiece.canControl = true;
+        
     }
     #endregion
 }

@@ -147,7 +147,7 @@ public class ActiveSkill : MonoBehaviour
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
         
-       yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.HighlightTiles();
         yield return BoardSelectManager.Instance.WaitForTileClick();
@@ -188,6 +188,7 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator Paint(PieceController pieceController)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.AllHighlightTiles();
@@ -245,6 +246,8 @@ public class ActiveSkill : MonoBehaviour
 
     public IEnumerator ConvertToFanatic(PieceController piece)
     {
+        PieceManager.Instance.SetCurrentPieceControl(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         List<Vector2Int> surroundList = BoardManager.Instance.GetTilePositions(DirectionType.Eight, piece.gridPosition);
@@ -293,6 +296,8 @@ public class ActiveSkill : MonoBehaviour
 
             //ToastManager.Instance.ShowToast("성공", piece.transform);
         }
+
+        PieceManager.Instance.SetCurrentPieceControl(true);
     }
 
     // 사제 스킬
@@ -322,12 +327,14 @@ public class ActiveSkill : MonoBehaviour
         }
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+
     }
 
     // 도적 스킬 : 이동 UI 띄우기
     public IEnumerator FastMove(PieceController piece)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
         moveSkillUI.Initialize(piece); // 추가
         yield return moveSkillUI.WaitForArrowClick();
