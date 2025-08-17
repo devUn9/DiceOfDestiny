@@ -485,7 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.972549}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1409,13 +1409,13 @@ RectTransform:
   - {fileID: 2180327273142807546}
   - {fileID: 6642567907485856987}
   - {fileID: 8445874926146072273}
-  - {fileID: 3382230450946407108}
-  - {fileID: 4343333950730582748}
-  - {fileID: 629738164078481350}
   - {fileID: 3735948824040457822}
   - {fileID: 6211928423455189730}
   - {fileID: 712622148280798292}
   - {fileID: 2840188421636397577}
+  - {fileID: 3382230450946407108}
+  - {fileID: 4343333950730582748}
+  - {fileID: 629738164078481350}
   m_Father: {fileID: 3546800214383908565}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1444,7 +1444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.95686275}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3730,7 +3730,7 @@ GameObject:
   - component: {fileID: 984872789371547988}
   - component: {fileID: 5366801111245009590}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
