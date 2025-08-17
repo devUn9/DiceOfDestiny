@@ -69,8 +69,10 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
         }
         else
         {
-            Debug.Log("90%의 확률로 질병을 극복했습니다.");
             ToastManager.Instance.ShowToast("90%의 확률로 질병을 극복했습니다.", piece.transform, 1f);
+
+            if (className == "Baby")
+                return;
         }
 
 
