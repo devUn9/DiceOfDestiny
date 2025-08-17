@@ -31,7 +31,6 @@ public sealed class StageManager : Singletone<StageManager>
         currentStage = stageProfiles[stageIndex];
 
         UIManager.Instance.SetStageName(currentStage.StageName);
-        UIManager.Instance.UpdateActionPointUI();
 
         ObstacleManager.Instance.RemoveAllObstacle();
         BoardManager.Instance.SetBoard(currentStage);
@@ -40,6 +39,7 @@ public sealed class StageManager : Singletone<StageManager>
         CurrentTurn = 1;
         DiceValue = 0;
 
+        UIManager.Instance.UpdateActionPointUI();
         UIManager.Instance.ShowBanner(currentStage.stageNumber, currentStage.StageName);
         BoardManager.Instance.CreateBorderAndBG();
     }
