@@ -70,7 +70,7 @@ public class BoardManager : Singletone<BoardManager>
     // 보드 경계 체크 함수, 보드 안쪽을 리턴
     private bool IsValidPosition(Vector2Int position)
     {
-        return position.x >= 0 && position.x < boardSize && position.y >= 0 && position.y < boardSize;
+        return position.x >= 0 && position.x < boardSize && position.y >= 0 && position.y < boardSizeY;
     }
 
     private void GenerateBoard()
