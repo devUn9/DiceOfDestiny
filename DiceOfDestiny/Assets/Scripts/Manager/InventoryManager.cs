@@ -169,7 +169,7 @@ public class InventoryManager : Singletone<InventoryManager>
         }
     }
 
-    public void GetRandomItem()
+    public string GetRandomItem()
     {
         float random = Random.Range(0.0f, 1.0f);
 
@@ -177,11 +177,44 @@ public class InventoryManager : Singletone<InventoryManager>
         {
             var item = GenerateRandomPieceNet();
             AddPieceNet(item);
+            return "전개도를 얻었습니다.";
         }
         else
         {
             var item = GenerateRandomSticker();
             AddSticker(item);
+
+            string className = "";
+            if (item.classData == knightClassData)
+            {
+                className = "기사";
+            }
+            else if (item.classData == demonClassData)
+            {
+                className = "악마";
+            }
+            else if (item.classData == babyClassData)
+            {
+                className = "아기";
+            }
+            else if (item.classData == fanaticClassData)
+            {
+                className = "광신도";
+            }
+            else if (item.classData == thiefClassData)
+            {
+                className = "도둑";
+            }
+            else if (item.classData == preistClassData)
+            {
+                className = "사제";
+            }
+            else if (item.classData == painterClassData)
+            {
+                className = "화가";
+            }
+
+            return $"{className} 스티커를 얻었습니다.";
         }
     }
 
