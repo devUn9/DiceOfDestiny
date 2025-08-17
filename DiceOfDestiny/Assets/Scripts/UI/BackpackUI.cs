@@ -165,7 +165,7 @@ public class BackpackUI : MonoBehaviour
 
     public void onClickSpawnPieceButton()
     {
-        StopAllCoroutines();
+        StopCoroutine(SpawnPiece());
 
         if (PieceManager.Instance.pieceDatas[currentIndex] == null)
         {

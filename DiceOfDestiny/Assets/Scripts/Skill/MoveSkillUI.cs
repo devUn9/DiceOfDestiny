@@ -85,8 +85,14 @@ public class MoveSkillUI : MonoBehaviour
             BoardManager.Instance.ReturnObstacleByPosition(upPos).isWalkable) &&
             BoardManager.Instance.Board[upPos.x, upPos.y].GetPiece() == null)
         {
-            upButton.SetActive(true);
-            RegisterButtonEvents(upButton, () => SelectDirection(Vector2Int.up));
+
+            if (MissionManager.Instance.CanGoFinishLine())
+            {
+               
+                upButton.SetActive(true);
+                RegisterButtonEvents(upButton, () => SelectDirection(Vector2Int.up)); ;
+            }
+           
         }
 
         // 하
