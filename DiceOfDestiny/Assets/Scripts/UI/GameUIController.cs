@@ -48,4 +48,14 @@ public class GameUIController : MonoBehaviour
     {
         missionUI.GetComponent<MissionUI>().UpdateProgressText();
     }
+
+    public void ShowMissionUI()
+    {
+        missionUI.SetActive(true);
+    }
+
+    public void HideMissionUI()
+    {
+        missionUI.SetActive(false);
+    }
 }

@@ -87,7 +87,16 @@ public class UIManager : Singletone<UIManager>
     public void UpdateMissionUI()
     {
         currentUIRoot.GetComponent<GameUIController>().UpdateMissionUI();
-    } 
+    }
+
+    public void ShowMissionUI()
+    {
+        currentUIRoot.GetComponent<GameUIController>().ShowMissionUI();
+    }
+    public void HideMissionUI()
+    {
+        currentUIRoot.GetComponent<GameUIController>().HideMissionUI();
+    }
 
     public void HideUI()
     {

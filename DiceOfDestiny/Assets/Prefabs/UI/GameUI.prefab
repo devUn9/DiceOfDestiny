@@ -1900,6 +1900,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: MissionUI
       objectReference: {fileID: 0}
+    - target: {fileID: 8737747767158278197, guid: 27b0466fde70bc945b3cc6ebdc9daf85, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 135
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737747767158278197, guid: 27b0466fde70bc945b3cc6ebdc9daf85, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -67
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
