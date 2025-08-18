@@ -200,7 +200,8 @@ public class PassiveSkill : MonoBehaviour
         for (int i = 0; i < diagonalList.Count; i++)
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(diagonalList[i]);
-            if (obstacle != null && (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Pawn))
+            if (obstacle != null &&
+                    (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie))
             {
                 hasTarget = true;
                 Debug.Log($"광신도가 공격 대상 찾음: ({diagonalList[i].x}, {diagonalList[i].y})");
@@ -237,7 +238,8 @@ public class PassiveSkill : MonoBehaviour
                 skillEffects.Add(skillEffect);
 
                 var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(pos);
-                if (targetObstacle != null && targetObstacle.obstacleType == ObstacleType.Slime)
+                if (targetObstacle != null &&
+                   (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie))
                 {
                     BoardManager.Instance.RemoveObstacleAtPosition(pos);
                     Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
@@ -263,6 +265,72 @@ public class PassiveSkill : MonoBehaviour
         {
             yield return null;
         }
+    }
+
+    public IEnumerator DoFanaticMeteor()
+    {
+        PieceManager.Instance.SetCurrentPieceControl(false);
+
+        yield return new WaitForSeconds(0.5f);
+
+        // 전체 타일 위치 가져오기
+        List<Vector2Int> allTiles = BoardManager.Instance.GetAllTilePositions();
+
+        if (allTiles.Count == 0)
+        {
+            Debug.LogWarning("보드에 타일이 없습니다.");
+            yield break;
+        }
+
+        List<GameObject> skillEffects = new List<GameObject>();
+
+        // 모든 타일에 이펙트 생성
+        foreach (var pos in allTiles)
+        {
+            // 그리드 위치를 월드 위치로 변환
+            Vector3 effectPos = pos + new Vector2(-6, -6); // 타일 중앙 위치
+
+            // 이펙트 생성 (회전은 기본값으로 설정)
+            GameObject skillEffect = Instantiate(
+                fanaticPassiveEffect,
+                effectPos,
+                Quaternion.Euler(0f, 0f, 0f)
+            );
+            skillEffects.Add(skillEffect);
+
+            // 타겟 장애물 확인
+            var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(pos);
+            if (targetObstacle != null)
+            {
+                if (targetObstacle.obstacleType == ObstacleType.Slime ||
+                    targetObstacle.obstacleType == ObstacleType.Zombie)
+                {
+                    BoardManager.Instance.RemoveObstacleAtPosition(pos);
+                    Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
+
+                    RuleEvents.TriggerRule("Fanatic_Passive2_ObstacleMove");
+                }
+                else if (targetObstacle.obstacleType == ObstacleType.Pawn)
+                {
+                    ObstacleManager.Instance.HitPawn(pos);
+                    Debug.Log($"폰 데미지 입힘: ({pos.x}, {pos.y})");
+                }
+            }
+        }
+
+        // 이펙트 지속 시간
+        yield return new WaitForSeconds(0.5f);
+
+        // 이펙트 제거
+        foreach (var skillEffect in skillEffects)
+        {
+            if (skillEffect != null)
+            {
+                Destroy(skillEffect);
+            }
+        }
+
+        PieceManager.Instance.SetCurrentPieceControl(true);
     }
 
     // 사제 패시브 스킬

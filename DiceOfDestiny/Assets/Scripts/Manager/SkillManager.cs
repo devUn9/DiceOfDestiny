@@ -97,6 +97,11 @@ public class SkillManager : Singletone<SkillManager>
         StartCoroutine(passiveSkill.Steal());
     }
 
+    public void FanaticMeteor()
+    {
+        StartCoroutine(passiveSkill.DoFanaticMeteor());
+    }
+
     // 스킬 사용 가능한지 판단하는 코루틴
     public IEnumerator TryActiveSkillCoroutine(Vector2Int position, PieceController piece)
     {
