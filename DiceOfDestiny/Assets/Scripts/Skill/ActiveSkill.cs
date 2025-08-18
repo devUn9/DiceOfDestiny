@@ -13,6 +13,7 @@ public class ActiveSkill : MonoBehaviour
     private PainterActiveSkillUI painterActiveSkillUI;
     private MoveSkillUI moveSkillUI;
     private PieceSelectUI pieceSelectUI;
+    private int fanaticPoint = 0;
 
     private void Awake()
     {
@@ -281,6 +282,11 @@ public class ActiveSkill : MonoBehaviour
                                 BoardManager.Instance.boardTransform
                             );
                             Destroy(effect, 0.5f);
+                        }
+                        fanaticPoint++;
+                        if( fanaticPoint == 3)
+                        {
+                            SkillManager.Instance.FanaticMeteor();
                         }
                     }
                 }

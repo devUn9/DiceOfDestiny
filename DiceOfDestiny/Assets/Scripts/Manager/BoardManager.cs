@@ -674,6 +674,19 @@ public class BoardManager : Singletone<BoardManager>
         return positions;
     }
 
+    public List<Vector2Int> GetAllTilePositions()
+    {
+
+        List<Vector2Int> allList = new List<Vector2Int>();
+        for (int x = 0; x <= 12; x++)
+        {
+            for (int y = 1; y <= 13; y++)
+            {
+                allList.Add(new Vector2Int(x, y));
+            }
+        }
+        return allList;
+    }
 
     public void RemoveObstacleAtPosition(Vector2Int position)
     {
