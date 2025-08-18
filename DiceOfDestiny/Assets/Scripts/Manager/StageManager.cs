@@ -18,6 +18,9 @@ public sealed class StageManager : Singletone<StageManager>
     public int CurrentTurn { get; private set; } = 1;
     public int DiceValue { get; private set; }
 
+    // 튜토리얼 관련
+    public bool isFirstCreatePiece = false;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
@@ -41,6 +44,7 @@ public sealed class StageManager : Singletone<StageManager>
         CurrentTurn = 1;
         DiceValue = 0;
 
+        // 미션이 두개 이상일 때 미션 배너 생성
         if (currentStage.missions.Count >= 2)
         {
             UIManager.Instance.InitMissionUI();
@@ -125,7 +129,7 @@ public sealed class StageManager : Singletone<StageManager>
             PieceManager.Instance.Pieces.Remove(piece);
         }
 
-        if(clearPiece != null)
+        if (clearPiece != null)
         {
             clearPiece.isOutStartingLine = false;
         }
@@ -135,7 +139,7 @@ public sealed class StageManager : Singletone<StageManager>
 
         ToastManager.Instance.ClearAllToasts();
 
-        
+
         clearPiece?.MoveClearPiece();
 
         ShiftToNextStage();
@@ -143,7 +147,7 @@ public sealed class StageManager : Singletone<StageManager>
 
     public void ShiftToNextStage()
     {
-        
+
         stageIndex++;
 
         BoardManager.Instance.ShiftBoard();
@@ -160,7 +164,7 @@ public sealed class StageManager : Singletone<StageManager>
     {
         stageIndex = 0;
     }
-    
+
     public int GetCurrentStage()
     {
         return stageIndex;
@@ -178,4 +182,4 @@ public sealed class StageManager : Singletone<StageManager>
 
         return false;
     }
-}   
+}

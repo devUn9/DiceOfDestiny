@@ -98,14 +98,21 @@ public class UIManager : Singletone<UIManager>
         currentUIRoot.GetComponent<GameUIController>().HideMissionUI();
     }
 
+    public void ShowTutorialUI()
+    {
+        currentUIRoot.GetComponent<GameUIController>().ShowTutorialUI();
+    }
+    public void HideTutorialUI()
+    {
+        currentUIRoot.GetComponent<GameUIController>().HideTutorialUI();
+    }
+
     public void HideUI()
     {
         currentUIRoot.SetActive(false);
     }
     public void ShowUI()
     {
-
         currentUIRoot.SetActive(true);
-
     }
 }

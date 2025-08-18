@@ -14,6 +14,7 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private GameObject stageFailedUI;
 
     [SerializeField] private GameObject missionUI;
+    [SerializeField] private GameObject tutorialUI;
     public void Initialize()
     {
         pauseMenuUI.SetActive(false);
@@ -57,5 +58,15 @@ public class GameUIController : MonoBehaviour
     public void HideMissionUI()
     {
         missionUI.SetActive(false);
+    }
+
+    public void ShowTutorialUI()
+    {
+        tutorialUI.SetActive(true);
+    }
+
+    public void HideTutorialUI()
+    {
+        tutorialUI.SetActive(false);
     }
 }
