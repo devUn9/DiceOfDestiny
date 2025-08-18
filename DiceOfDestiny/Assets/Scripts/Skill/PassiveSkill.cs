@@ -274,7 +274,7 @@ public class PassiveSkill : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         // 전체 타일 위치 가져오기
-        List<Vector2Int> allTiles = BoardManager.Instance.GetAllTilePositions();
+        List<Vector2Int> allTiles = BoardManager.Instance.GetCircleTilePositions();
 
         if (allTiles.Count == 0)
         {
