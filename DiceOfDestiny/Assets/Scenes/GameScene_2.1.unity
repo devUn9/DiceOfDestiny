@@ -1662,7 +1662,7 @@ MonoBehaviour:
   uiCanvas: {fileID: 1222871037}
   toastDuration: 2
   worldYOffset: 0
-  pixelYOffset: 20
+  pixelYOffset: 10
 --- !u!4 &758300002
 Transform:
   m_ObjectHideFlags: 0
