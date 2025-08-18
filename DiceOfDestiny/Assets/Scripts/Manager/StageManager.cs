@@ -118,7 +118,7 @@ public sealed class StageManager : Singletone<StageManager>
 
         foreach (var piece in toRemove)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 3; i++)
             {
                 if (PieceManager.Instance.pieceDatas[i] == null)
                 {
