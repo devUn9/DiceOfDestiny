@@ -94,7 +94,7 @@ public class ToastManager : Singletone<ToastManager>
 
     public void ClearAllToasts()
     {
-
+        StopAllCoroutines();
         // 모든 토스트 인스턴스 파괴
         foreach (var toast in toastInstances)
         {
