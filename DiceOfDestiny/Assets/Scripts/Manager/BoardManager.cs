@@ -688,6 +688,55 @@ public class BoardManager : Singletone<BoardManager>
         return allList;
     }
 
+    public List<Vector2Int> GetCircleTilePositions()
+    {
+        List<Vector2Int> magicCircleList = new List<Vector2Int>();
+        int centerX = 6;
+        int centerY = 7;
+        int radius = 5;
+        float tolerance = 0.5f;
+
+        // 원형 패턴
+        for (int x = 0; x <= 12; x++)
+        {
+            for (int y = 1; y <= 13; y++)
+            {
+                float distance = Mathf.Sqrt(Mathf.Pow(x - centerX, 2) + Mathf.Pow(y - centerY, 2));
+                if (Mathf.Abs(distance - radius) < tolerance)
+                {
+                    magicCircleList.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        // 대각선 패턴
+        for (int x = 0; x <= 12; x++)
+        {
+            int y1 = x + 1; // 주 대각선
+            int y2 = 13 - x; // 부 대각선
+            if (y1 >= 1 && y1 <= 13)
+            {
+                magicCircleList.Add(new Vector2Int(x, y1));
+            }
+            if (y2 >= 1 && y2 <= 13)
+            {
+                magicCircleList.Add(new Vector2Int(x, y2));
+            }
+        }
+
+        // 추가: 십자형 패턴 (마법진 대칭성 강화)
+        for (int x = 0; x <= 12; x++)
+        {
+            magicCircleList.Add(new Vector2Int(x, centerY)); // 수평선 (y = 7)
+        }
+        for (int y = 1; y <= 13; y++)
+        {
+            magicCircleList.Add(new Vector2Int(centerX, y)); // 수직선 (x = 6)
+        }
+        
+        return magicCircleList;
+    }
+
     public void RemoveObstacleAtPosition(Vector2Int position)
     {
         if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSizeY)
