@@ -39,7 +39,7 @@ MonoBehaviour:
   - type: 2
     weight: 10
   - type: 4
-    weight: 20
+    weight: 30
   - type: 0
     weight: 3
   - type: 8

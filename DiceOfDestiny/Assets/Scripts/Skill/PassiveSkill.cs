@@ -47,7 +47,7 @@ public class PassiveSkill : MonoBehaviour
                 (new Vector2Int(1, 0), -90f)   // 우
             };
 
-            ToastManager.Instance.ShowToast("기사 패시브 발동! 주변 4방향을 공격합니다.", pieceController.transform, 1f);
+            ToastManager.Instance.ShowToast("기사 패시브 발동! 주변 4방향을 공격합니다.", pieceController.transform, 0f);
 
             foreach (var (dir, rotationZ) in directions)
             {
@@ -369,7 +369,7 @@ public class PassiveSkill : MonoBehaviour
         SkillManager.Instance.DelayTime = 2f;
         yield return new WaitForSeconds(0.8f); // 기물이 굴러가는 시간
 
-        ToastManager.Instance.ShowToast("도둑이 보물을 훔칩니다.", PieceManager.Instance.currentPiece.transform, 1f);
+        ToastManager.Instance.ShowToast("도둑이 보물을 훔칩니다.", PieceManager.Instance.currentPiece.transform, 0f);
 
         if (thiefPassiveEffect != null)
         {

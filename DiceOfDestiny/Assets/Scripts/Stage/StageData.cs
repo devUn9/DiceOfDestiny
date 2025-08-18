@@ -33,5 +33,5 @@ public class StageData : ScriptableObject
 public class ObstacleWeight
 {
     public ObstacleType type;
-    [Range(1, 20)] public int weight;
+    [Range(1, 30)] public int weight;
 }

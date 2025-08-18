@@ -26,8 +26,8 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
 
         if (className == "Knight")
         {
-            Debug.Log("기사가 100% 확률로 질병에 걸렸습니다.");
-            ToastManager.Instance.ShowToast("기사가 100% 확률로 질병에 걸렸습니다.", piece.transform, 1f);
+            Debug.Log("기사가 100%의 확률로 질병에 걸렸습니다.");
+            ToastManager.Instance.ShowToast("기사가 100%의 확률로 질병에 걸렸습니다.", piece.transform, 1f);
             RuleEvents.TriggerRule("Knight_Passive_DiseaseX2");
 
             piece.statusEffectController.SetStatus(PieceStatus.Disease, 2);
@@ -36,7 +36,7 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
 
         if (className == "Baby")
         {
-            Debug.Log("패로 돌아가는 코루틴 시작");
+            Debug.Log("아기가 물에 빠져서 패로 돌아갑니다.");
             ToastManager.Instance.ShowToast($"응애! <color=blue>(퐁당)</color>", piece.transform, 1f);
             StartCoroutine(GoHand(piece));
             return;

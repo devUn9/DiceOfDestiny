@@ -445,7 +445,7 @@ MonoBehaviour:
   - {r: 0.22467959, g: 0.26718375, b: 0.9339623, a: 1}
   - {r: 0.9622642, g: 0.9622642, b: 0.28595585, a: 1}
   - {r: 0.6359323, g: 0.2027857, b: 0.8773585, a: 1}
-  - {r: 1, g: 0.54023284, b: 0.042452812, a: 1}
+  - {r: 0.7735849, g: 0.47541463, b: 0.14960839, a: 1}
 --- !u!1 &255492582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1662,7 +1662,7 @@ MonoBehaviour:
   uiCanvas: {fileID: 1222871037}
   toastDuration: 2
   worldYOffset: 0
-  pixelYOffset: 10
+  pixelYOffset: 20
 --- !u!4 &758300002
 Transform:
   m_ObjectHideFlags: 0
@@ -3810,6 +3810,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6828c2986df7d6e4aabc87941897539e, type: 2}
   - {fileID: 11400000, guid: 8ed4859463f62cf448965ea0fe6e3bca, type: 2}
   - {fileID: 11400000, guid: 60f221dfb72b1b84aa4272684d5f262c, type: 2}
+  - {fileID: 11400000, guid: b9fc5464a9e2a084caa427f69e57cee1, type: 2}
   isFirstCreatePiece: 0
 --- !u!1 &1973307751
 GameObject:
