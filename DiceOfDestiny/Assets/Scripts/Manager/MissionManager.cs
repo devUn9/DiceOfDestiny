@@ -76,9 +76,9 @@ public class MissionManager : Singletone<MissionManager>
         return false;
     }
 
-    private void UpdateKillEnemyCount(int count = 0)
+    private int UpdateKillEnemyCount(int count = 0)
     {
-        killEnemyCount = 6;
+        killEnemyCount = 8;
 
         for (int x = 0; x < BoardManager.Instance.boardSize; x++)
         {
@@ -92,6 +92,7 @@ public class MissionManager : Singletone<MissionManager>
         }
 
         killEnemyCount -= count;
+        return count;
     }
 
     //적을 모두 처치했는지 확인
@@ -99,7 +100,7 @@ public class MissionManager : Singletone<MissionManager>
     {
         int count = 0;
 
-        UpdateKillEnemyCount(count);
+        count = UpdateKillEnemyCount(count);
 
         return count <= 0;
     }

@@ -1,68 +1,27 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class SlimeBehaviour : Obstacle, IObstacleBehaviour
 {
     [SerializeField] private float duration = 0.4f;
 
-    NextStep oppositeStep = NextStep.None;
+    private List<NextStep> randNextStep = new List<NextStep>();
 
     public void DoLogic()
     {
-        int rand = Random.Range(0, 4); // 0~3
-        switch (rand)
+        randNextStep.Clear();
+
+        if (CanNextStep(NextStep.Up)) randNextStep.Add(NextStep.Up);
+        if (CanNextStep(NextStep.Down)) randNextStep.Add(NextStep.Down);
+        if (CanNextStep(NextStep.Left)) randNextStep.Add(NextStep.Left);
+        if (CanNextStep(NextStep.Right)) randNextStep.Add(NextStep.Right);
+
+        if (randNextStep.Count > 0)
         {
-            case 0: nextStep = NextStep.Up; break;
-            case 1: nextStep = NextStep.Down; break;
-            case 2: nextStep = NextStep.Left; break;
-            case 3: nextStep = NextStep.Right; break;
+            int randIndex = Random.Range(0, randNextStep.Count); // 0 ~ Count-1
+            MoveSlime(randNextStep[randIndex]);
         }
-
-        if (nextStep == oppositeStep)
-        {
-            nextStep = GetOppositeStep(nextStep);
-        }
-
-        Vector2Int direction = GetDirection(nextStep);
-        oppositeStep = GetOppositeStep(nextStep);
-
-        Vector2Int nextPosition = obstaclePosition + direction;
-        Tile nextTile = BoardManager.Instance.GetTile(nextPosition);
-
-        if (nextTile == null)
-        {
-            animator.SetTrigger("Jump");
-
-            if (nextStep == NextStep.Left)
-                spriteRenderer.flipX = true;
-            else
-                spriteRenderer.flipX = false;
-            return;
-        }
-
-        if (!BoardManager.Instance.IsMovementArea(nextPosition))
-            return;
-
-        if (nextTile.Obstacle == ObstacleType.None && nextTile.GetPiece() == null)
-        {
-            Vector2Int beforePosition = obstaclePosition;
-
-            BoardManager.Instance.MoveObstacle(this, nextPosition);
-            AnimateObstacleMove(nextStep);
-
-            BoardManager.Instance.CreateObstacle(beforePosition, ObstacleType.SlimeDdong);
-
-            RuleEvents.TriggerRule("Slime_Move");
-        }
-        else
-        {
-            animator.SetTrigger("Jump");
-        }
-
-        if (nextStep == NextStep.Left)
-            spriteRenderer.flipX = true;
-        else
-            spriteRenderer.flipX = false;
     }
 
     private Vector2Int GetDirection(NextStep step)
@@ -74,18 +33,6 @@ public class SlimeBehaviour : Obstacle, IObstacleBehaviour
             NextStep.Up => Vector2Int.up,
             NextStep.Down => Vector2Int.down,
             _ => Vector2Int.zero
-        };
-    }
-
-    private NextStep GetOppositeStep(NextStep step)
-    {
-        return step switch
-        {
-            NextStep.Right => NextStep.Left,
-            NextStep.Left => NextStep.Right,
-            NextStep.Up => NextStep.Down,
-            NextStep.Down => NextStep.Up,
-            _ => NextStep.None
         };
     }
 
@@ -130,5 +77,62 @@ public class SlimeBehaviour : Obstacle, IObstacleBehaviour
                 );
             });
         }
+    }
+
+    private bool CanNextStep(NextStep nextStep)
+    {
+        Vector2Int direction = GetDirection(nextStep);
+
+        Vector2Int nextPosition = obstaclePosition + direction;
+        Tile nextTile = BoardManager.Instance.GetTile(nextPosition);
+
+        // 좌우 반전
+        if (nextTile == null)
+        {
+            animator.SetTrigger("Jump");
+
+            if (nextStep == NextStep.Left)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+            return false;
+        }
+
+        // 보드 안밖인지
+        if (!BoardManager.Instance.IsMovementArea(nextPosition))
+            return false;
+
+        if (nextTile.Obstacle == ObstacleType.None && nextTile.GetPiece() == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void MoveSlime(NextStep nextStep)
+    {
+        Vector2Int direction = GetDirection(nextStep);
+
+        Vector2Int nextPosition = obstaclePosition + direction;
+        Tile nextTile = BoardManager.Instance.GetTile(nextPosition);
+
+        if (nextTile.Obstacle == ObstacleType.None && nextTile.GetPiece() == null)
+        {
+            Vector2Int beforePosition = obstaclePosition;
+
+            BoardManager.Instance.MoveObstacle(this, nextPosition);
+            AnimateObstacleMove(nextStep);
+
+            BoardManager.Instance.CreateObstacle(beforePosition, ObstacleType.SlimeDdong);
+
+            RuleEvents.TriggerRule("Slime_Move");
+        }
+
+        // 좌우 반전
+        if (nextStep == NextStep.Left)
+            spriteRenderer.flipX = true;
+        else
+            spriteRenderer.flipX = false;
     }
 }

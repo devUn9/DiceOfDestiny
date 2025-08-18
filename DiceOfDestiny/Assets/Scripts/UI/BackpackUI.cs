@@ -51,6 +51,13 @@ public class BackpackUI : MonoBehaviour
         // Refresh 함수 구독
         EventManager.Instance.AddListener("Refresh", _ => Refresh());
 
+        // 첫 스테이지면 튜토리얼
+        if (StageManager.Instance.currentStage.stageNumber == 1)
+        {
+            onClickBackpackOpenCloseButton();
+            UIManager.Instance.ShowTutorialUI();
+        }
+
         // 기물 선택 UI의 기물 윗면 새로고침
         Refresh();
     }
@@ -133,7 +140,7 @@ public class BackpackUI : MonoBehaviour
             BoardSelectManager.Instance.restrictYBoundaries = true;
             oneChance = false;
         }
-        
+
         else if (ActionPointManager.Instance.CanUse(1))
         {
             ActionPointManager.Instance.RemoveAP(1);
@@ -161,11 +168,17 @@ public class BackpackUI : MonoBehaviour
         choicePieceClassImage[currentIndex].sprite = null;
 
         // 피스 생성
-        PieceManager.Instance.GeneratePiece(currentIndex, gridPos);       
-        
+        PieceManager.Instance.GeneratePiece(currentIndex, gridPos);
+
         // 슬롯에 있는 피스 제거
         Debug.Log(currentIndex + "번 피스 제거");
-        PieceManager.Instance.pieceDatas[currentIndex] = null;      
+        PieceManager.Instance.pieceDatas[currentIndex] = null;
+
+        if (!StageManager.Instance.isFirstCreatePiece)
+        {
+            StageManager.Instance.isFirstCreatePiece = true;
+            UIManager.Instance.HideTutorialUI();
+        }
     }
 
 
