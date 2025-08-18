@@ -70,7 +70,7 @@ public class BoardManager : Singletone<BoardManager>
     // 보드 경계 체크 함수, 보드 안쪽을 리턴
     private bool IsValidPosition(Vector2Int position)
     {
-        return position.x >= 0 && position.x < boardSize && position.y >= 0 && position.y < boardSize;
+        return position.x >= 0 && position.x < boardSize && position.y >= 0 && position.y < boardSizeY;
     }
 
     private void GenerateBoard()
@@ -674,6 +674,19 @@ public class BoardManager : Singletone<BoardManager>
         return positions;
     }
 
+    public List<Vector2Int> GetAllTilePositions()
+    {
+
+        List<Vector2Int> allList = new List<Vector2Int>();
+        for (int x = 0; x <= 12; x++)
+        {
+            for (int y = 1; y <= 13; y++)
+            {
+                allList.Add(new Vector2Int(x, y));
+            }
+        }
+        return allList;
+    }
 
     public void RemoveObstacleAtPosition(Vector2Int position)
     {
