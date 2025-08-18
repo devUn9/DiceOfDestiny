@@ -79,7 +79,7 @@ public sealed class StageManager : Singletone<StageManager>
     {
         if (GameState == GameState.ReadyToRoll)
         {
-            ToastManager.Instance.ShowToast("먼저 주사위를 굴리세요.", transform, 1f);
+            ToastManager.Instance.ShowToast("먼저 주사위를 굴리세요.", transform, 0f);
             return;
         }
         PieceManager.Instance.DecreaseDebuffAllPieces(); // 모든 말의 디버프 감소
