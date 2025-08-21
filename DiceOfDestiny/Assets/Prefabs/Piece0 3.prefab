@@ -407,6 +407,7 @@ MonoBehaviour:
   animationRenderer: {fileID: 7747588284998386673}
   canControl: 1
   isOutStartingLine: 0
+  lastTileColor: 7
   statusEffectController: {fileID: 0}
   uiFollow: {fileID: 0}
 --- !u!114 &-496050788824586386
@@ -595,7 +596,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &438653871639293440
 RectTransform:
   m_ObjectHideFlags: 0
