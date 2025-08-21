@@ -38,6 +38,10 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
         {
             AnimateObstacleHalfBack(nextStep);
             nextStep = oppositeStep;
+
+            isStun = true;
+            stunTime = 2;
+
             return;
         }
 
@@ -208,6 +212,10 @@ public class ZombieBehaviour : Obstacle, IObstacleBehaviour
         {
             AnimateObstacleHalfBack(nextStep);
             nextStep = _oppositeStep;
+
+            isStun = true;
+            stunTime = 2;
+            
             ToastManager.Instance.ShowToast("어림도 없지! <color=red>(팅!)</color>", _nextTile.GetPiece().transform, 1f);
 
             RuleEvents.TriggerRule("Zombie_VsCombat_RecoilStun");

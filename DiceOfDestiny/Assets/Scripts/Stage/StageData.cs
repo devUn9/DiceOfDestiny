@@ -9,9 +9,11 @@ public class StageData : ScriptableObject
     [Header("Stage Missions")]
     [SerializeReference] public List<MissionData> missions;
     public int maxTurn = 30;
-    public bool isGrayGrass = false;
-    public bool isGrayTree = false;
-    public bool isGrayPoisonousherb = false;
+    [Header("Gray Setting")]
+    public Vector2Int grayGrassCount = new Vector2Int(0, 0);
+    public Vector2Int grayTreeCount = new Vector2Int(0, 0);
+    public Vector2Int grayPoisonousherbCount = new Vector2Int(0, 0);
+    public int grayTileCount = 0;
 
     [Header("ColorSetting")]
     public int minimumColorEnsure;

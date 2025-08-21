@@ -914,17 +914,17 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
-    public void ChangeGrayObstacles(int count = 3)
+    public void ChangeGrayObstacles(StageData stageData)
     {
-        int grayGrassCount = count;
-        int grayTreeCount = count;
-        int grayPoisonousherbCount = count;
+        int grayGrassCount = Random.Range(stageData.grayGrassCount.x, stageData.grayGrassCount.y+ 1);
+        int grayTreeCount = Random.Range(stageData.grayTreeCount.x, stageData.grayTreeCount.y + 1);
+        int grayPoisonousherbCount = Random.Range(stageData.grayPoisonousherbCount.x, stageData.grayPoisonousherbCount.y + 1);
 
         foreach (GameObject obstacle in ObstacleManager.Instance.currentObstacles)
         {
             var obstacleComp = obstacle.GetComponent<Obstacle>();
 
-            if (StageManager.Instance.currentStage.isGrayGrass &&
+            if (StageManager.Instance.currentStage.grayGrassCount != new Vector2Int(0, 0) &&
                 obstacleComp.obstacleType == ObstacleType.Grass &&
                 grayGrassCount > 0)
             {
@@ -933,7 +933,7 @@ public class BoardManager : Singletone<BoardManager>
                 grayGrassCount--;
             }
 
-            if (StageManager.Instance.currentStage.isGrayTree &&
+            if (StageManager.Instance.currentStage.grayTreeCount != new Vector2Int(0, 0) &&
                 obstacleComp.obstacleType == ObstacleType.Tree &&
                 grayTreeCount > 0)
             {
@@ -942,7 +942,7 @@ public class BoardManager : Singletone<BoardManager>
                 grayTreeCount--;
             }
 
-            if (StageManager.Instance.currentStage.isGrayPoisonousherb &&
+            if (StageManager.Instance.currentStage.grayPoisonousherbCount != new Vector2Int(0, 0) &&
                 obstacleComp.obstacleType == ObstacleType.PoisonousHerb &&
                 grayPoisonousherbCount > 0)
             {
@@ -1176,22 +1176,27 @@ public class BoardManager : Singletone<BoardManager>
     private void AddSpecialStageSetting()
     {
         // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
-        StageManager.Instance.currentStage.missions.ForEach(mission =>
-        {
-            // 5스테이지
-            if (mission.missionType is MissionType.FindGrayGrass)
-            {
-                ChangeGrayTiles();
-                ChangeGrayObstacles();
-            }
-            // 6스테이지
-            else if (mission.missionType is MissionType.KillPawn)
-            {
-                ChangeGrayTiles();
-                ChangeGrayObstacles();
 
+        switch (StageManager.Instance.currentStage.stageNumber)
+        {
+            case 5:
+                ChangeGrayTiles(StageManager.Instance.currentStage.grayTileCount);
+                ChangeGrayObstacles(StageManager.Instance.currentStage);
+                break;
+            case 6:
+                ChangeGrayTiles(StageManager.Instance.currentStage.grayTileCount);
+                ChangeGrayObstacles(StageManager.Instance.currentStage);
                 SetPawn();
-            }
-        });
+                break;
+            case 7:
+                ChangeGrayTiles(StageManager.Instance.currentStage.grayTileCount);
+                ChangeGrayObstacles(StageManager.Instance.currentStage);
+                break;
+            case 8:
+                ChangeGrayTiles(StageManager.Instance.currentStage.grayTileCount);
+                ChangeGrayObstacles(StageManager.Instance.currentStage);
+                break;
+        }
+
     }
 }
