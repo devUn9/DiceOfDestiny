@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singletone<GameManager>
@@ -63,13 +62,21 @@ public class GameManager : Singletone<GameManager>
     {
         Debug.Log($"[GameManager] Active scene changed from {oldScene.name} to {newScene.name}");
 
-        if(newScene.name == "MainScene")
+        if (newScene.name == "MainScene")
         {
-            if(UIManager == null)
+            if (UIManager == null)
             {
                 UIManager = FindFirstObjectByType<UIManager>();
             }
-            UIManager.InitializeMainUI();
+            var existingMainUI = FindFirstObjectByType<MainController>();
+            if (existingMainUI == null)
+            {
+                UIManager.InitializeMainUI();
+            }
+            else
+            {
+                existingMainUI.transform.root.gameObject.SetActive(true);
+            }
         }
 
         if (newScene.name == "CustomizeScene")
@@ -131,5 +138,16 @@ public class GameManager : Singletone<GameManager>
         UIManager.TogglePauseMenu();
         isPaused = false;
         Time.timeScale = 1f;
+    }    
+
+    private bool IsFirstRun()
+    {
+        return PlayerPrefs.GetInt("IsFirstRun", 1) == 1;
+    }
+
+    public void SetFirstRunComplete()
+    {
+        PlayerPrefs.SetInt("IsFirstRun", 0);
+        PlayerPrefs.Save();
     }
 }

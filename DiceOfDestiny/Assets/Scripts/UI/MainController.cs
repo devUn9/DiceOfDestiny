@@ -62,9 +62,11 @@ public class MainController : MonoBehaviour
     [Header("씬 설정")]
     [SerializeField] string gamePlayScene;
     [SerializeField] string createItemScene;
+    [SerializeField] string tutorialScene;
 
     private const string KeyLastScene = "LastScene";
     private const string DefaultScene = "GameScene_2.1";
+    private const string KeyFirstRun = "IsFirstRun"; // 추가: 최초 실행 키
     #endregion
 
     private void OnEnable()
@@ -237,6 +239,19 @@ public class MainController : MonoBehaviour
     private void OnPlayGameButton()
     {
         Debug.Log("게임 시작");
+        // 최초 실행이면 튜토리얼로 라우팅
+        if (PlayerPrefs.GetInt(KeyFirstRun, 1) == 1)
+        {
+            if (string.IsNullOrEmpty(tutorialScene))
+            {
+                Debug.LogError("튜토리얼 씬 이름이 설정되지 않았습니다! 튜토리얼로 이동할 수 없으므로 기존 흐름을 사용합니다.");
+            }
+            else
+            {
+                SceneManager.LoadScene(tutorialScene);
+                return;
+            }
+        }
         if (gamePlayScene == "")
         {
             Debug.LogError("게임 시작을 눌렀을때 바뀔 씬의 이름이 설정되지 않았습니다!!");
