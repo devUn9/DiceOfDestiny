@@ -105,8 +105,9 @@ public class SkillManager : Singletone<SkillManager>
     // 스킬 사용 가능한지 판단하는 코루틴
     public IEnumerator TryActiveSkillCoroutine(Vector2Int position, PieceController piece)
     {
-        yield return new WaitForSeconds(0.1f); // 패시브 스킬이 완료될 때까지 잠시 대기
-
+        //yield return new WaitForSeconds(0.1f); // 패시브 스킬이 완료될 때까지 잠시 대기
+        yield return new WaitForSeconds(0f); // DelayTime을 사용하여 대기
+        
         bool isDdongBlind = false;
 
         // 주변 8칸 중 상단 컬러와 일치하는 칸 수 확인
@@ -186,7 +187,7 @@ public class SkillManager : Singletone<SkillManager>
 
                 ActionPointManager.Instance.AddAP(1);
                 StartCoroutine(activeSkill.HealAP());
-                ToastManager.Instance.ShowToast($"사제 스킬 발동! AP를 추가로 {ActionPointManager.Instance.GetAP()}만큼 더 얻습니다.", currentPiece.transform, 0f);
+                ToastManager.Instance.ShowToast($"사제 스킬 발동! AP를 추가로 1만큼 더 얻습니다.", currentPiece.transform, 0f);
                 RuleEvents.TriggerRule("Priest_Active_ColorMatch");
 
                 break;
@@ -230,7 +231,7 @@ public class SkillManager : Singletone<SkillManager>
             yield break;
         }
 
-        PieceManager.Instance.currentPiece.canControl = false;
+         
         
 
         // 스킬이 발동된 타일과 매칭된 타일들의 SpriteRenderer 수집
