@@ -37,3 +37,11 @@ public class ObstacleWeight
     public ObstacleType type;
     [Range(1, 30)] public int weight;
 }
+
+public enum StormDirection
+{
+    Left,
+    Right,
+    Up,
+    None
+}

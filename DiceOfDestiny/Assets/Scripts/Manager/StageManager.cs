@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -89,6 +88,8 @@ public sealed class StageManager : Singletone<StageManager>
 
         ResetTurn();
         UIManager.Instance.UpdateActionPointUI();
+
+        CheckStormStage();
     }
 
     private void ResetTurn()
@@ -181,5 +182,127 @@ public sealed class StageManager : Singletone<StageManager>
         }
 
         return false;
+    }
+
+    public void CheckStormStage()
+    {
+        if (currentStage.stageNumber == 8)
+        {
+            StormDirection randStormDir = (StormDirection)Random.Range(0, 4);
+            Debug.Log($"이번 바람은 {randStormDir} 에서 옵니다.");
+
+            switch (randStormDir)
+            {
+                case StormDirection.Left:
+                    StartCoroutine(ApplyStorm(Vector2Int.left, new Vector3(-20, 0, 0), Vector2Int.right));
+                    break;
+                case StormDirection.Right:
+                    StartCoroutine(ApplyStorm(Vector2Int.right, new Vector3(20, 0, 0), Vector2Int.left));
+                    break;
+                case StormDirection.Up:
+                    StartCoroutine(ApplyStorm(Vector2Int.up, new Vector3(0, 15, 0), Vector2Int.down));
+                    break;
+                case StormDirection.None:
+                    Debug.Log($"이번 턴에는 바람이 안 붑니다.");
+                    break;
+            }
+        }
+    }
+
+    private IEnumerator ApplyStorm(Vector2Int searchDir, Vector3 effectPos, Vector2Int pushDir)
+    {
+        yield return new WaitForSeconds(1f);
+
+        foreach (var piece in PieceManager.Instance.Pieces)
+        {
+            int pivotX = piece.gridPosition.x;
+            int pivotY = piece.gridPosition.y;
+            bool blocked = false;
+
+            // 좌우 확인
+            if (searchDir.x != 0)
+            {
+                for (int x = pivotX - 1; x <= pivotX + 1; x += 2)
+                {
+                    if (x < 0 || x >= BoardManager.Instance.boardSize)
+                        continue;
+
+                    if (BoardManager.Instance.Board[x, pivotY].Obstacle == ObstacleType.Tree ||
+                        BoardManager.Instance.Board[x, pivotY].Obstacle == ObstacleType.Rock ||
+                        BoardManager.Instance.Board[x, pivotY].GetPiece() != null)
+                    {
+                        blocked = true;
+                        break;
+                    }
+                }
+            }
+            // 상하 확인
+            else if (searchDir.y != 0)
+            {
+                for (int y = pivotY - 1; y <= pivotY + 1; y += 2)
+                {
+                    if (y < 1 || y >= BoardManager.Instance.boardSize + 1)
+                        continue;
+
+                    if (BoardManager.Instance.Board[pivotX, y].Obstacle == ObstacleType.Tree ||
+                        BoardManager.Instance.Board[pivotX, y].Obstacle == ObstacleType.Rock ||
+                        BoardManager.Instance.Board[pivotX, y].GetPiece() != null)
+                    {
+                        blocked = true;
+                        break;
+                    }
+                }
+            }
+
+            EffectManager.Instance.PlayEffect("WindEffect", effectPos, pushDir);
+
+            if (!blocked)
+                StormMove(piece, pushDir);
+        }
+    }
+
+
+    private void StormMove(PieceController piece, Vector2Int stormDir)
+    {
+        // 다음 좌표와 타일
+        Vector2Int nextPosition = piece.gridPosition + stormDir;
+
+        if (nextPosition.x < 0 || nextPosition.x >= BoardManager.Instance.boardSize
+            || nextPosition.y < 1 || nextPosition.y >= BoardManager.Instance.boardSize + 1)
+            return;
+        
+        Tile nextTile = BoardManager.Instance.Board[nextPosition.x, nextPosition.y];
+
+        var stunTurns = 1;
+
+        // 뒤에 밀리지 않을만한 장애물이 있는 경우
+        if (nextTile.Obstacle == ObstacleType.Zombie || nextTile.Obstacle == ObstacleType.Slime)
+        {
+            // 밀리지 않고 기절만
+            if (piece.statusEffectController.IsStatusActive(PieceStatus.Stun))
+                return;
+            piece.statusEffectController.SetStatus(PieceStatus.Stun, stunTurns);
+            ToastManager.Instance.ShowToast($"바람에 맞았습니다. {stunTurns}턴간 기절합니다.", piece.transform, 1f);
+            return;
+        }
+
+        // 그 외에는 밀리고 기절 //
+
+        // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
+        BoardManager.Instance.Board[piece.gridPosition.x, piece.gridPosition.y].SetPiece(null);
+        nextTile.SetPiece(piece);
+
+        // 현재 타일에 색 적용
+        BoardManager.Instance.Board[piece.gridPosition.x, piece.gridPosition.y].TileColor = piece.lastTileColor;
+        piece.lastTileColor = nextTile.TileColor;
+        nextTile.TileColor = piece.GetPiece().faces[2].color;
+
+        piece.RotateToTopFace(stormDir);
+        piece.UpdateTopFace(stormDir);
+
+        if (piece.statusEffectController.IsStatusActive(PieceStatus.Stun))
+            return;
+        piece.statusEffectController.SetStatus(PieceStatus.Stun, stunTurns);
+        ToastManager.Instance.ShowToast($"바람에 맞았습니다. {stunTurns}턴간 기절합니다.", piece.transform, 1f);
     }
 }

@@ -733,7 +733,7 @@ public class BoardManager : Singletone<BoardManager>
         {
             magicCircleList.Add(new Vector2Int(centerX, y)); // 수직선 (x = 6)
         }
-        
+
         return magicCircleList;
     }
 
@@ -916,7 +916,7 @@ public class BoardManager : Singletone<BoardManager>
 
     public void ChangeGrayObstacles(StageData stageData)
     {
-        int grayGrassCount = Random.Range(stageData.grayGrassCount.x, stageData.grayGrassCount.y+ 1);
+        int grayGrassCount = Random.Range(stageData.grayGrassCount.x, stageData.grayGrassCount.y + 1);
         int grayTreeCount = Random.Range(stageData.grayTreeCount.x, stageData.grayTreeCount.y + 1);
         int grayPoisonousherbCount = Random.Range(stageData.grayPoisonousherbCount.x, stageData.grayPoisonousherbCount.y + 1);
 
@@ -1176,27 +1176,16 @@ public class BoardManager : Singletone<BoardManager>
     private void AddSpecialStageSetting()
     {
         // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
+        StageData stageData = StageManager.Instance.currentStage;
 
-        switch (StageManager.Instance.currentStage.stageNumber)
+        if (stageData.stageNumber >= 5)
         {
-            case 5:
-                ChangeGrayTiles(StageManager.Instance.currentStage.grayTileCount);
-                ChangeGrayObstacles(StageManager.Instance.currentStage);
-                break;
-            case 6:
-                ChangeGrayTiles(StageManager.Instance.currentStage.grayTileCount);
-                ChangeGrayObstacles(StageManager.Instance.currentStage);
-                SetPawn();
-                break;
-            case 7:
-                ChangeGrayTiles(StageManager.Instance.currentStage.grayTileCount);
-                ChangeGrayObstacles(StageManager.Instance.currentStage);
-                break;
-            case 8:
-                ChangeGrayTiles(StageManager.Instance.currentStage.grayTileCount);
-                ChangeGrayObstacles(StageManager.Instance.currentStage);
-                break;
+            ChangeGrayTiles(stageData.grayTileCount);
+            ChangeGrayObstacles(stageData);
         }
-
+        if (stageData.stageNumber == 6)
+        {
+            SetPawn();
+        }
     }
 }
