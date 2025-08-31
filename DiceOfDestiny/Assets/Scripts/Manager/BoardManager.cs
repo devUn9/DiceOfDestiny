@@ -986,6 +986,32 @@ public class BoardManager : Singletone<BoardManager>
         ObstacleManager.Instance.CreateVisibleRook(11.5f, 6.5f);
     }
 
+    public void SetKnight()
+    {
+        int count = 0;
+
+        while (true)
+        {
+            int randX = Random.Range(0, boardSize);
+            int randY = Random.Range(1, boardSizeY - 1);
+
+            Vector2Int knightPos = new Vector2Int(randX, randY);
+
+            // 이미 룩이나 나이트가 있으면 건너뛰기
+            if (Board[knightPos.x, knightPos.y].Obstacle == ObstacleType.Rook ||
+                Board[knightPos.x, knightPos.y].Obstacle == ObstacleType.Knight)
+                continue;
+
+            RemoveObstacleAtPosition(knightPos);
+            CreateObstacle(knightPos, ObstacleType.Knight);
+
+            ++count;
+
+            if (count >= 2)
+                break;
+        }
+    }
+
     public bool IsMovementArea(Vector2Int position)
     {
         return position.y < boardSizeY - 1 && position.y > 0;
@@ -1209,6 +1235,7 @@ public class BoardManager : Singletone<BoardManager>
         if (stageData.stageNumber == 9)
         {
             SetRook();
+            SetKnight();
         }
     }
 }

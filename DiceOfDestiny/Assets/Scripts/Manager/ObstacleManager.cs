@@ -18,6 +18,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
 
     [SerializeField] private GameObject pawnPrefab;
     [SerializeField] private GameObject rookPrefab;
+    [SerializeField] private GameObject knightPrefab;
 
     [SerializeField] private RuntimeAnimatorController grayGarassAnimator;
     [SerializeField] private RuntimeAnimatorController grayTreeAnimator;
@@ -50,6 +51,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
             { ObstacleType.SlimeDdong, slimeDdongPrefab },
             { ObstacleType.Pawn, pawnPrefab },
             { ObstacleType.Rook, rookPrefab },
+            { ObstacleType.Knight, knightPrefab },
         };
 
         currentObstacles = new List<GameObject>();

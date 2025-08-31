@@ -15,6 +15,7 @@ public enum ObstacleType
     SlimeDdong,
     Pawn,
     Rook,
+    Knight,
     None
 }
 

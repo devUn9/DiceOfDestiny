@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using System.Collections.Generic;
 
 public enum RookArrowDirection
 {
@@ -14,11 +13,19 @@ public class RookBehaviour : Obstacle, IObstacleBehaviour
 {
     [SerializeField] GameObject arrowPrefab;
     [SerializeField] private int arrowStunTurns = 1;
+    [SerializeField] private int cooldown = 2;
+    private int currentcooldown = 0;
     private bool blocked = false;
 
     public void DoLogic()
     {
-        StartCoroutine(CheckPiece());
+        if (currentcooldown >= cooldown)
+        {
+            StartCoroutine(CheckPiece());
+            currentcooldown = 0;
+        }
+        else
+            ++currentcooldown;
     }
 
     private IEnumerator CheckPiece()

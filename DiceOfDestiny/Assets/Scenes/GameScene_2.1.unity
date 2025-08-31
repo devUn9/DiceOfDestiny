@@ -2574,6 +2574,7 @@ MonoBehaviour:
   slimeDdongPrefab: {fileID: 5239956457780272049, guid: fb256067f7bba754cb8c7031d1842fd4, type: 3}
   pawnPrefab: {fileID: 2465335938598337309, guid: a3f4b156df2deab45a8922a6cb66fd15, type: 3}
   rookPrefab: {fileID: 7333959039673425380, guid: 4cfce03f186a4804bb8bd2a119a13311, type: 3}
+  knightPrefab: {fileID: 2465335938598337309, guid: ad21db2e9fbf33a448528293fc89fa22, type: 3}
   grayGarassAnimator: {fileID: 9100000, guid: b9a4a399ab190b943ac3829eeeddc51b, type: 2}
   grayTreeAnimator: {fileID: 9100000, guid: 786b7fb7d1e46894b9cb3ff74b7709d4, type: 2}
   grayPoisonousHerbAnimator: {fileID: 9100000, guid: e6db9b90f357be34e883bcf8f14c1887, type: 2}
