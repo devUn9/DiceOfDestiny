@@ -14,6 +14,7 @@ public enum ObstacleType
     Slime,
     SlimeDdong,
     Pawn,
+    Rook,
     None
 }
 
@@ -44,10 +45,10 @@ public class Obstacle : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    protected IEnumerator GoHand(PieceController pieceController)
+    protected IEnumerator GoHand(PieceController pieceController, float duration = 1.5f)
     {
-        // 약간의 연출 대기 (예: 0.2초)
-        yield return new WaitForSeconds(1.5f);
+        // 약간의 연출 대기 (예: 1.5초)
+        yield return new WaitForSeconds(duration);
 
         // 기존 보드의 기물 제거
         Destroy(pieceController.gameObject);
@@ -55,11 +56,11 @@ public class Obstacle : MonoBehaviour
         // 기물 선택 타일 제거
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
 
-        // 약간의 연출 대기 (예: 0.2초)
+        // 약간의 연출 대기 (예: 0.5초)
         yield return new WaitForSeconds(0.5f);
 
         // 가방에 새로운 기물 생성
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
             if (PieceManager.Instance.pieceDatas[i] == null) // 슬롯이 비어 있는 경우
             {

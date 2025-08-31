@@ -966,6 +966,25 @@ public class BoardManager : Singletone<BoardManager>
             ObstacleManager.Instance.AddPawnToList(obstacle);
         }
     }
+    public void SetRook(int height = 6)
+    {
+        // (0,6) (1,6) (0,7) (1,7) 왼쪽 룩 // 0.5 6.5
+        // (11,6) (12,6) (11,7) (12,7) 오른쪽 룩 // 11.5 6.5
+        int[] xPositions = { 0, 1, boardSize - 2, boardSize - 1 };
+
+        for (int y = height; y <= height + 1; y++)
+        {
+            foreach (int x in xPositions)
+            {
+                Vector2Int rookPos = new Vector2Int(x, y);
+                RemoveObstacleAtPosition(rookPos);
+                CreateObstacle(rookPos, ObstacleType.Rook);
+            }
+        }
+
+        ObstacleManager.Instance.CreateVisibleRook(0.5f, 6.5f);
+        ObstacleManager.Instance.CreateVisibleRook(11.5f, 6.5f);
+    }
 
     public bool IsMovementArea(Vector2Int position)
     {
@@ -1186,6 +1205,10 @@ public class BoardManager : Singletone<BoardManager>
         if (stageData.stageNumber == 6)
         {
             SetPawn();
+        }
+        if (stageData.stageNumber == 9)
+        {
+            SetRook();
         }
     }
 }
