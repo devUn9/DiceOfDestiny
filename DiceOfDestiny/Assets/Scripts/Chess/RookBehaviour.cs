@@ -15,7 +15,6 @@ public class RookBehaviour : Obstacle, IObstacleBehaviour
     [SerializeField] private int arrowStunTurns = 1;
     [SerializeField] private int cooldown = 2;
     private int currentcooldown = 0;
-    private bool blocked = false;
 
     public void DoLogic()
     {
@@ -34,29 +33,21 @@ public class RookBehaviour : Obstacle, IObstacleBehaviour
 
         foreach (var piece in PieceManager.Instance.Pieces)
         {
-            // 같은 가로 열일 때
-            if (obstaclePosition.y == piece.gridPosition.y)
+            Vector2Int diff = piece.gridPosition - obstaclePosition;
+
+            // 같은 가로줄
+            if (diff.y == 0)
             {
-                if (obstaclePosition.x < piece.gridPosition.x)
-                {
-                    CreateArrow(RookArrowDirection.Right, Vector2Int.right, piece);
-                }
-                else if (obstaclePosition.x > piece.gridPosition.x)
-                {
-                    CreateArrow(RookArrowDirection.Left, Vector2Int.left, piece);
-                }
+                var dir = diff.x > 0 ? Vector2Int.right : Vector2Int.left;
+                var arrowDir = diff.x > 0 ? RookArrowDirection.Right : RookArrowDirection.Left;
+                CreateArrow(arrowDir, dir, piece);
             }
-            // 같은 세로 열일 때
-            else if (obstaclePosition.x == piece.gridPosition.x)
+            // 같은 세로줄
+            else if (diff.x == 0)
             {
-                if (obstaclePosition.y < piece.gridPosition.y)
-                {
-                    CreateArrow(RookArrowDirection.Up, Vector2Int.up, piece);
-                }
-                else if (obstaclePosition.y > piece.gridPosition.y)
-                {
-                    CreateArrow(RookArrowDirection.Down, Vector2Int.down, piece);
-                }
+                var dir = diff.y > 0 ? Vector2Int.up : Vector2Int.down;
+                var arrowDir = diff.y > 0 ? RookArrowDirection.Up : RookArrowDirection.Down;
+                CreateArrow(arrowDir, dir, piece);
             }
         }
     }
@@ -67,53 +58,37 @@ public class RookBehaviour : Obstacle, IObstacleBehaviour
         Arrow.transform.rotation = Quaternion.Euler(0, 0, (float)arrowDir);
         Arrow.GetComponent<RookArrow>().Init(dir);
 
-        int pivotX = piece.gridPosition.x;
-        int pivotY = piece.gridPosition.y;
-        blocked = false;
+        Vector2Int pos = piece.gridPosition;
+        Vector2Int step = dir; // (1,0), (-1,0), (0,1), (0,-1)
+
+        int x = pos.x;
+        int y = pos.y;
+
+        // 이미 기절이면 면역
+        if (piece.statusEffectController.IsStatusActive(PieceStatus.Stun))
+            return;
 
         // 풀 속 아기는 면역
         if (piece.GetTopFace().classData.className == "Baby" &&
-            BoardManager.Instance.Board[pivotX, pivotY].Obstacle == ObstacleType.Grass)
+            BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Grass)
         {
             return;
         }
 
-        // 좌우 확인
-        if (dir == Vector2Int.right)
+        while (true)
         {
-            for (int x = pivotX - 1; x >= obstaclePosition.x + 1; x--)
-            {
-                if (CheckBlocked(x, pivotY))
-                    break;
-            }
-        }
-        else if (dir == Vector2Int.left)
-        {
-            for (int x = pivotX - 1; x <= obstaclePosition.x - 1; x++)
-            {
-                if (CheckBlocked(x, pivotY))
-                    break;
-            }
-        }
-        else if (dir == Vector2Int.up)
-        {
-            for (int y = pivotY - 1; y >= obstaclePosition.y + 1; y--)
-            {
-                if (CheckBlocked(pivotX, y))
-                    break;
-            }
-        }
-        else if (dir == Vector2Int.down)
-        {
-            for (int y = pivotY + 1; y <= obstaclePosition.y - 1; y++)
-            {
-                if (CheckBlocked(pivotX, y))
-                    break;
-            }
+            x -= step.x;
+            y -= step.y;
+
+            if (x == obstaclePosition.x && y == obstaclePosition.y)
+                break;
+
+            if (CheckBlocked(x, y))
+                return; // 중간에 막힘 → 함수 종료
         }
 
-        if (!blocked)
-            HitPiece(piece);
+        // 막히지 않았다면 피스 타격
+        HitPiece(piece);
     }
 
     private bool CheckBlocked(int x, int y)
@@ -122,7 +97,6 @@ public class RookBehaviour : Obstacle, IObstacleBehaviour
             BoardManager.Instance.Board[x, y].Obstacle == ObstacleType.Rock ||
             BoardManager.Instance.Board[x, y].GetPiece() != null)
         {
-            blocked = true;
             return true;
         }
         return false;

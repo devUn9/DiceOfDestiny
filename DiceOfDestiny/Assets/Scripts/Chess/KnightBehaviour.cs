@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Random = UnityEngine.Random;
+using System.Collections;
 
 public class KnightBehaviour : Obstacle, IObstacleBehaviour
 {
@@ -15,15 +16,18 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
         DownRight,
         DownLeft,
         LeftUp,
-        LeftDown,
-        None
+        LeftDown
     }
     [SerializeField] private float duration = 0.4f;
 
-    private List<KnightNextStep> randNextStep = new List<KnightNextStep>();
+    private List<KnightNextStep> randNextStep = new();
+    private bool isMoving = false;
 
     public void DoLogic()
     {
+        // 애니메이션 중엔 재호출 금지
+        if (isMoving || DOTween.IsTweening(transform)) return;
+
         randNextStep.Clear();
 
         // 8 방향 중에 이동 가능한 방향을 리스트에 추가
@@ -96,6 +100,8 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
             StartCoroutine(GoHand(nextTile.GetPiece()));
         }
 
+        isMoving = true;
+
         BoardManager.Instance.MoveObstacle(this, nextPosition);
         AnimateObstacleMove(nextStep);
     }
@@ -117,6 +123,11 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
                 BoardManager.Instance.boardTransform.position.y + obstaclePosition.y,
                 0
             );
+
+            BoardManager.Instance.Board[obstaclePosition.x, obstaclePosition.y].TileColor = TileColor.Gray;
+            BoardManager.Instance.Board[obstaclePosition.x, obstaclePosition.y].SetTileColor(Color.gray);
+
+            isMoving = false;
         });
     }
 }
