@@ -693,6 +693,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe28a6237295b09498182212f5c18de4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &389446728
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 389446730}
+  - component: {fileID: 389446729}
+  m_Layer: 0
+  m_Name: EffectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &389446729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389446728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8da4375431102c4997d32625a6b5720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab:
+  - {fileID: 735330881440975806, guid: 0d0ad706183634e4a9812ec450790b9d, type: 3}
+--- !u!4 &389446730
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389446728}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &427611462
 GameObject:
   m_ObjectHideFlags: 0
@@ -2529,10 +2575,13 @@ MonoBehaviour:
   slimePrefab: {fileID: 2465335938598337309, guid: 2a6ce1ef19d36e64684f0baf6f13cd5e, type: 3}
   slimeDdongPrefab: {fileID: 5239956457780272049, guid: fb256067f7bba754cb8c7031d1842fd4, type: 3}
   pawnPrefab: {fileID: 2465335938598337309, guid: a3f4b156df2deab45a8922a6cb66fd15, type: 3}
+  rookPrefab: {fileID: 7333959039673425380, guid: 4cfce03f186a4804bb8bd2a119a13311, type: 3}
+  knightPrefab: {fileID: 2465335938598337309, guid: ad21db2e9fbf33a448528293fc89fa22, type: 3}
   grayGarassAnimator: {fileID: 9100000, guid: b9a4a399ab190b943ac3829eeeddc51b, type: 2}
   grayTreeAnimator: {fileID: 9100000, guid: 786b7fb7d1e46894b9cb3ff74b7709d4, type: 2}
   grayPoisonousHerbAnimator: {fileID: 9100000, guid: e6db9b90f357be34e883bcf8f14c1887, type: 2}
   currentObstacles: []
+  rookVisual: {fileID: 7333959039673425380, guid: e1423ab84180b824a9b2ebe808f1729d, type: 3}
 --- !u!1 &1146971578
 GameObject:
   m_ObjectHideFlags: 0
@@ -3806,13 +3855,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageIndex: 0
   stageProfiles:
-  - {fileID: 11400000, guid: c2c391696bc63994b898d9be7e4a7456, type: 2}
-  - {fileID: 11400000, guid: cfd912d1b69670743b9bd885b9536f75, type: 2}
+  - {fileID: 11400000, guid: 63ea21ca3a626274d97a816cf402ee19, type: 2}
+  - {fileID: 11400000, guid: d79c80c5ef57c1444a0f9ff9badfa110, type: 2}
   - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
   - {fileID: 11400000, guid: 6828c2986df7d6e4aabc87941897539e, type: 2}
   - {fileID: 11400000, guid: 8ed4859463f62cf448965ea0fe6e3bca, type: 2}
   - {fileID: 11400000, guid: 60f221dfb72b1b84aa4272684d5f262c, type: 2}
   - {fileID: 11400000, guid: b9fc5464a9e2a084caa427f69e57cee1, type: 2}
+  - {fileID: 11400000, guid: 63ea21ca3a626274d97a816cf402ee19, type: 2}
+  - {fileID: 11400000, guid: d79c80c5ef57c1444a0f9ff9badfa110, type: 2}
   isFirstCreatePiece: 0
 --- !u!1 &1973307751
 GameObject:
@@ -4060,6 +4111,7 @@ SceneRoots:
   - {fileID: 830614872}
   - {fileID: 1887372543}
   - {fileID: 758300002}
+  - {fileID: 389446730}
   - {fileID: 1485107672}
   - {fileID: 1066769909}
   - {fileID: 129709146}

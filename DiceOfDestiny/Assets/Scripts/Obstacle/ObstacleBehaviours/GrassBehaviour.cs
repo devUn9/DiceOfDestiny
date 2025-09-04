@@ -60,12 +60,13 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
         if (rand == 0)
         {
             ToastManager.Instance.ShowToast("10%의 확률로 질병에 걸렸습니다.", piece.transform, 1f);
+            piece.statusEffectController.SetStatus(PieceStatus.Disease, 2);
 
             if (className == "Baby")
             {
                 StartCoroutine(GoHand(piece));
+                return;
             }
-            piece.statusEffectController.SetStatus(PieceStatus.Disease, 2);
         }
         else
         {

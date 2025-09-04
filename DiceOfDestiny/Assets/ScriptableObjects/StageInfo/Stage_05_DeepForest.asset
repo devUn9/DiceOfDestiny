@@ -18,9 +18,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
   - {fileID: 11400000, guid: 91ce260453d76eb479e9479b1aa28d64, type: 2}
   maxTurn: 30
-  isGrayGrass: 1
-  isGrayTree: 1
-  isGrayPoisonousherb: 0
+  grayGrassCount: {x: 3, y: 3}
+  grayTreeCount: {x: 3, y: 3}
+  grayPoisonousherbCount: {x: 0, y: 0}
+  grayTileCount: 3
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1

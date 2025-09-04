@@ -741,7 +741,7 @@ public class BoardManager : Singletone<BoardManager>
         {
             magicCircleList.Add(new Vector2Int(centerX, y)); // 수직선 (x = 6)
         }
-        
+
         return magicCircleList;
     }
 
@@ -922,17 +922,17 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
-    public void ChangeGrayObstacles(int count = 3)
+    public void ChangeGrayObstacles(StageData stageData)
     {
-        int grayGrassCount = count;
-        int grayTreeCount = count;
-        int grayPoisonousherbCount = count;
+        int grayGrassCount = Random.Range(stageData.grayGrassCount.x, stageData.grayGrassCount.y + 1);
+        int grayTreeCount = Random.Range(stageData.grayTreeCount.x, stageData.grayTreeCount.y + 1);
+        int grayPoisonousherbCount = Random.Range(stageData.grayPoisonousherbCount.x, stageData.grayPoisonousherbCount.y + 1);
 
         foreach (GameObject obstacle in ObstacleManager.Instance.currentObstacles)
         {
             var obstacleComp = obstacle.GetComponent<Obstacle>();
 
-            if (StageManager.Instance.currentStage.isGrayGrass &&
+            if (StageManager.Instance.currentStage.grayGrassCount != new Vector2Int(0, 0) &&
                 obstacleComp.obstacleType == ObstacleType.Grass &&
                 grayGrassCount > 0)
             {
@@ -941,7 +941,7 @@ public class BoardManager : Singletone<BoardManager>
                 grayGrassCount--;
             }
 
-            if (StageManager.Instance.currentStage.isGrayTree &&
+            if (StageManager.Instance.currentStage.grayTreeCount != new Vector2Int(0, 0) &&
                 obstacleComp.obstacleType == ObstacleType.Tree &&
                 grayTreeCount > 0)
             {
@@ -950,7 +950,7 @@ public class BoardManager : Singletone<BoardManager>
                 grayTreeCount--;
             }
 
-            if (StageManager.Instance.currentStage.isGrayPoisonousherb &&
+            if (StageManager.Instance.currentStage.grayPoisonousherbCount != new Vector2Int(0, 0) &&
                 obstacleComp.obstacleType == ObstacleType.PoisonousHerb &&
                 grayPoisonousherbCount > 0)
             {
@@ -972,6 +972,54 @@ public class BoardManager : Singletone<BoardManager>
 
             // 미션을 위한 스테이지 상의 Pawn 리스트에 추가
             ObstacleManager.Instance.AddPawnToList(obstacle);
+        }
+    }
+    public void SetRook(int height = 6)
+    {
+        // (0,6) (1,6) (0,7) (1,7) 왼쪽 룩 // 0.5 6.5
+        // (11,6) (12,6) (11,7) (12,7) 오른쪽 룩 // 11.5 6.5
+        int[] xPositions = { 0, 1, boardSize - 2, boardSize - 1 };
+
+        for (int y = height; y <= height + 1; y++)
+        {
+            foreach (int x in xPositions)
+            {
+                Vector2Int rookPos = new Vector2Int(x, y);
+                RemoveObstacleAtPosition(rookPos);
+                CreateObstacle(rookPos, ObstacleType.Rook);
+
+                Board[x, y].TileColor = TileColor.Gray;
+                Board[x, y].SetTileColor(Color.gray);
+            }
+        }
+
+        ObstacleManager.Instance.CreateVisibleRook(0.5f, 6.5f);
+        ObstacleManager.Instance.CreateVisibleRook(11.5f, 6.5f);
+    }
+
+    public void SetKnight()
+    {
+        int count = 0;
+
+        while (true)
+        {
+            int randX = Random.Range(0, boardSize);
+            int randY = Random.Range(1, boardSizeY - 1);
+
+            Vector2Int knightPos = new Vector2Int(randX, randY);
+
+            // 이미 룩이나 나이트가 있으면 건너뛰기
+            if (Board[knightPos.x, knightPos.y].Obstacle == ObstacleType.Rook ||
+                Board[knightPos.x, knightPos.y].Obstacle == ObstacleType.Knight)
+                continue;
+
+            RemoveObstacleAtPosition(knightPos);
+            CreateObstacle(knightPos, ObstacleType.Knight);
+
+            ++count;
+
+            if (count >= 2)
+                break;
         }
     }
 
@@ -1184,22 +1232,21 @@ public class BoardManager : Singletone<BoardManager>
     private void AddSpecialStageSetting()
     {
         // 특정 스테이지 미션에 따른 타일 및 장애물 세팅
-        StageManager.Instance.currentStage.missions.ForEach(mission =>
-        {
-            // 5스테이지
-            if (mission.missionType is MissionType.FindGrayGrass)
-            {
-                ChangeGrayTiles();
-                ChangeGrayObstacles();
-            }
-            // 6스테이지
-            else if (mission.missionType is MissionType.KillPawn)
-            {
-                ChangeGrayTiles();
-                ChangeGrayObstacles();
+        StageData stageData = StageManager.Instance.currentStage;
 
-                SetPawn();
-            }
-        });
+        if (stageData.stageNumber >= 5)
+        {
+            ChangeGrayTiles(stageData.grayTileCount);
+            ChangeGrayObstacles(stageData);
+        }
+        if (stageData.stageNumber == 6)
+        {
+            SetPawn();
+        }
+        if (stageData.stageNumber == 9)
+        {
+            SetRook();
+            SetKnight();
+        }
     }
 }
