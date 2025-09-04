@@ -979,6 +979,9 @@ public class BoardManager : Singletone<BoardManager>
                 Vector2Int rookPos = new Vector2Int(x, y);
                 RemoveObstacleAtPosition(rookPos);
                 CreateObstacle(rookPos, ObstacleType.Rook);
+
+                Board[x, y].TileColor = TileColor.Gray;
+                Board[x, y].SetTileColor(Color.gray);
             }
         }
 
