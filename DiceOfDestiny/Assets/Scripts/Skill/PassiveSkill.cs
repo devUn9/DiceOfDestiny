@@ -28,7 +28,8 @@ public class PassiveSkill : MonoBehaviour
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(cardinalList[i]);
             if (obstacle != null &&
-                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie || obstacle.obstacleType == ObstacleType.Pawn))
+                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie ||
+                    obstacle.obstacleType == ObstacleType.Pawn || obstacle.obstacleType == ObstacleType.Knight))
             {
                 hasTarget = true;
                 Debug.Log($"기사가 공격 대상 찾았어: ({cardinalList[i].x}, {cardinalList[i].y})");
@@ -63,7 +64,8 @@ public class PassiveSkill : MonoBehaviour
 
                 var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(targetPos);
                 if (targetObstacle != null &&
-                    (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie))
+                    (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie ||
+                     targetObstacle.obstacleType == ObstacleType.Knight))
                 {
                     BoardManager.Instance.RemoveObstacleAtPosition(targetPos);
 
@@ -107,7 +109,8 @@ public class PassiveSkill : MonoBehaviour
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(forwardList[i]);
             if (obstacle != null &&
-                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie || obstacle.obstacleType == ObstacleType.Pawn))
+                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie ||
+                    obstacle.obstacleType == ObstacleType.Pawn || obstacle.obstacleType == ObstacleType.Knight))
             {
                 hasTarget = true;
                 break;
@@ -153,7 +156,8 @@ public class PassiveSkill : MonoBehaviour
 
                 var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(pos);
                 if (targetObstacle != null &&
-                    (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie))
+                    (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie ||
+                        targetObstacle.obstacleType == ObstacleType.Knight))
                 {
                     BoardManager.Instance.RemoveObstacleAtPosition(pos);
                     Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
@@ -201,7 +205,8 @@ public class PassiveSkill : MonoBehaviour
         {
             var obstacle = BoardManager.Instance.ReturnObstacleByPosition(diagonalList[i]);
             if (obstacle != null &&
-                    (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie))
+                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie ||
+                    obstacle.obstacleType == ObstacleType.Pawn || obstacle.obstacleType == ObstacleType.Knight))
             {
                 hasTarget = true;
                 Debug.Log($"광신도가 공격 대상 찾음: ({diagonalList[i].x}, {diagonalList[i].y})");
@@ -239,7 +244,8 @@ public class PassiveSkill : MonoBehaviour
 
                 var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(pos);
                 if (targetObstacle != null &&
-                   (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie))
+                   (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie ||
+                    targetObstacle.obstacleType == ObstacleType.Knight))
                 {
                     BoardManager.Instance.RemoveObstacleAtPosition(pos);
                     Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
@@ -303,7 +309,8 @@ public class PassiveSkill : MonoBehaviour
             if (targetObstacle != null)
             {
                 if (targetObstacle.obstacleType == ObstacleType.Slime ||
-                    targetObstacle.obstacleType == ObstacleType.Zombie)
+                    targetObstacle.obstacleType == ObstacleType.Zombie ||
+                    targetObstacle.obstacleType == ObstacleType.Knight)
                 {
                     BoardManager.Instance.RemoveObstacleAtPosition(pos);
                     Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");

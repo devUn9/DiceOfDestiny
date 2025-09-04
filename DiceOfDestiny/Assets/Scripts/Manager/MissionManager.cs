@@ -18,6 +18,10 @@ public class MissionManager : Singletone<MissionManager>
     public int alivePawnCount { get; private set; } = 0;
     public bool isKillTwoPawn { get; private set; } = false;
 
+    [Header("Stage 9 Mission")]
+    public int aliveKnightCount { get; private set; } = 0;
+    public bool isKillTwoKnight { get; private set; } = false;
+
     public void Start()
     {
         killEnemyCount = 0;
@@ -118,9 +122,19 @@ public class MissionManager : Singletone<MissionManager>
     {
         alivePawnCount++;
 
-        if(alivePawnCount >= 2)
+        if (alivePawnCount >= 2)
         {
             isKillTwoPawn = true;
+        }
+    }
+
+    public void AliveKnightCountCheck()
+    {
+        aliveKnightCount++;
+
+        if (aliveKnightCount >= 2)
+        {
+            isKillTwoKnight = true;
         }
     }
 }

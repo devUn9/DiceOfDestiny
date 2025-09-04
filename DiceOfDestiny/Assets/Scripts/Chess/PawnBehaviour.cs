@@ -43,8 +43,8 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
         Vector2Int nextPosition = obstaclePosition + direction;
         Tile nextTile = BoardManager.Instance.GetTile(nextPosition);
 
-        // 참조하려는 좌표값이 보드 밖이면 return // 근데 폰이 시작점에 도달하면 끝나는 로직을 추가할 때, 아래 코드 제거 예정
-        if (!BoardManager.Instance.IsInsideBoard(nextPosition))
+        // 참조하려는 좌표값이 보드 밖이면 return
+        if (nextTile == null)
             return;
 
         // 다음 타일이 장애물도 없고 피스도 없으면 이동

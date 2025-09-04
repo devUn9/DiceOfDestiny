@@ -1006,7 +1006,9 @@ public class BoardManager : Singletone<BoardManager>
                 continue;
 
             RemoveObstacleAtPosition(knightPos);
-            CreateObstacle(knightPos, ObstacleType.Knight);
+            GameObject obstacle = CreateObstacle(knightPos, ObstacleType.Knight);
+
+            ObstacleManager.Instance.AddKnightToList(obstacle);
 
             ++count;
 

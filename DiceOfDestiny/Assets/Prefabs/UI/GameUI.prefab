@@ -1986,6 +1986,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 8177226717378978277}
     m_Modifications:
     - target: {fileID: 171557084437014805, guid: 27b0466fde70bc945b3cc6ebdc9daf85, type: 3}
+      propertyPath: sprites.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 171557084437014805, guid: 27b0466fde70bc945b3cc6ebdc9daf85, type: 3}
       propertyPath: 'sprites.Array.data[0]'
       value: 
       objectReference: {fileID: 446568746212952993, guid: 0eb1f5cc7e3dd564dac13af0e8434c03, type: 3}
@@ -2001,6 +2005,10 @@ PrefabInstance:
       propertyPath: 'sprites.Array.data[3]'
       value: 
       objectReference: {fileID: -564201037, guid: 2a8c2784be9c78b42a59ab03e6eb6c09, type: 3}
+    - target: {fileID: 171557084437014805, guid: 27b0466fde70bc945b3cc6ebdc9daf85, type: 3}
+      propertyPath: 'sprites.Array.data[4]'
+      value: 
+      objectReference: {fileID: -1669720151, guid: c99fabd47bad9a04ea3f6aaf0de3cccd, type: 3}
     - target: {fileID: 4660989795884663218, guid: 27b0466fde70bc945b3cc6ebdc9daf85, type: 3}
       propertyPath: m_text
       value: 

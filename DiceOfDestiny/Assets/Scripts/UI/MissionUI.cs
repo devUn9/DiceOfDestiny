@@ -9,7 +9,8 @@ public class MissionUI : MonoBehaviour
         Zombie,
         Slime,
         GrayGrass,
-        Pawn
+        Pawn,
+        Knight
     }
 
     [SerializeField] private GameObject MissionImageGroup;
@@ -44,6 +45,11 @@ public class MissionUI : MonoBehaviour
             else if (mission.missionType is MissionType.KillPawn)
             {
                 CreateMissionImage(sprites[(int)MissionImageType.Pawn]);
+            }
+            // 9스테이지
+            else if (mission.missionType is MissionType.KillKnight)
+            {
+                CreateMissionImage(sprites[(int)MissionImageType.Knight]);
             }
             else
             {
@@ -86,7 +92,12 @@ public class MissionUI : MonoBehaviour
             // 6스테이지
             else if (mission.missionType is MissionType.KillPawn)
             {
-                ProgressText.text = $"{MissionManager.Instance.alivePawnCount} / 3";
+                ProgressText.text = $"{MissionManager.Instance.alivePawnCount} / 2";
+            }
+            // 9스테이지
+            else if (mission.missionType is MissionType.KillKnight)
+            {
+                ProgressText.text = $"{MissionManager.Instance.aliveKnightCount} / 2";
             }
             else
             {

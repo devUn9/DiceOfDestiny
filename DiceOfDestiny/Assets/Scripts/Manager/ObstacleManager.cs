@@ -35,6 +35,9 @@ public class ObstacleManager : Singletone<ObstacleManager>
     [Header("Boss Rook")]
     [SerializeField] private GameObject rookVisual;
 
+    [Header("Boss Knight")]
+    private List<GameObject> knightList = new List<GameObject>();
+
     public void Initialize()
     {
         obstaclePrefabs = new Dictionary<ObstacleType, GameObject>
@@ -198,6 +201,22 @@ public class ObstacleManager : Singletone<ObstacleManager>
             new Vector3(BoardManager.Instance.boardTransform.position.x + _x, BoardManager.Instance.boardTransform.position.y + _y, 0),
             Quaternion.identity,
             BoardManager.Instance.boardTransform);
+    }
+
+    // 보스 나이트 함수들
+    public void AddKnightToList(GameObject knight)
+    {
+        if (knight != null && !knightList.Contains(knight))
+        {
+            knightList.Add(knight);
+        }
+    }
+
+    public void RemoveKnightToList(GameObject knight)
+    {
+        knightList.Remove(knight);
+
+        MissionManager.Instance.AliveKnightCountCheck(); // 나이트가 죽었을 때 미션 카운트 감소
     }
 
     public RuntimeAnimatorController GetGrayGrassAnimator()

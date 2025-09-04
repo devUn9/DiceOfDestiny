@@ -51,8 +51,17 @@ public class Obstacle : MonoBehaviour
         // 약간의 연출 대기 (예: 1.5초)
         yield return new WaitForSeconds(duration);
 
+        // 타일 상의 피스 존재 제거
+        BoardManager.Instance.GetTile(pieceController.gridPosition).SetPiece(null);
+
+        if (pieceController.gameObject == null)
+            yield break;
+
         // 기존 보드의 기물 제거
         Destroy(pieceController.gameObject);
+
+        // 피스 리스트 상의 피스 제거
+        PieceManager.Instance.Pieces.Remove(pieceController);
 
         // 기물 선택 타일 제거
         BoardSelectManager.Instance.DestroyPieceHighlightTile();

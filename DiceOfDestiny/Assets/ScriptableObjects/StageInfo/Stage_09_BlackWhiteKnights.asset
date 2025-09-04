@@ -20,7 +20,7 @@ MonoBehaviour:
   grayGrassCount: {x: 5, y: 8}
   grayTreeCount: {x: 5, y: 8}
   grayPoisonousherbCount: {x: 5, y: 8}
-  grayTileCount: 10
+  grayTileCount: 0
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1
