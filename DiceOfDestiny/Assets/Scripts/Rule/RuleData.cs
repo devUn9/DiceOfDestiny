@@ -17,4 +17,6 @@ public class RuleData : ScriptableObject
     public RuleCategory category;
 
     public int triggerCount = 3;
+
+    public bool isClear = false;
 }

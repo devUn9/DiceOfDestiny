@@ -198,7 +198,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     public IEnumerator WaitForTileClick()
     {
         isWaitingForClick = true;
-        lastClickedPosition = Vector2Int.zero;
+        lastClickedPosition = new Vector2Int(-1,-1);
 
         while (isWaitingForClick)
         {

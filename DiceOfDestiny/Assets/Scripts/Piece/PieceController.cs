@@ -29,6 +29,8 @@ public class PieceController : MonoBehaviour
     private readonly int[] leftTransition = new int[] { 4, 1, 5, 3, 2, 0 }; // 왼쪽으로 이동
     private readonly int[] rightTransition = new int[] { 5, 1, 4, 3, 0, 2 }; // 오른쪽으로 이동
 
+    private float duration = 0.8f; // 이동 애니메이션 시간
+
     void Start()
     {
         statusEffectController = GetComponent<PieceStatusEffectController>();
@@ -258,11 +260,35 @@ public class PieceController : MonoBehaviour
 
                 // 모든 장애물 기믹 동작
                 ObstacleManager.Instance.UpdateObstacleStep();
+
+                //// 스킬 발동
+                StartCoroutine(SkillCoroutine());
             }
             else
             {
                 Debug.LogWarning($"Invalid move to position: {newPosition}");
             }
+        }
+    }
+
+    IEnumerator SkillCoroutine()
+    {
+        yield return new WaitForSeconds(duration + 0.1f); // 스킬 발동 후 잠시 대기
+        // 스킬 발동
+        if (SkillManager.Instance != null)
+        {
+            // y값이 0이나 14가 아니면
+            if (PieceManager.Instance.currentPiece.gridPosition.y != 0 && PieceManager.Instance.currentPiece.gridPosition.y != 14)
+            {
+                SkillManager.Instance.TrySkill(gridPosition, this);
+                //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+            }
+
+
+        }
+        else
+        {
+            Debug.LogError("SkillManager.Instance is null!");
         }
     }
 
@@ -477,7 +503,7 @@ public class PieceController : MonoBehaviour
         StartCoroutine(RotateToTopFaceCoroutine(moveDirection));
     }
 
-    IEnumerator RotateToTopFaceCoroutine(Vector2Int moveDirection)
+    public IEnumerator RotateToTopFaceCoroutine(Vector2Int moveDirection)
     {
         isMoving = true; // 이동 중 입력받지 아니함. 
 
@@ -528,7 +554,7 @@ public class PieceController : MonoBehaviour
         newClassObj.transform.localScale = Vector3.zero;
         newColorObj.transform.localScale = Vector3.zero;
 
-        float duration = 0.8f;
+        duration = 0.8f;
         float time = 0f;
 
         Vector3 startPos = transform.position;
@@ -610,26 +636,20 @@ public class PieceController : MonoBehaviour
         CheckOutStartingLine();
 
 
-        // 스킬 발동
-        if (SkillManager.Instance != null)
-        {
-            // y값이 0이나 14가 아니면
-            if (PieceManager.Instance.currentPiece.gridPosition.y != 0 && PieceManager.Instance.currentPiece.gridPosition.y != 14)
-            {
-                SkillManager.Instance.TrySkill(gridPosition, this);
-                //SkillManager.Instance.TryActiveSkill(gridPosition, this);
-            }
-
-
-        }
-        else
-        {
-            Debug.LogError("SkillManager.Instance is null!");
-        }
+     
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
     {
+        if (animator != null)
+        {
+            animator.enabled = false; // 애니메이션 종료 후 Animator 비활성화
+        }
+
+        classRenderer.gameObject.SetActive(true);
+        animationRenderer.gameObject.SetActive(false);
+        animPlaying = false;
+
         StartCoroutine(RotateHalfBackCoroutine(moveDirection));
     }
 

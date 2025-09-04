@@ -133,6 +133,9 @@ public class BackpackUI : MonoBehaviour
         // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
+        if (BoardSelectManager.Instance.lastClickedPosition == new Vector2Int(-1, -1))
+            yield break;
+
         // =====================[ 생성 시작 ]=====================
         if (oneChance)
         {
@@ -180,7 +183,7 @@ public class BackpackUI : MonoBehaviour
         }
     }
 
-
+    // 기물 스폰 윗면 누른걸로 설치
     public void onClickSpawnPieceButton()
     {
         StopCoroutine(SpawnPiece());
