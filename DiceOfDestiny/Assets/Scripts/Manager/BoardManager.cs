@@ -18,7 +18,8 @@ public enum DirectionType
     Four,      // 상하좌우 4방향
     Eight,     // 8방향 (상하좌우 + 대각선)
     Diagonal,  // 대각선만
-    ForwardThree // 굴러온 방향 기준 전방 3칸
+    ForwardThree, // 굴러온 방향 기준 전방 3칸
+    ForwardOne // 굴러온 방향 기준 전방 1칸
 }
 
 public class BoardManager : Singletone<BoardManager>
@@ -560,7 +561,7 @@ public class BoardManager : Singletone<BoardManager>
     {
         Vector2Int currentPieceLastDirection = PieceManager.Instance.currentPiece.GetLastMoveDirection();
         List<Vector2Int> positions = new List<Vector2Int>();
-
+        
         // 4방향 (상, 하, 좌, 우)
         Vector2Int[] fourDirections = new Vector2Int[]
         {
@@ -668,6 +669,13 @@ public class BoardManager : Singletone<BoardManager>
                 {
                     Debug.LogWarning("Current piece has no valid last move direction.");
                 }
+                break;
+            case DirectionType.ForwardOne:
+                // 앞으로 한 칸
+                Vector2Int forwardDir = currentPieceLastDirection;
+                Vector2Int forwardPosition = gridPosition + forwardDir;
+                if (IsValidPosition(forwardPosition))
+                    positions.Add(forwardPosition);
                 break;
         }
 

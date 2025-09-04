@@ -9,6 +9,7 @@ public class ActiveSkill : MonoBehaviour
     [SerializeField] private GameObject painterSkillEffect;
     [SerializeField] private GameObject fanaticSkillEffect;
     [SerializeField] private GameObject priestSkillEffect;
+    [SerializeField] private GameObject woodCutterSkillEffect;
 
     private PainterActiveSkillUI painterActiveSkillUI;
     private MoveSkillUI moveSkillUI;
@@ -505,5 +506,46 @@ public class ActiveSkill : MonoBehaviour
         BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+    }
+
+    public IEnumerator CreateBox()
+    {
+        PieceManager.Instance.SetCurrentPieceControl(false);
+
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        BoardSelectManager.Instance.HighlightTiles();
+        yield return BoardSelectManager.Instance.WaitForTileClick();
+
+        SkillManager.Instance.IsSelectingProgress = true;
+        Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
+
+        Vector3 effectPosition = new Vector3(
+                   selectPos.x - 6f,
+                   selectPos.y - 6f,
+                   0f
+               );
+
+        if (woodCutterSkillEffect != null)
+        {
+            GameObject effect = Instantiate(
+                woodCutterSkillEffect,
+                effectPosition,
+                Quaternion.identity,
+                BoardManager.Instance.boardTransform
+            );
+            Destroy(effect, 0.5f);
+        }
+        else
+        {
+            Debug.LogWarning("나무꾼 스킬 할당 안됨");
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        BoardManager.Instance.CreateObstacle(selectPos, ObstacleType.Tree);
+        SkillManager.Instance.IsSelectingProgress = false;
+
+        PieceManager.Instance.SetCurrentPieceControl(true);
+
     }
 }

@@ -9,6 +9,7 @@ public class PassiveSkill : MonoBehaviour
     [SerializeField] private GameObject fanaticPassiveEffect;
     [SerializeField] private GameObject priestPassiveEffect;
     [SerializeField] private GameObject thiefPassiveEffect;
+    [SerializeField] private GameObject woodCutterPassiveEffect;
 
 
     // 기사 공격 스킬
@@ -267,6 +268,7 @@ public class PassiveSkill : MonoBehaviour
         }
     }
 
+    // 광신도가 사제를 광신도로 3번 바꾸면 전체 타일에 메테오 공격하는 히든 스킬
     public IEnumerator DoFanaticMeteor()
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
@@ -394,4 +396,126 @@ public class PassiveSkill : MonoBehaviour
         yield return new WaitForSeconds(1f);
     }
 
+    //public IEnumerator WoodCutterPassive(PieceController pieceController)
+    //{
+    //    yield return new WaitForSeconds(0.8f);
+
+    //    // 전방 한칸 가져오기
+    //    List<Vector2Int> forwardList = BoardManager.Instance.GetTilePositions(DirectionType.ForwardOne, pieceController.gridPosition);
+
+    //    bool hasTarget = false;
+    //    for (int i = 0; i < forwardList.Count; i++)
+    //    {
+    //        var obstacle = BoardManager.Instance.ReturnObstacleByPosition(forwardList[i]);
+    //        if (obstacle != null &&
+    //            (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie || obstacle.obstacleType == ObstacleType.Pawn))
+    //        {
+    //            hasTarget = true;
+    //            break;
+    //        }
+    //    }
+
+    //    // 공격 대상이 있는 경우
+    //    if (hasTarget)
+    //    {
+    //        List<GameObject> skillEffects = new List<GameObject>();
+    //        Vector2Int lastMoveDirection = PieceManager.Instance.currentPiece.GetLastMoveDirection();
+
+    //        // 전방 3칸 타일 위치에 이펙트 생성
+    //        foreach (var pos in forwardList)
+    //        {
+    //            // 그리드 위치를 월드 위치로 변환 (pieceController.transform.position 사용 유지)
+    //            Vector3 effectPos = pos + new Vector2(-6f, -6f); // 타일 중앙 위치
+
+    //            // 타일의 인덱스를 기준으로 회전 각도 설정
+    //            int index = forwardList.IndexOf(pos);
+    //            float rotationZ = index switch
+    //            {
+    //                0 => 0f,    // 전방 1칸
+    //                1 => -60f,  // 좌 대각선
+    //                _ => 60f    // 우 대각선
+    //            };
+
+    //            // 이동 방향에 따라 회전 각도 조정
+    //            if (lastMoveDirection == new Vector2Int(0, -1)) // 하
+    //                rotationZ += 180f;
+    //            else if (lastMoveDirection == new Vector2Int(-1, 0)) // 좌
+    //                rotationZ += 90f;
+    //            else if (lastMoveDirection == new Vector2Int(1, 0)) // 우
+    //                rotationZ += -90f;
+
+    //            Quaternion rotation = Quaternion.Euler(0f, 0f, rotationZ);
+    //            GameObject skillEffect = Instantiate(
+    //                woodCutterPassiveEffect,
+    //                effectPos,
+    //                rotation
+    //            );
+    //            skillEffects.Add(skillEffect);
+
+    //            var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(pos);
+    //            if (targetObstacle != null &&
+    //                targetObstacle.obstacleType == ObstacleType.Tree)
+    //            {
+    //                BoardManager.Instance.RemoveObstacleAtPosition(pos);
+    //                Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
+
+    //                RuleEvents.TriggerRule("Demon_Active_ObstacleMove");
+    //            }
+    //            else if (targetObstacle != null && targetObstacle.obstacleType == ObstacleType.Pawn)
+    //            {
+    //                ObstacleManager.Instance.HitPawn(pos);
+    //            }
+    //        }
+
+    //        // 이펙트 지속 시간 대기
+    //        yield return new WaitForSeconds(0.5f);
+
+    //        // 모든 이펙트 제거
+    //        foreach (var skillEffect in skillEffects)
+    //        {
+    //            if (skillEffect != null)
+    //            {
+    //                Destroy(skillEffect);
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        yield return null;
+    //    }
+    //}
+
+    public IEnumerator WoodCutterPassive(PieceController pieceController)
+    {
+        
+
+        // 전방 한칸 타일 위치 가져오기
+        Vector2Int forwardPos = BoardManager.Instance.GetTilePositions(DirectionType.ForwardOne, pieceController.gridPosition)[0];
+        var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(forwardPos);
+
+        // 나무
+        if (targetObstacle != null &&
+            targetObstacle.obstacleType == ObstacleType.Tree)
+
+        {
+            // 이펙트 생성
+            Vector3 effectPos = forwardPos + new Vector2(-6f, -6f);
+            GameObject skillEffect = Instantiate(woodCutterPassiveEffect, effectPos, Quaternion.identity);
+
+            // 나무 제거
+            if (targetObstacle.obstacleType == ObstacleType.Tree)
+            {
+                BoardManager.Instance.RemoveObstacleAtPosition(forwardPos);
+                Debug.Log($"나무 제거됨: ({forwardPos.x}, {forwardPos.y})");
+                RuleEvents.TriggerRule("Demon_Active_ObstacleMove");
+            }
+            
+            // 이펙트 지속 시간 대기 후 제거
+            yield return new WaitForSeconds(0.5f);
+            if (skillEffect != null)
+            {
+                Destroy(skillEffect);
+            }
+        }
+    }
 }

@@ -79,6 +79,12 @@ public class SkillManager : Singletone<SkillManager>
                 // 화가 패시브 로직
 
                 break;
+
+            case "WoodCutter":
+                // 나무꾼 패시브 로직
+                StartCoroutine(passiveSkill.WoodCutterPassive(piece));
+                
+                break;
             default:
                 break;
         }
@@ -209,9 +215,11 @@ public class SkillManager : Singletone<SkillManager>
 
                 break;
 
-            case "Miner":
-                // 광부 스킬 : 다른 기물 주변 8칸으로 땅굴파서 이동하기?
-
+            case "WoodCutter":
+                // 나무꾼 스킬 : 주변 8칸 중 한 칸에 나무 장애물을 만듬
+                StartCoroutine(activeSkill.CreateBox());
+                ToastManager.Instance.ShowToast("나무꾼 스킬 발동! 원하는 보드 한 칸에 나무 장애물을 만듭니다.", currentPiece.transform, 0f);
+                //RuleEvents.TriggerRule("");
                 break;
 
             default:
