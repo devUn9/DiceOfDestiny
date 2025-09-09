@@ -27,6 +27,12 @@ public class RuleManager : MonoBehaviour
         // ruleId는 ScriptableObject 이름으로 사용한다고 가정
         foreach (var rule in allRules)
         {
+            if (rule.isClear)
+            {
+                EventManager.Instance.TriggerEvent("ShowRule", rule);
+                continue;
+            }
+
             var runtimeData = new RuleRuntimeData(rule);
             ruleRuntimeLookup[rule.name] = runtimeData;
         }
@@ -66,5 +72,7 @@ public class RuleManager : MonoBehaviour
     {
         Debug.Log($"[규칙 발견] {rule.name} - {rule.ruleDescription}");
         EventManager.Instance.TriggerEvent("ShowRule", rule);
+
+        rule.isClear = true;
     }
 }

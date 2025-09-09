@@ -505,7 +505,7 @@ public class PieceController : MonoBehaviour
         StartCoroutine(RotateToTopFaceCoroutine(moveDirection));
     }
 
-    IEnumerator RotateToTopFaceCoroutine(Vector2Int moveDirection)
+    public IEnumerator RotateToTopFaceCoroutine(Vector2Int moveDirection)
     {
         isMoving = true; // 이동 중 입력받지 아니함. 
 

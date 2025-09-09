@@ -17,6 +17,8 @@ public class ObstacleManager : Singletone<ObstacleManager>
     [SerializeField] private GameObject slimeDdongPrefab;
 
     [SerializeField] private GameObject pawnPrefab;
+    [SerializeField] private GameObject rookPrefab;
+    [SerializeField] private GameObject knightPrefab;
 
     [SerializeField] private RuntimeAnimatorController grayGarassAnimator;
     [SerializeField] private RuntimeAnimatorController grayTreeAnimator;
@@ -29,6 +31,9 @@ public class ObstacleManager : Singletone<ObstacleManager>
     [Header("Boss Pawn")]
     private List<GameObject> pawnList = new List<GameObject>();
     public int pawnMoveIndex { get; private set; } = 0;
+
+    [Header("Boss Rook")]
+    [SerializeField] private GameObject rookVisual;
 
     public void Initialize()
     {
@@ -45,6 +50,8 @@ public class ObstacleManager : Singletone<ObstacleManager>
             { ObstacleType.Slime, slimePrefab },
             { ObstacleType.SlimeDdong, slimeDdongPrefab },
             { ObstacleType.Pawn, pawnPrefab },
+            { ObstacleType.Rook, rookPrefab },
+            { ObstacleType.Knight, knightPrefab },
         };
 
         currentObstacles = new List<GameObject>();
@@ -183,6 +190,14 @@ public class ObstacleManager : Singletone<ObstacleManager>
     {
         int pawnRandomIndex = Random.Range(0, pawnList.Count);
         pawnMoveIndex = pawnRandomIndex;
+    }
+
+    public void CreateVisibleRook(float _x, float _y)
+    {
+        Instantiate(rookVisual,
+            new Vector3(BoardManager.Instance.boardTransform.position.x + _x, BoardManager.Instance.boardTransform.position.y + _y, 0),
+            Quaternion.identity,
+            BoardManager.Instance.boardTransform);
     }
 
     public RuntimeAnimatorController GetGrayGrassAnimator()
