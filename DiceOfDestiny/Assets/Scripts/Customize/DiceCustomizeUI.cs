@@ -7,6 +7,8 @@ public class DiceCustomizeUI : MonoBehaviour
     public GameObject pieceScrollView;
     public GameObject pieceNetScrollView;
 
+    public GameObject stickerPanel;
+
     [Header("CustomizePanel")]
     public GameObject customizePanel;
     public GameObject customizePiece;
@@ -14,6 +16,9 @@ public class DiceCustomizeUI : MonoBehaviour
     [Header("Buttons")]
     public GameObject showPieceButton;
     public GameObject showPieceNetButton;
+    public GameObject showStickerPanelButton;
     public GameObject backToMainButton;
+    public GameObject helpButton;
+    public GameObject optionButton;
 
 }
