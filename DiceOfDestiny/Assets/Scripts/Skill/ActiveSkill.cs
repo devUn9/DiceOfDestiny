@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditorInternal.VersionControl.ListControl;
 
 public class ActiveSkill : MonoBehaviour
 {
@@ -10,11 +11,13 @@ public class ActiveSkill : MonoBehaviour
     [SerializeField] private GameObject fanaticSkillEffect;
     [SerializeField] private GameObject priestSkillEffect;
     [SerializeField] private GameObject woodCutterSkillEffect;
+    [SerializeField] private GameObject wizardSkillEffect;
 
     private PainterActiveSkillUI painterActiveSkillUI;
     private MoveSkillUI moveSkillUI;
     private PieceSelectUI pieceSelectUI;
     private int fanaticPoint = 0;
+    private bool isPieceSelected = false;
 
     private void Awake()
     {
@@ -89,7 +92,7 @@ public class ActiveSkill : MonoBehaviour
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 60f);
             }
-        }   
+        }
         else
         {
             Debug.LogWarning("Skill effect prefab is not assigned!");
@@ -106,7 +109,7 @@ public class ActiveSkill : MonoBehaviour
 
         pieceController.transform.position = endPos;
 
-        
+
 
         bool hasObstacle = BoardManager.Instance.IsEmptyTile(newPos);
 
@@ -148,7 +151,7 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator Plant(PieceController pieceController)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
-        
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.HighlightTiles();
@@ -183,7 +186,7 @@ public class ActiveSkill : MonoBehaviour
         SkillManager.Instance.IsSelectingProgress = false;
 
         PieceManager.Instance.SetCurrentPieceControl(true);
-        
+
     }
 
     // 화가 스킬: 색칠하기
@@ -285,7 +288,7 @@ public class ActiveSkill : MonoBehaviour
                             Destroy(effect, 0.5f);
                         }
                         fanaticPoint++;
-                        if( fanaticPoint == 3)
+                        if (fanaticPoint == 3)
                         {
                             SkillManager.Instance.FanaticMeteor();
                         }
@@ -388,27 +391,21 @@ public class ActiveSkill : MonoBehaviour
         }
 
         pieceController.transform.position = endPos;
-        
+
 
         // 보드 
         Vector2Int PiecePosition = PieceManager.Instance.currentPiece.gridPosition;
         Vector2Int lastPosition = PieceManager.Instance.currentPiece.gridPosition - moveDirection;
+
+       
+        BoardManager.Instance.Board[lastPosition.x, lastPosition.y].SetPiece(null);
+        BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
 
         // 기존 SetPiece 코드 위에 타일 색상 처리 추가
         BoardManager.Instance.Board[lastPosition.x, lastPosition.y].TileColor = pieceController.lastTileColor;
         pieceController.lastTileColor = BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].TileColor;
         BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].TileColor = pieceController.GetPiece().faces[2].color;
 
-        BoardManager.Instance.Board[lastPosition.x, lastPosition.y].SetPiece(null);
-        BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
-
-
-        //bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
-
-        //if (!hasObstacle)
-        //{
-        //    BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
-        //}
 
         if (SkillManager.Instance != null)
         {
@@ -489,7 +486,7 @@ public class ActiveSkill : MonoBehaviour
         }
 
         // 기물 선택 UI 생성
-        pieceSelectUI.CreateButtonsForPieces();
+        pieceSelectUI.CreateButtonsForMoveSkill();
 
 
         // 화살표 클릭 대기
@@ -498,8 +495,8 @@ public class ActiveSkill : MonoBehaviour
         // 기물 선택 UI 종료
         pieceSelectUI.ClearButtons();
 
-       
-        
+
+
         // 하이라이트 타일 제거 및 현재 기물 위치 하이라이트
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
         PieceManager.Instance.currentPiece = pieceController;
@@ -508,6 +505,7 @@ public class ActiveSkill : MonoBehaviour
         PieceManager.Instance.SetCurrentPieceControl(true);
     }
 
+    // 나무꾼 스킬 : 나무 방벽 설치
     public IEnumerator CreateWoodBox()
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
@@ -548,4 +546,122 @@ public class ActiveSkill : MonoBehaviour
         PieceManager.Instance.SetCurrentPieceControl(true);
 
     }
+
+    // 마법사 스킬 : 본인을 제외한 기물간 위치 변경
+    public IEnumerator SwapPieces(PieceController pieceController)
+    {
+        PieceManager.Instance.SetCurrentPieceControl(false);
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        // 본인을 제외한 기물들 중 이동 가능한 타일이 있는지 확인
+        bool hasOtherPiece = false;
+        foreach (PieceController targetPiece in PieceManager.Instance.Pieces)
+        {
+            if (targetPiece == null || targetPiece == pieceController) // 본인 또는 null 기물 제외
+                continue;
+            hasOtherPiece = true;
+            break; // 다른 기물이 하나라도 있으면 루프 종료
+        }
+
+        // 이동 가능한 기물이 없으면 코루틴 종료
+        if (!hasOtherPiece)
+        {
+            Debug.Log("마법사 스킬 썼지만 발동 가능한 기물이 없네");
+            ToastManager.Instance.ShowToast("마법사쪽으로 위치변환 가능한 기물이 없습니다.", pieceController.transform, 1.5f);
+            PieceManager.Instance.SetCurrentPieceControl(true);
+            yield break;
+        }
+
+        // 기존 하이라이트 타일 제거
+        BoardSelectManager.Instance.DestroyPieceHighlightTile();
+
+        // 본인을 제외한 기물 위치에 하이라이트 타일 생성
+        foreach (PieceController p in PieceManager.Instance.Pieces)
+        {
+            if (p == null || p == PieceManager.Instance.currentPiece)
+                continue;
+            // 하이라이트 타일 생성
+            BoardSelectManager.Instance.PieceHighLightTilesMulty(p.gridPosition);
+        }
+
+        // 기물 선택 UI 생성
+        pieceSelectUI.CreateButtonsForSwapSkill();
+
+        // 두 기물 선택 대기
+        yield return StartCoroutine(pieceSelectUI.WaitForArrowClick(pieceController));
+
+        // 위치 교환 후 이펙트 생성
+        if (pieceSelectUI.firstSelectedPiece != null && pieceSelectUI.isPieceSelected)
+        {
+            PieceController secondSelectedPiece = PieceManager.Instance.currentPiece;
+            if (secondSelectedPiece != null && pieceSelectUI.firstSelectedPiece != secondSelectedPiece && secondSelectedPiece != pieceController)
+            {
+                // 첫 번째 기물 위치에 이펙트 생성
+                if (wizardSkillEffect != null)
+                {
+                    GameObject effect1 = Instantiate(
+                        wizardSkillEffect,
+                        pieceSelectUI.firstSelectedPiece.transform.position,
+                        Quaternion.identity,
+                        BoardManager.Instance.boardTransform
+                    );
+                    Destroy(effect1, 1f);
+                }
+
+                // 두 번째 기물 위치에 이펙트 생성
+                if (wizardSkillEffect != null)
+                {
+                    GameObject effect2 = Instantiate(
+                        wizardSkillEffect,
+                        secondSelectedPiece.transform.position,
+                        Quaternion.identity,
+                        BoardManager.Instance.boardTransform
+                    );
+                    Destroy(effect2, 1f);
+                }
+
+                // 위치 교환
+                Vector2Int tempPosition = pieceSelectUI.firstSelectedPiece.gridPosition;
+                pieceSelectUI.firstSelectedPiece.gridPosition = secondSelectedPiece.gridPosition;
+                secondSelectedPiece.gridPosition = tempPosition;
+
+                Vector3 tempWorldPosition = pieceSelectUI.firstSelectedPiece.transform.position;
+                pieceSelectUI.firstSelectedPiece.transform.position = secondSelectedPiece.transform.position;
+                secondSelectedPiece.transform.position = tempWorldPosition;
+
+                Debug.Log($"Swapped {pieceSelectUI.firstSelectedPiece.name} and {secondSelectedPiece.name}");
+
+                if (SkillManager.Instance != null)
+                {
+                    SkillManager.Instance.TrySkill(secondSelectedPiece.gridPosition, secondSelectedPiece);
+                    SkillManager.Instance.TrySkill(pieceSelectUI.firstSelectedPiece.gridPosition, pieceSelectUI.firstSelectedPiece);
+                }
+                else
+                {
+                    Debug.LogError("SkillManager.Instance is null!");
+                }
+
+            }
+            else
+            {
+                Debug.Log("유효하지 않은 기물 선택");
+                ToastManager.Instance.ShowToast("유효하지 않은 기물 선택입니다.", pieceController.transform, 1.5f);
+            }
+        }
+
+        // UI 버튼 제거
+        pieceSelectUI.ClearButtons();
+
+        // 컨트롤 복구
+        PieceManager.Instance.SetCurrentPieceControl(true);
+
+        // 하이라이트 타일 제거 및 현재 기물 위치 하이라이트
+        BoardSelectManager.Instance.DestroyPieceHighlightTile();
+        PieceManager.Instance.currentPiece = pieceController;
+        BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
+
+        PieceManager.Instance.SetCurrentPieceControl(true);
+    }
+
+   
 }

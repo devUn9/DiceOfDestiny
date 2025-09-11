@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAvailable: 1
   faces:
-  - classData: {fileID: 11400000, guid: eb0d9b583443ea549bfd65042068c55c, type: 2}
+  - classData: {fileID: 11400000, guid: 07092dbc18dae944daee57de55fcb9dd, type: 2}
     color: 0
   - classData: {fileID: 11400000, guid: 384c756a026c75446866dfb53aa3372d, type: 2}
     color: 1

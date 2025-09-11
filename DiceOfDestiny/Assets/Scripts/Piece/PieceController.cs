@@ -360,6 +360,13 @@ public class PieceController : MonoBehaviour
                     animationName = "Fanatic_Idle";
 
                     break;
+                case "WoodCutter":
+                    animationName = "Woodcutter_Idle";
+                    break;
+                case "Wizard":
+                    animationName = "Wizard_Idle";
+                    break;
+
                 default:
                     Debug.LogWarning($"Unknown class: {piece.faces[2].classData.className}");
 

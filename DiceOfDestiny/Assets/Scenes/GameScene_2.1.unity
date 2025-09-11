@@ -1925,6 +1925,7 @@ MonoBehaviour:
   fanaticSkillEffect: {fileID: 8301357996556643184, guid: 81f74734435b88a4c8c84b73f8b6d86a, type: 3}
   priestSkillEffect: {fileID: 5770720890533067149, guid: fea0a462d8377824dafad442c933594a, type: 3}
   woodCutterSkillEffect: {fileID: 8546471297454802166, guid: 6cf9d3419d8d3e14989491b6e6491ce4, type: 3}
+  wizardSkillEffect: {fileID: 8301357996556643184, guid: 81f74734435b88a4c8c84b73f8b6d86a, type: 3}
 --- !u!114 &830614874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1993,6 +1994,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieceSelectButton: {fileID: 5233864642296173606, guid: 01092873cfd3c7044917ca679163010c, type: 3}
   canvas: {fileID: 1222871037}
+  firstSelectedPiece: {fileID: 0}
+  isPieceSelected: 0
 --- !u!1 &847223742
 GameObject:
   m_ObjectHideFlags: 0

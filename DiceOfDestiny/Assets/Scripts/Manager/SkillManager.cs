@@ -222,6 +222,11 @@ public class SkillManager : Singletone<SkillManager>
                 //RuleEvents.TriggerRule("");
                 break;
 
+            case "Wizard":
+                // 마법사 스킬 : 기물간 위치변환
+                StartCoroutine(activeSkill.SwapPieces(currentPiece));
+                break;
+
             default:
                 Debug.LogError($"알 수 없는 클래스 : {classData.className}");
 
