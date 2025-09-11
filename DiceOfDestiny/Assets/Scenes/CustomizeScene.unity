@@ -260,6 +260,7 @@ MonoBehaviour:
   thiefClassData: {fileID: 11400000, guid: c46d4b0574e7b9b42a12e7262c15b141, type: 2}
   preistClassData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
   painterClassData: {fileID: 11400000, guid: 2126fa894a0a68e44918428e1bfd819c, type: 2}
+  classDataList: []
 --- !u!1 &1501029614
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,6 +308,7 @@ MonoBehaviour:
   diceCustomizeUIPrefab: {fileID: 8281481393313179790, guid: 19792676171761648af33ccc7b32df3e, type: 3}
   piecePreviewButtonPrefab: {fileID: 4420756477264095231, guid: 15e11830a1403d045a90d3e1d5d6f899, type: 3}
   pieceNetPreviewButtonPrefab: {fileID: 6911938695811559320, guid: d122adcfc83ba564db5bc1621ee0ca78, type: 3}
+  stickerPreviewButtonUI: {fileID: 6384462064550464447, guid: d60971c73543f3f4f8a8d789c2e70777, type: 3}
   stickerSourcePrefab: {fileID: 6718747924625817573, guid: 92241433e69214b48ae046cfce866d6b, type: 3}
   isFolded: 0
 --- !u!1 &1848363191
