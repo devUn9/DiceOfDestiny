@@ -68,6 +68,7 @@ public class GameManager : Singletone<GameManager>
             {
                 UIManager = FindFirstObjectByType<UIManager>();
             }
+
             var existingMainUI = FindFirstObjectByType<MainController>();
             if (existingMainUI == null)
             {
@@ -75,7 +76,7 @@ public class GameManager : Singletone<GameManager>
             }
             else
             {
-                existingMainUI.transform.root.gameObject.SetActive(true);
+                UIManager.AttachExistingMainUI(existingMainUI.transform.root.gameObject);
             }
         }
 
@@ -114,7 +115,33 @@ public class GameManager : Singletone<GameManager>
                 StageManager = FindFirstObjectByType<StageManager>();
             }
             StageManager.StartStage();
+        }
 
+        if (newScene.name == "TutorialScene")
+        {
+            if (UIManager == null)
+            {
+                UIManager = FindFirstObjectByType<UIManager>();
+            }
+            UIManager.InitializeGameUI();
+
+            if (BoardManager == null)
+            {
+                BoardManager = FindFirstObjectByType<BoardManager>();
+            }
+            BoardManager.Initialize();
+
+            if (ObstacleManager == null)
+            {
+                ObstacleManager = FindFirstObjectByType<ObstacleManager>();
+            }
+            ObstacleManager.Initialize();
+
+            if (StageManager == null)
+            {
+                StageManager = FindFirstObjectByType<StageManager>();
+            }
+            StageManager.StartStage();
         }
     }
 

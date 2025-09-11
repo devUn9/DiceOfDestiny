@@ -255,6 +255,7 @@ public class PieceController : MonoBehaviour
 
                 // 도착점 체크
                 MissionManager.Instance.CheckStageClearAfterMove(newPosition);
+
                 // 모든 미션완료 상태 체크
                 StartCoroutine(MissionManager.Instance.IsAllMissionCompleted(this));
 
@@ -263,6 +264,8 @@ public class PieceController : MonoBehaviour
 
                 //// 스킬 발동
                 StartCoroutine(SkillCoroutine());
+                // 튜토리얼 이동 미션 체크
+                MissionManager.Instance.CheckMoveMission();
             }
             else
             {
@@ -635,8 +638,22 @@ public class PieceController : MonoBehaviour
 
         CheckOutStartingLine();
 
-
-     
+             
+        // 스킬 발동
+        if (SkillManager.Instance != null)
+        {
+            // y값이 0이나 14가 아니면
+            if (PieceManager.Instance.currentPiece.gridPosition.y != 0 && PieceManager.Instance.currentPiece.gridPosition.y != 14)
+            {
+                SkillManager.Instance.TrySkill(gridPosition, this);
+                //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+                MissionManager.Instance.CheckPassiveSkillUse();
+            }
+        }
+        else
+        {
+            Debug.LogError("SkillManager.Instance is null!");
+        }
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)

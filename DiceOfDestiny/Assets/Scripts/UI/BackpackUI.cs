@@ -179,7 +179,8 @@ public class BackpackUI : MonoBehaviour
         if (!StageManager.Instance.isFirstCreatePiece)
         {
             StageManager.Instance.isFirstCreatePiece = true;
-            UIManager.Instance.HideTutorialUI();
+            // UIManager.Instance.HideTutorialUI();
+            TutorialManager.Instance.ShowStep(0);
         }
     }
 

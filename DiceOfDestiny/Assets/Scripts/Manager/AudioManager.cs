@@ -1,13 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.EventSystems;
 
+[DefaultExecutionOrder(-100)]
 public class AudioManager : Singletone<AudioManager>
 {
-    // public static AudioManager Instance { get; private set; }
-
     [Header("Audio Sources")]
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource sfxSource;
@@ -21,20 +20,29 @@ public class AudioManager : Singletone<AudioManager>
 
     private Dictionary<string, AudioClip> bgmDict;
     private Dictionary<string, AudioClip> sfxDict;
+    private bool _initialized;
 
     protected override void Awake()
     {
         base.Awake();
-        if (bgmSource == null || sfxSource == null || audioMixer == null)
-        {
-            Debug.LogError("AudioManager is missing required components. Please assign them in the inspector.");
-            return;
-        }
+        EnsureInitialized();        
+    }
 
-        bgmDict = bgmClips.ToDictionary(c => c.name, c => c);
-        sfxDict = sfxClips.ToDictionary(c => c.name, c => c);
+    private void EnsureInitialized()
+    {
+        if (_initialized) return;
+
+        var safeBgm = bgmClips ?? Array.Empty<AudioClip>();
+        var safeSfx = sfxClips ?? Array.Empty<AudioClip>();
+        bgmDict = safeBgm.ToDictionary(c => c.name, c => c);
+        sfxDict = safeSfx.ToDictionary(c => c.name, c => c);
+
+        if (bgmSource == null) Debug.LogError("[AudioManager] bgmSource 미할당");
+        if (sfxSource == null) Debug.LogError("[AudioManager] sfxSource 미할당");
+        if (audioMixer == null) Debug.LogError("[AudioManager] audioMixer 미할당");
 
         ApplySavedAudioSettings();
+        _initialized = true;
     }
 
     public void SetVolume(string exposedParam, float linearValue)
@@ -46,6 +54,13 @@ public class AudioManager : Singletone<AudioManager>
 
     public void SetMasterMute(bool mute)
     {
+        if (audioMixer == null)
+        {
+            if (bgmSource != null) bgmSource.mute = mute;
+            if (sfxSource != null) sfxSource.mute = mute;
+            return;
+        }
+
         float masterVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("MasterVolume", 1f)) * 20f;
         float bgmVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("BGMVolume", 1f)) * 20f;
         float sfxVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("SFXVolume", 1f)) * 20f;
@@ -54,25 +69,28 @@ public class AudioManager : Singletone<AudioManager>
         audioMixer.SetFloat("BGMVolume", bgmVolume);
         audioMixer.SetFloat("SFXVolume", sfxVolume);
 
-        if (bgmSource != null)
-            bgmSource.mute = mute;
-        if (sfxSource != null)
-            sfxSource.mute = mute;
+        if (bgmSource != null) bgmSource.mute = mute;
+        if (sfxSource != null) sfxSource.mute = mute;
     }
 
 
-public void PlayBGM(string name, bool loop = true)
+    public bool PlayBGM(string name, bool loop = true)
     {
-        if (bgmDict.TryGetValue(name, out var clip))
+        EnsureInitialized();
+        if (!bgmDict.TryGetValue(name, out var clip) || clip == null)
         {
-            bgmSource.clip = clip;
-            bgmSource.loop = loop;
-            bgmSource.Play();
+            Debug.LogWarning($"[AudioManager] BGM '{name}'을(를) 찾지 못했습니다.");
+            return false;
         }
-        else
+        if (bgmSource == null)
         {
-            Debug.LogWarning($"BGM '{name}' not found.");
+            Debug.LogError("[AudioManager] bgmSource가 비어 있어 재생할 수 없습니다.");
+            return false;
         }
+        bgmSource.clip = clip;
+        bgmSource.loop = loop;
+        bgmSource.Play();
+        return true;
     }
 
     public void StopBGM()
@@ -82,16 +100,19 @@ public void PlayBGM(string name, bool loop = true)
 
     public void PlaySFX(string name)
     {
-        if (sfxDict.TryGetValue(name, out var clip))
+        EnsureInitialized();
+        if (!sfxDict.TryGetValue(name, out var clip) || clip == null)
         {
-            sfxSource.PlayOneShot(clip);
+            Debug.LogWarning($"[AudioManager] SFX '{name}'을(를) 찾지 못했습니다.");
+            return;
         }
-        else
+        if (sfxSource == null)
         {
-            Debug.LogWarning($"SFX '{name}' not found.");
+            Debug.LogError("[AudioManager] sfxSource가 비어 있어 재생할 수 없습니다.");
+            return;
         }
+        sfxSource.PlayOneShot(clip);
     }
-
 
     public void ApplySavedAudioSettings()
     {
@@ -105,5 +126,4 @@ public void PlayBGM(string name, bool loop = true)
         SetVolume("SFXVolume", sfx);
         SetMasterMute(isMuted);
     }
-
 }

@@ -22,6 +22,38 @@ public class UIManager : Singletone<UIManager>
         base.Awake();
     }
 
+    public void AttachExistingMainUI(GameObject uiRoot)
+    {
+        if (uiRoot == null)
+        {
+            Debug.LogError("[UIManager] AttachExistingMainUI: uiRoot is null.");
+            return;
+        }
+
+        var canvas = uiRoot.GetComponentInParent<Canvas>();
+        if (canvas == null)
+        {
+            canvas = GameObject.Find("Canvas")?.GetComponent<Canvas>();
+            if (canvas == null)
+            {
+                Debug.LogError("[UIManager] 캔버스를 찾지 못했습니다. 씬에 'Canvas'가 존재하는지 확인해 주세요.");
+                return;
+            }
+        }
+        var root = uiRoot.transform.root.gameObject;
+        var wasInactive = !root.activeSelf;
+        if (wasInactive) root.SetActive(true);
+
+        var uiManager = this; // 가독성용
+        var uiManagerType = typeof(UIManager);
+        var canvasField = uiManagerType.GetField("currentCanvas", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+        var rootField = uiManagerType.GetField("currentUIRoot", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+        canvasField?.SetValue(uiManager, canvas);
+        rootField?.SetValue(uiManager, root);
+    }
+
+
     public void InitializeMainUI()
     {
         currentCanvas = GameObject.Find("Canvas")?.GetComponent<Canvas>();
