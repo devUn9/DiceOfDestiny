@@ -508,7 +508,7 @@ public class ActiveSkill : MonoBehaviour
         PieceManager.Instance.SetCurrentPieceControl(true);
     }
 
-    public IEnumerator CreateBox()
+    public IEnumerator CreateWoodBox()
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
 
@@ -542,7 +542,7 @@ public class ActiveSkill : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
-        BoardManager.Instance.CreateObstacle(selectPos, ObstacleType.Tree);
+        BoardManager.Instance.CreateObstacle(selectPos, ObstacleType.WoodBox);
         SkillManager.Instance.IsSelectingProgress = false;
 
         PieceManager.Instance.SetCurrentPieceControl(true);

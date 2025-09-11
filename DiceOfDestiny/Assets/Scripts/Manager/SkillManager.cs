@@ -217,7 +217,7 @@ public class SkillManager : Singletone<SkillManager>
 
             case "WoodCutter":
                 // 나무꾼 스킬 : 주변 8칸 중 한 칸에 나무 장애물을 만듬
-                StartCoroutine(activeSkill.CreateBox());
+                StartCoroutine(activeSkill.CreateWoodBox());
                 ToastManager.Instance.ShowToast("나무꾼 스킬 발동! 원하는 보드 한 칸에 나무 장애물을 만듭니다.", currentPiece.transform, 0f);
                 //RuleEvents.TriggerRule("");
                 break;
