@@ -20,6 +20,18 @@ public class ToastManager : Singletone<ToastManager>
     protected override void Awake()
     {
         base.Awake();
+        Initialize();
+    }
+
+    /// <summary>
+    /// 기물 위에 토스트를 표시합니다.
+    /// </summary>
+    /// <param name="message">토스트에 표시할 텍스트</param>
+    /// <param name="targetPiece">토스트를 띄울 대상 기물의 Transform</param>
+    /// <param name="delay">딜레이(초). 0이면 즉시 표시</param>
+
+    public void Initialize()
+    {
         if (uiCanvas == null)
         {
             uiCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -30,12 +42,6 @@ public class ToastManager : Singletone<ToastManager>
             uiCanvas.worldCamera = Camera.main;
     }
 
-    /// <summary>
-    /// 기물 위에 토스트를 표시합니다.
-    /// </summary>
-    /// <param name="message">토스트에 표시할 텍스트</param>
-    /// <param name="targetPiece">토스트를 띄울 대상 기물의 Transform</param>
-    /// <param name="delay">딜레이(초). 0이면 즉시 표시</param>
 
     public void ShowToast(string message, Transform targetPiece, float delay = 0f)
     {

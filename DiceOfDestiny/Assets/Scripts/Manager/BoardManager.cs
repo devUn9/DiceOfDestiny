@@ -24,7 +24,7 @@ public enum DirectionType
 public class BoardManager : Singletone<BoardManager>
 {
     [Header("Board Size Settings")]
-    [SerializeField] public int boardSize { get; private set; } = 13;
+    [SerializeField] public int boardSize = 13;
     public int boardSizeY;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] public GameObject boardPosParent;
@@ -1240,5 +1240,39 @@ public class BoardManager : Singletone<BoardManager>
             SetRook();
             SetKnight();
         }
+    }
+
+    public void ClearBoard()
+    {
+        // 모든 타일 오브젝트 제거
+        if (Board != null)
+        {
+            for (int x = 0; x < boardSize; x++)
+            {
+                for (int y = 0; y < boardSizeY; y++)
+                {
+                    if (Board[x, y] != null)
+                    {
+                        Destroy(Board[x, y].gameObject);
+                        Board[x, y] = null;
+                    }
+                }
+            }
+        }
+
+        // boardTransform의 모든 자식 오브젝트 제거
+        if (boardTransform != null)
+        {
+            for (int i = boardTransform.childCount - 1; i >= 0; i--)
+            {
+                Destroy(boardTransform.GetChild(i).gameObject);
+            }
+        }
+
+        // 경계/배경 제거
+        DestroyBorder();
+        DestroyBackGround();
+        Board = null;
+        TempBoard = null;
     }
 }

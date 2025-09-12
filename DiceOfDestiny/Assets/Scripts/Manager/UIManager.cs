@@ -68,7 +68,13 @@ public class UIManager : Singletone<UIManager>
     }
 
     public void ToggleSettings(bool isOn)
-    {        
+    {
+        if (currentCanvas == null)
+        {
+            currentCanvas = GameObject.Find("Canvas")?.GetComponent<Canvas>();
+            if (currentCanvas == null) return;            
+        }
+
         if (settingUI == null)
         {
             settingUI = Instantiate(settingUIPrefab, currentCanvas.transform, false);
@@ -128,15 +134,6 @@ public class UIManager : Singletone<UIManager>
     public void HideMissionUI()
     {
         currentUIRoot.GetComponent<GameUIController>().HideMissionUI();
-    }
-
-    public void ShowTutorialUI()
-    {
-        currentUIRoot.GetComponent<GameUIController>().ShowTutorialUI();
-    }
-    public void HideTutorialUI()
-    {
-        currentUIRoot.GetComponent<GameUIController>().HideTutorialUI();
     }
 
     public void HideUI()

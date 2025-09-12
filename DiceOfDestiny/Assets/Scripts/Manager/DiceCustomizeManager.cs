@@ -40,6 +40,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     GameObject stickerDrawer;
 
     private GameObject backToMainButton;
+    private GameObject optionButton;
     [HideInInspector] public bool isFolded;
 
 
@@ -75,6 +76,9 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
         backToMainButton = diceCustomizeUI.backToMainButton;
         backToMainButton.GetComponent<Button>().onClick.AddListener(OnClickBackToMainButton);
+
+        optionButton = diceCustomizeUI.optionButton;
+        optionButton.GetComponent<Button>().onClick.AddListener(() => UIManager.Instance.ToggleSettings(true));
 
         piecePreviewButtonList = new List<PiecePreviewButton>();
         pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
@@ -241,5 +245,10 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     public void OnClickBackToMainButton()
     {
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void OnClickToggleSettingUI()
+    {
+        UIManager.Instance.ToggleSettings(true);
     }
 }

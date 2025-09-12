@@ -204,6 +204,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 864894360443533216}
+  - component: {fileID: 4125544334758056540}
   m_Layer: 5
   m_Name: PieceGroup
   m_TagString: Untagged
@@ -234,6 +235,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 175, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4125544334758056540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472069340978471491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 75, y: 75}
+  m_Spacing: {x: 25, y: 25}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &887687466654729004
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,7 +378,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 782929866979833998}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2591897168813343749, guid: 59053c529c85fa44bb88e5784e006923, type: 3}
+        m_TargetAssemblyTypeName: TutorialS1Director, Assembly-CSharp
+        m_MethodName: OnClick_SelectPiece
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &900813974907959491
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,20 +2231,22 @@ MonoBehaviour:
   backpackButtonImage: {fileID: 9023347391756377333}
   defaultSprite: {fileID: -1489819980984513191, guid: e60878b8dab60b74c8d193c9810fb540, type: 3}
   clickedSprite: {fileID: -3483382947888150493, guid: e60878b8dab60b74c8d193c9810fb540, type: 3}
-  inventoryPanel: {fileID: 0}
-  choiceTopFaceWindow: {fileID: 0}
-  spawnPieceColorImage: {fileID: 0}
-  spawnPieceObject: {fileID: 0}
-  nextSpawnPieceImage: {fileID: 0}
-  nextSpawnPieceObject: {fileID: 0}
+  inventoryPanel: {fileID: 2891874945675814310}
+  choiceTopFaceWindow: {fileID: 1052408885257056050}
+  spawnPieceColorImage: {fileID: 8574716758071788492}
+  spawnPieceObject: {fileID: 887687466654729004}
+  nextSpawnPieceImage: {fileID: 6826060895201973876}
+  nextSpawnPieceObject: {fileID: 8899430645987281889}
   choicePieceImageColorImage:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 9086030577825212938}
+  - {fileID: 2794510846680294368}
+  - {fileID: 1494459088810619661}
+  - {fileID: 8271089696363821858}
   choicePieceClassImage:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 329892053396001313}
+  - {fileID: 3231550580703920431}
+  - {fileID: 2894008689203464869}
+  - {fileID: 1257748247777715898}
 --- !u!1 &8229149914023854059
 GameObject:
   m_ObjectHideFlags: 0

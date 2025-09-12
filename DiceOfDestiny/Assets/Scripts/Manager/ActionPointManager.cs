@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ActionPointManager : Singletone<ActionPointManager>
 {
-    private int actionPoint;
+    [SerializeField] private int actionPoint;
 
     public void AddAP(int amount = 1)
     {
@@ -14,13 +14,15 @@ public class ActionPointManager : Singletone<ActionPointManager>
 
     public void RemoveAP(int amount = 1)
     {
-        if (CanUse(amount))
+        if (!CanUse(amount))
         {
             ToastManager.Instance.ShowToast("행동력이 없습니다.", transform, 0f);
+            return;
         }
         actionPoint -= amount;
-        if (actionPoint == 0)
+        if (actionPoint <= 0)
         {
+            actionPoint = 0;
             StageManager.Instance.EndTurn();
         }
         UIManager.Instance.UpdateActionPointUI();

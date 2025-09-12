@@ -83,6 +83,7 @@ public class ApDiceController : MonoBehaviour
         StartCoroutine(ReSizeDiceOverTime());
         StartCoroutine(RollCycle());
         AudioManager.Instance.PlaySFX("DiceRoll");
+        FindAnyObjectByType<TutorialS1Director>()?.NextStep();
     }
 
     void SetDiceRoute()

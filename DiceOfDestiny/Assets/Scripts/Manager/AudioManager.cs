@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 
-[DefaultExecutionOrder(-100)]
 public class AudioManager : Singletone<AudioManager>
 {
     [Header("Audio Sources")]
@@ -28,6 +27,12 @@ public class AudioManager : Singletone<AudioManager>
         EnsureInitialized();        
     }
 
+    private void Start()
+    {
+        // AudioMixer가 완전히 초기화된 후 볼륨 적용
+        ApplySavedAudioSettings();
+    }
+
     private void EnsureInitialized()
     {
         if (_initialized) return;
@@ -41,13 +46,12 @@ public class AudioManager : Singletone<AudioManager>
         if (sfxSource == null) Debug.LogError("[AudioManager] sfxSource 미할당");
         if (audioMixer == null) Debug.LogError("[AudioManager] audioMixer 미할당");
 
-        ApplySavedAudioSettings();
         _initialized = true;
     }
 
     public void SetVolume(string exposedParam, float linearValue)
     {
-        float dB = Mathf.Approximately(linearValue, 0f) ? -80f : Mathf.Log10(linearValue) * 20f;
+        float dB = (linearValue <= 0f) ? -80f : Mathf.Log10(linearValue) * 20f;
         audioMixer.SetFloat(exposedParam, dB);
         PlayerPrefs.SetFloat(exposedParam, linearValue);
     }
@@ -61,9 +65,13 @@ public class AudioManager : Singletone<AudioManager>
             return;
         }
 
-        float masterVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("MasterVolume", 1f)) * 20f;
-        float bgmVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("BGMVolume", 1f)) * 20f;
-        float sfxVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("SFXVolume", 1f)) * 20f;
+        float masterLinear = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        float bgmLinear = PlayerPrefs.GetFloat("BGMVolume", 1f);
+        float sfxLinear = PlayerPrefs.GetFloat("SFXVolume", 1f);
+
+        float masterVolume = mute ? -80f : (masterLinear <= 0f ? -80f : Mathf.Log10(masterLinear) * 20f);
+        float bgmVolume = mute ? -80f : (bgmLinear <= 0f ? -80f : Mathf.Log10(bgmLinear) * 20f);
+        float sfxVolume = mute ? -80f : (sfxLinear <= 0f ? -80f : Mathf.Log10(sfxLinear) * 20f);
 
         audioMixer.SetFloat("MasterVolume", masterVolume);
         audioMixer.SetFloat("BGMVolume", bgmVolume);
@@ -120,10 +128,11 @@ public class AudioManager : Singletone<AudioManager>
         float bgm = PlayerPrefs.GetFloat("BGMVolume", 1f);
         float sfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
         bool isMuted = PlayerPrefs.GetInt("Muted", 0) == 1;
-        
-        SetVolume("MasterVolume", master);
-        SetVolume("BGMVolume", bgm);
-        SetVolume("SFXVolume", sfx);
+
+        audioMixer.SetFloat("MasterVolume", master <= 0f ? -80f : Mathf.Log10(master) * 20f);
+        audioMixer.SetFloat("BGMVolume", bgm <= 0f ? -80f : Mathf.Log10(bgm) * 20f);
+        audioMixer.SetFloat("SFXVolume", sfx <= 0f ? -80f : Mathf.Log10(sfx) * 20f);
+
         SetMasterMute(isMuted);
     }
 }

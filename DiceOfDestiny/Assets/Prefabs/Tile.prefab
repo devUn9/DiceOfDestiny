@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9019824873321826196}
   - component: {fileID: 4251232675732337647}
   - component: {fileID: 8871831858722877987}
+  - component: {fileID: 7089367054936782045}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -102,6 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileColor: 0
+  obstacle: 0
   piece: {fileID: 0}
 --- !u!61 &8871831858722877987
 BoxCollider2D:
@@ -149,3 +151,30 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.56, y: 2.56}
   m_EdgeRadius: 0
+--- !u!114 &7089367054936782045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2471703998611980718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d31dc4a8920538e4fb53368296f6d894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTileClicked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

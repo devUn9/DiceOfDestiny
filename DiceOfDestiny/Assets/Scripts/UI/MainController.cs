@@ -123,15 +123,7 @@ public class MainController : MonoBehaviour
 
         StartCoroutine(StartBigDiceAnimation());
         StartCoroutine(StartSmallDiceAnimation());
-        if (AudioManager.Instance != null)
-        {
-            bool ok = AudioManager.Instance.PlayBGM("MainBGM");
-            if (!ok) Debug.LogWarning("[MainController] MainBGM 재생 실패");
-        }
-        else
-        {
-            Debug.LogError("[MainController] AudioManager.Instance 없음");
-        }
+        AudioManager.Instance.PlayBGM("MainBGM");
 
         // 튜토리얼 확인 모달 버튼 바인딩
         if (tutorialProceedButton != null) tutorialProceedButton.onClick.AddListener(OnChooseTutorialProceed);
