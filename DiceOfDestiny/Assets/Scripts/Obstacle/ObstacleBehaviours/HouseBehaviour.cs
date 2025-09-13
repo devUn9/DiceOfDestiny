@@ -18,8 +18,8 @@ public class HouseBehaviour : Obstacle, IObstacleBehaviour
     }
 
     private List<SponObstacleDir> randObstacleDir = new();
-    private int life = 5;
-    private int sponTure = 0;
+    [SerializeField] private int life = 5;
+    [SerializeField] private int sponTurn = 0;
 
     public void DoLogic()
     {
@@ -29,14 +29,14 @@ public class HouseBehaviour : Obstacle, IObstacleBehaviour
     public void DoLogicTurn()
     {
         // 턴 단위
-        if (sponTure < 2)
+        if (sponTurn < 1)
         {
-            sponTure++;
+            sponTurn++;
             return;
         }
         else
         {
-            sponTure = 0;
+            sponTurn = 0;
         }
 
         randObstacleDir.Clear();
@@ -104,7 +104,13 @@ public class HouseBehaviour : Obstacle, IObstacleBehaviour
         else if (randNum <= 9)
             obstacleType = ObstacleType.Slime;
         else
+        {
             obstacleType = ObstacleType.Pawn;
+            GameObject pawn = BoardManager.Instance.CreateObstacle(nextPosition, obstacleType);
+            ObstacleManager.Instance.AddPawnToList(pawn);
+
+            return;
+        }
 
 
         BoardManager.Instance.CreateObstacle(nextPosition, obstacleType);
@@ -113,7 +119,7 @@ public class HouseBehaviour : Obstacle, IObstacleBehaviour
     public void TakeDamage(int damage)
     {
         life -= damage;
-
+        
         if (life <= 0)
         {
             ObstacleManager.Instance.DestroyHouse(obstaclePosition);

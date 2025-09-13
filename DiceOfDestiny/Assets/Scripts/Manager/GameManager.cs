@@ -176,7 +176,7 @@ public class GameManager : Singletone<GameManager>
                 StageManager = FindFirstObjectByType<StageManager>();
             }
 
-            AllocateStageData();
+            //AllocateStageData();
             StageManager.StartStage();
         }
 

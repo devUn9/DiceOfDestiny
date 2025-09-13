@@ -78,7 +78,6 @@ public class PassiveSkill : MonoBehaviour
                 }
                 else if (targetObstacle != null && targetObstacle.obstacleType == ObstacleType.House)
                 {
-                    Debug.Log("HitHouse!");
                     ObstacleManager.Instance.HitHouse(targetPos);
                 }
             }

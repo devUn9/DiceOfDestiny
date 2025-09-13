@@ -44,6 +44,4 @@ MonoBehaviour:
   exactObstacle:
   - type: 5
     weight: 5
-  - type: 13
-    weight: 5
   obstacleDensity: 0.2

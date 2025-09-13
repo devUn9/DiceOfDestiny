@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0df24a270d71b7438e3feccea1b16fe, type: 3}
   m_Name: ReachFinishLine
   m_EditorClassIdentifier: 
-  missionType: 4
+  missionType: 6

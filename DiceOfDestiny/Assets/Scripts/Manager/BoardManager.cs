@@ -1022,20 +1022,19 @@ public class BoardManager : Singletone<BoardManager>
 
         while (true)
         {
-            int randX = Random.Range(0, boardSize);
-            int randY = Random.Range(1, boardSizeY - 1);
+            int randX = Random.Range(1, boardSize - 1);
+            int randY = Random.Range(3, boardSizeY - 2);
 
-            Vector2Int knightPos = new Vector2Int(randX, randY);
+            Vector2Int housePos = new Vector2Int(randX, randY);
 
-            // 이미 룩이나 나이트가 있으면 건너뛰기
-            if (Board[knightPos.x, knightPos.y].Obstacle == ObstacleType.Rook ||
-                Board[knightPos.x, knightPos.y].Obstacle == ObstacleType.Knight)
+            // 이미 집이 있으면 스킵
+            if (Board[housePos.x, housePos.y].Obstacle == ObstacleType.House)
                 continue;
 
-            RemoveObstacleAtPosition(knightPos);
-            GameObject obstacle = CreateObstacle(knightPos, ObstacleType.Knight);
+            RemoveObstacleAtPosition(housePos);
+            GameObject obstacle = CreateObstacle(housePos, ObstacleType.House);
 
-            ObstacleManager.Instance.AddKnightToList(obstacle);
+            ObstacleManager.Instance.AddHouseToList(obstacle);
 
             ++count;
 
@@ -1271,7 +1270,7 @@ public class BoardManager : Singletone<BoardManager>
         }
         if (stageData.stageNumber == 10)
         {
-            //SetHouse();
+            SetHouse();
         }
     }
 

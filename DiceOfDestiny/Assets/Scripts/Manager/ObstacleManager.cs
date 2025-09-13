@@ -255,13 +255,13 @@ public class ObstacleManager : Singletone<ObstacleManager>
     public void RemoveHouseToList(GameObject pawn)
     {
         houseList.Remove(pawn);
-
+        
         MissionManager.Instance.AliveHouseCountCheck(); // 집이 파괴되었을 때 미션 카운트
     }
 
     public void DestroyHouse(Vector2Int gridPos)
     {
-        if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.Pawn)
+        if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.House)
         {
             // 집 리스트 상에서의 오브젝트 제거
             Obstacle house = BoardManager.Instance.ReturnObstacleByPosition(gridPos);

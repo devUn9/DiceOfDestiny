@@ -272,7 +272,8 @@ public class PieceController : MonoBehaviour
                 ObstacleManager.Instance.UpdateObstacleStep();
 
                 //// 스킬 발동
-                StartCoroutine(SkillCoroutine());
+                //StartCoroutine(SkillCoroutine());
+
                 // 튜토리얼 이동 미션 체크
                 MissionManager.Instance.CheckMoveMission();
 

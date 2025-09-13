@@ -41,6 +41,8 @@ public class MissionManager : Singletone<MissionManager>
         isFinishLine = false;
         isFindGrayGrass = false;
         isKillTwoPawn = false;
+        isKillTwoKnight = false;
+        isDestroyHouse = false;
     }
 
     public IEnumerator IsAllMissionCompleted(PieceController clearPiece)
