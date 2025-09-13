@@ -22,6 +22,10 @@ public class MissionManager : Singletone<MissionManager>
     public int aliveKnightCount { get; private set; } = 0;
     public bool isKillTwoKnight { get; private set; } = false;
 
+    [Header("Stage 10 Mission")]
+    public int aliveHouseCount { get; private set; } = 0;
+    public bool isDestroyHouse { get; private set; } = false;
+
     public void Start()
     {
         killEnemyCount = 0;
@@ -136,5 +140,12 @@ public class MissionManager : Singletone<MissionManager>
         {
             isKillTwoKnight = true;
         }
+    }
+
+    public void AliveHouseCountCheck()
+    {
+        aliveHouseCount++;
+
+        isDestroyHouse = true;
     }
 }

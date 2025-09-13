@@ -121,6 +121,10 @@ public class ActiveSkill : MonoBehaviour
             {
                 ObstacleManager.Instance.RemoveKnightToList(obstacle.gameObject);
             }
+            else if (BoardManager.Instance.Board[newPos.x, newPos.y].Obstacle == ObstacleType.House)
+            {
+                ObstacleManager.Instance.RemoveHouseToList(obstacle.gameObject);
+            }
 
             BoardManager.Instance.RemoveObstacleAtPosition(newPos);
         }

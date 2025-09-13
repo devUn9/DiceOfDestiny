@@ -10,7 +10,8 @@ public class MissionUI : MonoBehaviour
         Slime,
         GrayGrass,
         Pawn,
-        Knight
+        Knight,
+        House
     }
 
     [SerializeField] private GameObject MissionImageGroup;
@@ -50,6 +51,11 @@ public class MissionUI : MonoBehaviour
             else if (mission.missionType is MissionType.KillKnight)
             {
                 CreateMissionImage(sprites[(int)MissionImageType.Knight]);
+            }
+            // 10스테이지
+            else if (mission.missionType is MissionType.DestroyHouse)
+            {
+                CreateMissionImage(sprites[(int)MissionImageType.House]);
             }
             else
             {
@@ -98,6 +104,11 @@ public class MissionUI : MonoBehaviour
             else if (mission.missionType is MissionType.KillKnight)
             {
                 ProgressText.text = $"{MissionManager.Instance.aliveKnightCount} / 2";
+            }
+            // 9스테이지
+            else if (mission.missionType is MissionType.DestroyHouse)
+            {
+                ProgressText.text = $"{MissionManager.Instance.aliveKnightCount} / 1";
             }
             else
             {

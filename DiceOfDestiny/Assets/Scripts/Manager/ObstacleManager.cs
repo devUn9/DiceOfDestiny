@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObstacleManager : Singletone<ObstacleManager>
@@ -20,6 +21,8 @@ public class ObstacleManager : Singletone<ObstacleManager>
     [SerializeField] private GameObject rookPrefab;
     [SerializeField] private GameObject knightPrefab;
 
+    [SerializeField] private GameObject housePrefab;
+
     [SerializeField] private RuntimeAnimatorController grayGarassAnimator;
     [SerializeField] private RuntimeAnimatorController grayTreeAnimator;
     [SerializeField] private RuntimeAnimatorController grayPoisonousHerbAnimator;
@@ -34,9 +37,13 @@ public class ObstacleManager : Singletone<ObstacleManager>
 
     [Header("Boss Rook")]
     [SerializeField] private GameObject rookVisual;
+    private List<GameObject> rookVisualList = new List<GameObject>();
 
     [Header("Boss Knight")]
     private List<GameObject> knightList = new List<GameObject>();
+
+    [Header("House")]
+    private List<GameObject> houseList = new List<GameObject>();
 
     public void Initialize()
     {
@@ -55,6 +62,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
             { ObstacleType.Pawn, pawnPrefab },
             { ObstacleType.Rook, rookPrefab },
             { ObstacleType.Knight, knightPrefab },
+            { ObstacleType.House, housePrefab },
         };
 
         currentObstacles = new List<GameObject>();
@@ -71,6 +79,8 @@ public class ObstacleManager : Singletone<ObstacleManager>
             Destroy(obstacle);
         }
         currentObstacles.Clear();
+
+        RemoveAllVisibleRook();
     }
 
     public void DropAlObstacles()
@@ -195,12 +205,27 @@ public class ObstacleManager : Singletone<ObstacleManager>
         pawnMoveIndex = pawnRandomIndex;
     }
 
+    // 룩 4칸 그림 생성
     public void CreateVisibleRook(float _x, float _y)
     {
-        Instantiate(rookVisual,
+        GameObject rook = Instantiate(rookVisual,
             new Vector3(BoardManager.Instance.boardTransform.position.x + _x, BoardManager.Instance.boardTransform.position.y + _y, 0),
             Quaternion.identity,
             BoardManager.Instance.boardTransform);
+
+        rookVisualList.Add(rook);
+    }
+
+    public void RemoveAllVisibleRook()
+    {
+        if (rookVisualList.Count == 0)
+            return;
+
+        // 룩 리스트에 있는 모든 오브젝트 제거
+        foreach (GameObject rook in rookVisualList)
+        {
+            Destroy(rook);
+        }
     }
 
     // 보스 나이트 함수들
@@ -217,6 +242,66 @@ public class ObstacleManager : Singletone<ObstacleManager>
         knightList.Remove(knight);
 
         MissionManager.Instance.AliveKnightCountCheck(); // 나이트가 죽었을 때 미션 카운트 감소
+    }
+
+    // 집 함수들
+    public void AddHouseToList(GameObject knight)
+    {
+        if (knight != null && !knightList.Contains(knight))
+        {
+            houseList.Add(knight);
+        }
+    }
+    public void RemoveHouseToList(GameObject pawn)
+    {
+        houseList.Remove(pawn);
+
+        MissionManager.Instance.AliveHouseCountCheck(); // 집이 파괴되었을 때 미션 카운트
+    }
+
+    public void DestroyHouse(Vector2Int gridPos)
+    {
+        if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.Pawn)
+        {
+            // 집 리스트 상에서의 오브젝트 제거
+            Obstacle house = BoardManager.Instance.ReturnObstacleByPosition(gridPos);
+            RemoveHouseToList(house.gameObject);
+
+            // 현재 장애물 목록에서의 집 삭제
+            // 실제 집 오브젝트 삭제
+            // 타일에 장애물 타입 None으로 설정
+            BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
+        }
+    }
+
+    public void HitHouse(Vector2Int gridPos)
+    {
+        if (BoardManager.Instance.Board[gridPos.x, gridPos.y].Obstacle == ObstacleType.House)
+        {
+            Obstacle house = BoardManager.Instance.ReturnObstacleByPosition(gridPos);
+
+            HouseBehaviour houseBehaviour = house as HouseBehaviour;
+
+            if (houseBehaviour != null)
+            {
+                houseBehaviour.TakeDamage(1);
+            }
+            else
+            {
+                Debug.LogWarning($"PawnBehaviour not found at position {gridPos}");
+            }
+        }
+    }
+
+    public void HouseListToLogicTurn()
+    {
+        foreach (var house in houseList)
+        {
+            if (house == null)
+                continue;
+
+            house.GetComponent<HouseBehaviour>().DoLogicTurn();
+        }
     }
 
     public RuntimeAnimatorController GetGrayGrassAnimator()

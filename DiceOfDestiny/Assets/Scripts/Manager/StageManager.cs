@@ -90,6 +90,7 @@ public sealed class StageManager : Singletone<StageManager>
         UIManager.Instance.UpdateActionPointUI();
 
         CheckStormStage();
+        CheckHouseStage();
     }
 
     private void ResetTurn()
@@ -270,7 +271,7 @@ public sealed class StageManager : Singletone<StageManager>
         if (nextPosition.x < 0 || nextPosition.x >= BoardManager.Instance.boardSize
             || nextPosition.y < 1 || nextPosition.y >= BoardManager.Instance.boardSize + 1)
             return;
-        
+
         Tile nextTile = BoardManager.Instance.Board[nextPosition.x, nextPosition.y];
 
         var stunTurns = 1;
@@ -304,5 +305,13 @@ public sealed class StageManager : Singletone<StageManager>
             return;
         piece.statusEffectController.SetStatus(PieceStatus.Stun, stunTurns);
         ToastManager.Instance.ShowToast($"바람에 맞았습니다. {stunTurns}턴간 기절합니다.", piece.transform, 1f);
+    }
+
+    private void CheckHouseStage()
+    {
+        if (currentStage.stageNumber == 10)
+        {
+            ObstacleManager.Instance.HouseListToLogicTurn();
+        }
     }
 }

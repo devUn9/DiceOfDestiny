@@ -321,13 +321,15 @@ public class BoardManager : Singletone<BoardManager>
                 // 장애물 생성
                 if (obstacleIndices[idx] != ObstacleType.None)
                 {
-                    //Debug.Log(ObstacleManager.Instance);
                     GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
                         new Vector3(boardTransform.position.x + y, boardTransform.position.y + x, 0), Quaternion.identity, boardTransform);
                     obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(y, x);
                     ObstacleManager.Instance.SetObstacle(obstacle);
 
                     Board[y, x].isWalkable = obstacle.GetComponent<Obstacle>().isWalkable;
+
+                    if (obstacleIndices[idx] == ObstacleType.House)
+                        ObstacleManager.Instance.AddHouseToList(obstacle);
                 }
                 idx++;
                 yield return new WaitForSeconds(0.01f); // 장애물 설정 간 약간의 지연
@@ -928,7 +930,6 @@ public class BoardManager : Singletone<BoardManager>
                 obstacleComp.obstacleType == ObstacleType.Grass &&
                 grayGrassCount > 0)
             {
-                Debug.Log("풀 회색화");
                 obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayGrassAnimator();
                 grayGrassCount--;
             }
@@ -937,7 +938,6 @@ public class BoardManager : Singletone<BoardManager>
                 obstacleComp.obstacleType == ObstacleType.Tree &&
                 grayTreeCount > 0)
             {
-                Debug.Log("나무 회색화");
                 obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayTreeAnimator();
                 grayTreeCount--;
             }
@@ -946,7 +946,6 @@ public class BoardManager : Singletone<BoardManager>
                 obstacleComp.obstacleType == ObstacleType.PoisonousHerb &&
                 grayPoisonousherbCount > 0)
             {
-                Debug.Log("독초 회색화");
                 obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayPoisonousHerbAnimator();
                 grayPoisonousherbCount--;
             }
@@ -1013,6 +1012,34 @@ public class BoardManager : Singletone<BoardManager>
             ++count;
 
             if (count >= 2)
+                break;
+        }
+    }
+
+    public void SetHouse()
+    {
+        int count = 0;
+
+        while (true)
+        {
+            int randX = Random.Range(0, boardSize);
+            int randY = Random.Range(1, boardSizeY - 1);
+
+            Vector2Int knightPos = new Vector2Int(randX, randY);
+
+            // 이미 룩이나 나이트가 있으면 건너뛰기
+            if (Board[knightPos.x, knightPos.y].Obstacle == ObstacleType.Rook ||
+                Board[knightPos.x, knightPos.y].Obstacle == ObstacleType.Knight)
+                continue;
+
+            RemoveObstacleAtPosition(knightPos);
+            GameObject obstacle = CreateObstacle(knightPos, ObstacleType.Knight);
+
+            ObstacleManager.Instance.AddKnightToList(obstacle);
+
+            ++count;
+
+            if (count >= 5)
                 break;
         }
     }
@@ -1241,6 +1268,10 @@ public class BoardManager : Singletone<BoardManager>
         {
             SetRook();
             SetKnight();
+        }
+        if (stageData.stageNumber == 10)
+        {
+            //SetHouse();
         }
     }
 }

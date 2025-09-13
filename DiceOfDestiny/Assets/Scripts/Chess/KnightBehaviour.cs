@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Random = UnityEngine.Random;
-using System.Collections;
 
 public class KnightBehaviour : Obstacle, IObstacleBehaviour
 {

@@ -6,7 +6,8 @@ public enum MissionType
     KillAllMonsters,
     FindGrayGrass,
     KillPawn,
-    KillKnight
+    KillKnight,
+    DestroyHouse
 }
 
 [CreateAssetMenu(menuName = "Mission/MissionData")]
@@ -28,6 +29,8 @@ public class MissionData : ScriptableObject
                 return MissionManager.Instance.isKillTwoPawn;
             case MissionType.KillKnight:
                 return MissionManager.Instance.isKillTwoKnight;
+            case MissionType.DestroyHouse:
+                return MissionManager.Instance.isDestroyHouse;
             default:
                 return false;
         }

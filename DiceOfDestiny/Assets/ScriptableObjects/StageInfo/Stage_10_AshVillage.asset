@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b2505132fde72345af474f8fca00a1a, type: 3}
-  m_Name: Stage_09_BlackWhiteKnights
+  m_Name: Stage_10_AshVillage
   m_EditorClassIdentifier: 
-  <StageName>k__BackingField: "\uD751\uBC31 \uAE30\uC0AC\uB2E8"
-  stageNumber: 9
+  <StageName>k__BackingField: "\uC7AC\uAC00 \uB41C \uB9C8\uC744"
+  stageNumber: 10
   missions:
   - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
-  - {fileID: 11400000, guid: 12f8e3ae4fde01540860cd8baa8834ca, type: 2}
-  maxTurn: 50
-  grayGrassCount: {x: 5, y: 8}
-  grayTreeCount: {x: 5, y: 8}
-  grayPoisonousherbCount: {x: 5, y: 8}
-  grayTileCount: 0
+  - {fileID: 11400000, guid: 4fb308dbab58d654ea79a510a4681821, type: 2}
+  maxTurn: 30
+  grayGrassCount: {x: 10, y: 15}
+  grayTreeCount: {x: 10, y: 15}
+  grayPoisonousherbCount: {x: 10, y: 15}
+  grayTileCount: 30
   minimumColorEnsure: 0
   weightPower: 10
   redWeight: 1
@@ -38,18 +38,12 @@ MonoBehaviour:
   - type: 6
     weight: 3
   - type: 2
-    weight: 3
+    weight: 5
   - type: 4
     weight: 3
-  - type: 0
-    weight: 3
-  - type: 8
-    weight: 3
   exactObstacle:
-  - type: 1
+  - type: 5
     weight: 5
-  - type: 7
-    weight: 5
-  - type: 6
+  - type: 13
     weight: 5
   obstacleDensity: 0.2

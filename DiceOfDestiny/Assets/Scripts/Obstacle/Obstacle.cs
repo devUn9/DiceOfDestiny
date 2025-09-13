@@ -16,6 +16,7 @@ public enum ObstacleType
     Pawn,
     Rook,
     Knight,
+    House,
     None
 }
 
