@@ -50,12 +50,11 @@ public class BackpackUI : MonoBehaviour
         // Refresh 함수 구독
         EventManager.Instance.AddListener("Refresh", _ => Refresh());
 
-        // 첫 스테이지면 튜토리얼
-        if (StageManager.Instance.currentStage.stageNumber == 1)
-        {
-            onClickBackpackOpenCloseButton();
-            UIManager.Instance.ShowTutorialUI();
-        }
+        // 게임 시작 시 가방 열기
+        //if (StageManager.Instance.currentStage.stageNumber == 1)
+        //{
+        //    onClickBackpackOpenCloseButton();
+        //}
 
         // 기물 선택 UI의 기물 윗면 새로고침
         Refresh();
@@ -176,11 +175,7 @@ public class BackpackUI : MonoBehaviour
         Debug.Log(currentIndex + "번 피스 제거");
         PieceManager.Instance.pieceDatas[currentIndex] = null;
 
-        if (!StageManager.Instance.isFirstCreatePiece)
-        {
-            StageManager.Instance.isFirstCreatePiece = true;
-            UIManager.Instance.HideTutorialUI();
-        }
+        FindAnyObjectByType<TutorialS1Director>()?.NextStep();
     }
 
     // 기물 스폰 윗면 누른걸로 설치

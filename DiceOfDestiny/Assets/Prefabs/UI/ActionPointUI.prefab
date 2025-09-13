@@ -120,7 +120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9117260511693569443}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2591897168813343749, guid: 59053c529c85fa44bb88e5784e006923, type: 3}
+        m_TargetAssemblyTypeName: TutorialS1Director, Assembly-CSharp
+        m_MethodName: OnClick_RollDice
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &273310454149700782
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +150,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7827565311079904207
 RectTransform:
   m_ObjectHideFlags: 0
@@ -342,7 +354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9010475385894040744
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1108,7 +1120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2448989168136398026
 RectTransform:
   m_ObjectHideFlags: 0

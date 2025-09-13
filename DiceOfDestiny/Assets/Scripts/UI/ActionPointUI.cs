@@ -80,6 +80,27 @@ public class ActionPointUI : MonoBehaviour
 
     public void UpdateActionPointUI()
     {
+        if (StageManager.Instance == null || StageManager.Instance.currentStage == null)
+        {
+            currentStage.text = "스테이지 -";
+            currentState.text = "State : -";
+            currentTurn.text = "- / -";
+            diceText.text = "Dice  : -";
+
+            int apVal = 0;
+            if (ActionPointManager.Instance != null)
+                apVal = ActionPointManager.Instance.GetAP();
+
+            apText.text = $"AP    : {apVal}";
+
+            // 버튼 비활성 (안전상)
+            if (diceRollButton != null) diceRollButton.interactable = false;
+            if (endTurnButton != null) endTurnButton.interactable = false;
+
+            // 게이지 즉시 갱신
+            OnActionPointChanged(apVal);
+            return;
+        }
         currentStage.text = $"스테이지 {StageManager.Instance.currentStage.stageNumber}";
         currentState.text = $"State : {StageManager.Instance.GameState}";
         currentTurn.text = $"{StageManager.Instance.CurrentTurn} / {StageManager.Instance.currentStage.maxTurn}";

@@ -51,7 +51,18 @@ public class PieceControlUI : MonoBehaviour
                 faceIndex = 2;
                 break;
         }
-        Face gettedFace = GetComponentInParent<PieceController>().GetFace(faceIndex);
+        var pieceController = GetComponentInParent<PieceController>();
+        if (pieceController == null)
+        {
+            Debug.LogWarning("PieceControlUI: PieceController is null.");
+            return;
+        }
+        Face gettedFace = pieceController.GetFace(faceIndex);
+        if (gettedFace.classData == null)
+        {
+            Debug.LogWarning($"PieceControlUI: gettedFace.classData is null for faceIndex {faceIndex}.");
+            return;
+        }
         faceClassImage.sprite = gettedFace.classData.sprite;
         Color gettedColor = BoardManager.Instance.tileColors[(int)(gettedFace.color)];
         faceColorImage.color = gettedColor;

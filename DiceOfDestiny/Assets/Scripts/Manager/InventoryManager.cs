@@ -6,6 +6,7 @@ public class InventoryManager : Singletone<InventoryManager>
     public List<Piece> pieces = new List<Piece>();
     public List<PieceNet> pieceNets = new List<PieceNet>();
     public Dictionary<ClassData, int> classStickers = new Dictionary<ClassData, int>();
+    public Dictionary<ClassData, bool> classUnlockStatus = new Dictionary<ClassData, bool>();
 
     [Header("class Data")]
     public ClassData knightClassData;
@@ -16,10 +17,36 @@ public class InventoryManager : Singletone<InventoryManager>
     public ClassData preistClassData;
     public ClassData painterClassData;
 
+    [HideInInspector] public List<ClassData> classDataList;
+
     protected override void Awake()
     {
         base.Awake();
+        SetClassDataList();
         TestInitialize();
+
+    }
+
+    private void SetClassDataList()
+    {
+        classDataList = new List<ClassData>
+        {
+            knightClassData,
+            demonClassData,
+            babyClassData,
+            fanaticClassData,
+            thiefClassData,
+            preistClassData,
+            painterClassData
+        };
+
+        foreach (var classData in classDataList)
+        {
+            if (!classUnlockStatus.ContainsKey(classData))
+            {
+                classUnlockStatus[classData] = false; // 기본적으로 잠금 상태로 설정
+            }
+        }
     }
 
     void TestInitialize()
@@ -152,6 +179,7 @@ public class InventoryManager : Singletone<InventoryManager>
             classStickers[key]++;
         else
             classStickers[key] = 1;
+            classUnlockStatus[key] = true; // 스티커를 처음 얻을 때 해당 클래스 잠금 해제
     }
 
     public void RemoveSticker(ClassSticker sticker)

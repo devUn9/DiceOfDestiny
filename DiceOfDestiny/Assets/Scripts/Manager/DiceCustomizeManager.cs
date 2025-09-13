@@ -12,18 +12,26 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 
     private GameObject pieceCarouselUI;
     private GameObject pieceNetCarouselUI;
+    private GameObject stickerUI;
 
     private GameObject showPieceButton;
     private GameObject showPieceNestButton;
+    private GameObject showStickerButton;
 
     private GameObject piecesContent;
     private GameObject pieceNetContent;
 
+    private GameObject stickerPanelContent;
+
+    private GameObject stickerDetail;
+
     [SerializeField] private GameObject piecePreviewButtonPrefab;
     [SerializeField] private GameObject pieceNetPreviewButtonPrefab;
+    [SerializeField] private GameObject stickerPreviewButtonUI;
 
     List<PiecePreviewButton> piecePreviewButtonList;
     List<PieceNetPreviewButton> pieceNetPreviewButtonList;
+    List<StickerPreviewButtonUI> stickerPreviewButtonUIList;
 
     private GameObject customizePanel;
     CustomizePieceController customizePieceContoller;  
@@ -32,6 +40,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     GameObject stickerDrawer;
 
     private GameObject backToMainButton;
+    private GameObject optionButton;
     [HideInInspector] public bool isFolded;
 
 
@@ -49,8 +58,16 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
         showPieceButton.GetComponent<Button>().onClick.AddListener(OnClickPieceCaruselUIButton);
         showPieceNestButton.GetComponent<Button>().onClick.AddListener(OnClickPieceNetCaruselUIButton);
 
+        stickerUI = diceCustomizeUI.stickerPanel;
+        showStickerButton = diceCustomizeUI.showStickerPanelButton;
+        showStickerButton.GetComponent<Button>().onClick.AddListener(OnClickStickerUIButton);
+
         piecesContent = pieceCarouselUI.GetComponent<ScrollRect>().content.gameObject;
         pieceNetContent = pieceNetCarouselUI.GetComponent<ScrollRect>().content.gameObject;
+
+        stickerPanelContent = diceCustomizeUI.stickerPanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
+
+        stickerDetail = stickerUI.GetComponentInChildren<StickerDetailUI>().gameObject;
 
         customizePanel = diceCustomizeUI.customizePanel;
         customizePieceContoller = diceCustomizeUI.customizePiece.GetComponent<CustomizePieceController>();
@@ -60,11 +77,16 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
         backToMainButton = diceCustomizeUI.backToMainButton;
         backToMainButton.GetComponent<Button>().onClick.AddListener(OnClickBackToMainButton);
 
+        optionButton = diceCustomizeUI.optionButton;
+        optionButton.GetComponent<Button>().onClick.AddListener(() => UIManager.Instance.ToggleSettings(true));
+
         piecePreviewButtonList = new List<PiecePreviewButton>();
         pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
+        stickerPreviewButtonUIList = new List<StickerPreviewButtonUI>();
 
         InitializePiecesCaruselUI();
         InitializePieceNetCaruselUI();
+        InitializeStickerPanel();
         InitializeStickerDrawer();
     }
 
@@ -79,16 +101,13 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
         {
             Destroy(button.gameObject);
         }
-        pieceNetPreviewButtonList.Clear();
-
         InitializePiecesCaruselUI();
         InitializePieceNetCaruselUI();
+        UpdateStickerPanel();
     }
 
     public void InitializePiecesCaruselUI()
     {
-        Debug.Log(InventoryManager.Instance);
-        Debug.Log(InventoryManager.Instance.pieces);
         for (int i = 0; i < InventoryManager.Instance.pieces.Count; i++)
         {
             Piece piece = InventoryManager.Instance.pieces[i];
@@ -106,6 +125,42 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
             PieceNetPreviewButton button = Instantiate(pieceNetPreviewButtonPrefab, pieceNetContent.transform).GetComponent<PieceNetPreviewButton>();
             button.InitializePieceNetPreviewButton(pieceNet, () => OnClickPieceNetPreviewButton(pieceNet));
             pieceNetPreviewButtonList.Add(button);
+        }
+    }
+    public void InitializeStickerPanel()
+    {
+        for (int i = 0; i < InventoryManager.Instance.classDataList.Count; i++)
+        {
+            ClassData classData = InventoryManager.Instance.classDataList[i];
+            StickerPreviewButtonUI button = Instantiate(stickerPreviewButtonUI, stickerPanelContent.transform).GetComponent<StickerPreviewButtonUI>();
+
+            bool isUnlock = InventoryManager.Instance.classUnlockStatus.TryGetValue(classData, out bool status) && status;
+            ClassSticker classSticker = new ClassSticker();
+            classSticker.classData = classData;
+            button.Initialize(isUnlock, classSticker, () => ShowStickerDetail(classSticker));
+        }
+    }
+
+    public void UpdateStickerPanel()
+    {
+        for(int i = 0; i< stickerPreviewButtonUIList.Count; i++)
+        {
+            Destroy(stickerPreviewButtonUIList[i].gameObject);
+        }
+    }
+
+
+
+    public void ShowStickerDetail(ClassSticker classSticker)
+    {
+        bool isUnlock = InventoryManager.Instance.classUnlockStatus.TryGetValue(classSticker.classData, out bool status) && status;
+        if (isUnlock)
+        {
+            stickerDetail.GetComponent<StickerDetailUI>().SetDetail(classSticker);
+        }
+        else
+        {
+            stickerDetail.GetComponent<StickerDetailUI>().SetLocked();
         }
     }
 
@@ -156,6 +211,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
         {
             pieceNetCarouselUI.SetActive(false);
             pieceCarouselUI.SetActive(true);
+            stickerUI.SetActive(false);
         }
     }
 
@@ -165,6 +221,17 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
         {
             pieceCarouselUI.SetActive(false);
             pieceNetCarouselUI.SetActive(true);
+            stickerUI.SetActive(false);
+        }
+    }
+
+    public void OnClickStickerUIButton()
+    {
+        if (diceCustomizeUI.stickerPanel.activeSelf == false)
+        {
+            pieceCarouselUI.SetActive(false);
+            pieceNetCarouselUI.SetActive(false);
+            diceCustomizeUI.stickerPanel.SetActive(true);
         }
     }
 
@@ -178,5 +245,10 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
     public void OnClickBackToMainButton()
     {
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void OnClickToggleSettingUI()
+    {
+        UIManager.Instance.ToggleSettings(true);
     }
 }

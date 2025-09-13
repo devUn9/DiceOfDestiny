@@ -4,6 +4,12 @@ using System.Collections;
 
 public class MissionManager : Singletone<MissionManager>
 {
+    [Header("Tutorial Mission")]
+    public bool isTutorialMissionCompleted { get; set; } = false; // 튜토리얼 미션 완료 여부
+    public bool isFirstMovePiece { get; set; } = false; // 첫 번째 말 이동 여부
+    public bool isFirstActiveSkillUse { get; set; } = false; // 첫 번째 액티브 스킬 사용 여부
+    public bool isFirstPassiveSkillUse { get; set; } = false; // 첫 번째 패시브 스킬 사용 여부
+
     [Header("FinishLine Mission")]
     public bool isFinishLine { get; private set; } = false; // 도착 지점인지 여부
 
@@ -147,5 +153,22 @@ public class MissionManager : Singletone<MissionManager>
         aliveHouseCount++;
 
         isDestroyHouse = true;
+    }
+    public void CheckMoveMission()
+    {
+        if (!isFirstMovePiece)
+            isFirstMovePiece = true;
+    }
+
+    public void CheckPassiveSkillUse()
+    {
+        if (!isFirstPassiveSkillUse)
+            isFirstPassiveSkillUse = true;
+    }
+
+    public void CheckActiveSkillUse()
+    {
+        if (!isFirstActiveSkillUse)
+            isFirstActiveSkillUse = true;
     }
 }

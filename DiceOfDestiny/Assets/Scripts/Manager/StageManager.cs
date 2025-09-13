@@ -11,14 +11,11 @@ public sealed class StageManager : Singletone<StageManager>
 {
     [Header("Stage Settings")]
     [SerializeField] private int stageIndex = 0;
-    [SerializeField] private StageData[] stageProfiles = new StageData[6];
+    public StageData[] stageProfiles = new StageData[10];
     public StageData currentStage { get; private set; }
     public GameState GameState { get; private set; }
     public int CurrentTurn { get; private set; } = 1;
     public int DiceValue { get; private set; }
-
-    // 튜토리얼 관련
-    public bool isFirstCreatePiece = false;
 
     private void Update()
     {
@@ -313,5 +310,15 @@ public sealed class StageManager : Singletone<StageManager>
         {
             ObstacleManager.Instance.HouseListToLogicTurn();
         }
+    }
+    public void ClearStageState()
+    {
+        stageIndex = 0;
+        currentStage = null;
+        GameState = default;
+        CurrentTurn = 0;
+        DiceValue = 0;
+        stageProfiles = null; // 스테이지 데이터도 초기화
+        // TODO: 초기화해야 할 추가 필드가 있으면 여기에 추가
     }
 }
