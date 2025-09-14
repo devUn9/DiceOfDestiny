@@ -108,7 +108,7 @@ public class MissionUI : MonoBehaviour
             // 10스테이지
             else if (mission.missionType is MissionType.DestroyHouse)
             {
-                ProgressText.text = $"{MissionManager.Instance.aliveHouseCount} / 1";
+                ProgressText.text = $"{MissionManager.Instance.aliveHouseCount} / 2";
             }
             else
             {
