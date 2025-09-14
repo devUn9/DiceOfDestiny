@@ -32,7 +32,7 @@ public class SkillManager : Singletone<SkillManager>
         // 1. 패시브 스킬 실행 및 완료 대기
         yield return StartCoroutine(TryPassiveSkillCoroutine(position, piece));
 
-        yield return new WaitForSeconds(DelayTime); // 패시브 스킬이 완료될 때까지 대기, 현재 사제만 사용
+        yield return new WaitForSeconds(DelayTime); // 패시브 스킬이 완료될 때까지 대기, 사제와 도둑 패시브에 사용
 
         // 2. 패시브 스킬 완료 후 액티브 스킬 실행
         yield return StartCoroutine(TryActiveSkillCoroutine(position, piece));
@@ -118,7 +118,7 @@ public class SkillManager : Singletone<SkillManager>
     // 스킬 사용 가능한지 판단하는 코루틴
     public IEnumerator TryActiveSkillCoroutine(Vector2Int position, PieceController piece)
     {
-
+     
 
         bool isDdongBlind = false;
 
@@ -135,6 +135,8 @@ public class SkillManager : Singletone<SkillManager>
             StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile,piece));
 
             DoActiveSkill(piece.GetTopFace().classData);
+
+            GameManager.Instance.IsLockCursor = true;
 
             yield return new WaitForSeconds(blinkTime);
            
@@ -236,7 +238,7 @@ public class SkillManager : Singletone<SkillManager>
 
             case "Berserker":
                 // 광전사 스킬 : 기절하기
-                //
+                StartCoroutine(activeSkill.SelfStun(currentPiece));
                 break;
             default:
                 Debug.LogError($"알 수 없는 클래스 : {classData.className}");

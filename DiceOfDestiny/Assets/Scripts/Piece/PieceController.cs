@@ -40,7 +40,7 @@ public class PieceController : MonoBehaviour
 
     void Update()
     {
-        if (!canControl) return;
+        //if (!canControl) return;
         TestInput();
     }
 
@@ -50,7 +50,6 @@ public class PieceController : MonoBehaviour
     {
         if (this != PieceManager.Instance.GetCurrentPiece() || isMoving) return;
         MoveToDirection(Vector2Int.up);
-        Debug.Log("호출함");
     }
 
     public void MoveDown()
@@ -101,7 +100,7 @@ public class PieceController : MonoBehaviour
             Debug.LogWarning("MoveToDirection: Required singleton is null.");
             return;
         }
-        if (!canControl) return;
+        //if (!canControl) return;
         if (moveDirection == Vector2Int.zero) return;
         if (moveDirection != Vector2Int.zero)
         {
@@ -295,7 +294,7 @@ public class PieceController : MonoBehaviour
 
     IEnumerator SkillCoroutine()
     {
-        yield return new WaitForSeconds(duration + 0.1f); // 스킬 발동 후 잠시 대기
+        yield return new WaitForSeconds(duration); // 스킬 발동 후 잠시 대기
         // 스킬 발동
         if (SkillManager.Instance != null)
         {
@@ -323,7 +322,7 @@ public class PieceController : MonoBehaviour
         if (GameManager.Instance.IsLockCursor)
             return; // 커서 잠금 상태면 무시
 
-        Debug.Log("Piece clicked: " + piece);
+        
         // UI 위 클릭이면 무시
         if (IsPointerOnLayer("BlockUI"))
         {

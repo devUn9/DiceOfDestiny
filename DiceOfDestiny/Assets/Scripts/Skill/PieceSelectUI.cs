@@ -93,7 +93,7 @@ public class PieceSelectUI : MonoBehaviour
 
         foreach (var piece in PieceManager.Instance.Pieces)
         {
-            if (piece == PieceManager.Instance.currentPiece) continue;
+            //if (piece == PieceManager.Instance.currentPiece) continue;
 
             Vector3 screenPos = mainCamera.WorldToScreenPoint(piece.transform.position);
             GameObject button = Instantiate(pieceSelectButton, screenPos, Quaternion.identity, canvas.transform);

@@ -1963,7 +1963,8 @@ MonoBehaviour:
   fanaticPassiveEffect: {fileID: 3347284115625885614, guid: 5d29921e938fa1847b4a1e27b16e0390, type: 3}
   priestPassiveEffect: {fileID: 5289000743379248508, guid: 9b6c560882bfbdd4ab5fcdf0116860e8, type: 3}
   thiefPassiveEffect: {fileID: 6707930388800200877, guid: 705f124155aedf24cb5e614485381d10, type: 3}
-  woodCutterPassiveEffect: {fileID: 3954795626616449932, guid: 946739ec6ef11b4469fc0b909981cbe4, type: 3}
+  loggerPassiveEffect: {fileID: 3954795626616449932, guid: 946739ec6ef11b4469fc0b909981cbe4, type: 3}
+  berserkerPassiveEffect: {fileID: 3954795626616449932, guid: 946739ec6ef11b4469fc0b909981cbe4, type: 3}
 --- !u!114 &830614876
 MonoBehaviour:
   m_ObjectHideFlags: 0
