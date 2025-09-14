@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StageFailedUI : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class StageFailedUI : MonoBehaviour
 
     private void GoLobby()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("MainScene");
+        GameManager.Instance.UnPause(); // 게임 일시정지 해제
+        StageManager.Instance.ResetCurrentStage(); // 스테이지 인덱스 초기화
+        ObstacleManager.Instance.RemoveAllObstacle(); // 장애물 제거
+        PieceManager.Instance.ResetPieces();
+        BoardSelectManager.Instance.DestroyPieceHighlightTile();
     }
 }

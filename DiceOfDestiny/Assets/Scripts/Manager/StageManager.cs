@@ -174,7 +174,6 @@ public sealed class StageManager : Singletone<StageManager>
         // 최대 턴 넘으면 실패
         if (CurrentTurn > currentStage.maxTurn)
         {
-            PieceManager.Instance.ResetPieces();
             UIManager.Instance.ShowStageFailedUI();
             return true;
         }
