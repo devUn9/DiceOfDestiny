@@ -80,7 +80,10 @@ public class ObstacleManager : Singletone<ObstacleManager>
         }
         currentObstacles.Clear();
 
-        RemoveAllVisibleRook();
+        RemoveSpecialObstacle(rookVisualList);
+        RemoveSpecialObstacle(knightList);
+        RemoveSpecialObstacle(pawnList);
+        RemoveSpecialObstacle(houseList);
     }
 
     public void DropAlObstacles()
@@ -216,18 +219,6 @@ public class ObstacleManager : Singletone<ObstacleManager>
         rookVisualList.Add(rook);
     }
 
-    public void RemoveAllVisibleRook()
-    {
-        if (rookVisualList.Count == 0)
-            return;
-
-        // 룩 리스트에 있는 모든 오브젝트 제거
-        foreach (GameObject rook in rookVisualList)
-        {
-            Destroy(rook);
-        }
-    }
-
     // 보스 나이트 함수들
     public void AddKnightToList(GameObject knight)
     {
@@ -255,7 +246,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
     public void RemoveHouseToList(GameObject pawn)
     {
         houseList.Remove(pawn);
-        
+
         MissionManager.Instance.AliveHouseCountCheck(); // 집이 파괴되었을 때 미션 카운트
     }
 
@@ -304,6 +295,20 @@ public class ObstacleManager : Singletone<ObstacleManager>
         }
     }
 
+    public void RemoveSpecialObstacle(List<GameObject> specialObstacle)
+    {
+        if (specialObstacle.Count == 0)
+            return;
+
+        // 특별한 장애물 리스트에 있는 모든 오브젝트 제거
+        foreach (GameObject obstacle in specialObstacle)
+        {
+            Destroy(obstacle);
+        }
+
+        specialObstacle.Clear();
+    }
+
     public RuntimeAnimatorController GetGrayGrassAnimator()
     {
         return grayGarassAnimator;
@@ -317,4 +322,4 @@ public class ObstacleManager : Singletone<ObstacleManager>
         return grayPoisonousHerbAnimator;
     }
 }
-    
+

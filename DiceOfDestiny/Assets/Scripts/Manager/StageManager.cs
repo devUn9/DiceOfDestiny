@@ -35,6 +35,7 @@ public sealed class StageManager : Singletone<StageManager>
 
         ObstacleManager.Instance.RemoveAllObstacle();
         BoardManager.Instance.SetBoard(currentStage);
+        MissionManager.Instance.ResetMission();
 
         GameState = GameState.ReadyToRoll;
         CurrentTurn = 1;
