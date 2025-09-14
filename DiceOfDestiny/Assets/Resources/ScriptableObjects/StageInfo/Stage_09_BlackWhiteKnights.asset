@@ -17,7 +17,7 @@ MonoBehaviour:
   missions:
   - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
   - {fileID: 11400000, guid: 12f8e3ae4fde01540860cd8baa8834ca, type: 2}
-  maxTurn: 3
+  maxTurn: 50
   grayGrassCount: {x: 5, y: 8}
   grayTreeCount: {x: 5, y: 8}
   grayPoisonousherbCount: {x: 5, y: 8}
