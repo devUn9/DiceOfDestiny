@@ -12,19 +12,19 @@ public class EventManager : Singletone<EventManager>
         {
             currentListeners += newListener;
             eventDic[eventName] = currentListeners;
-            Debug.Log($"<color=#30ffae>Added Listener ({currentListeners}) on {eventName}</color>");
+            //Debug.Log($"<color=#30ffae>Added Listener ({currentListeners}) on {eventName}</color>");
         }
         else
         {
             eventDic.Add(eventName, newListener);
-            Debug.Log($"<color=#30ffae>Added Listener ({currentListeners}) on New event ({eventName})</color>");
+            //Debug.Log($"<color=#30ffae>Added Listener ({currentListeners}) on New event ({eventName})</color>");
         }
     }
     public void AddListener<T>(string eventName, Action<T> listener)
     {
         Action<object> wrappedListener = (obj) => listener((T)obj);
         AddListener(eventName, wrappedListener);
-        Debug.Log($"<color=#30ffae>Added Listener ({listener.Method.Name}) on {eventName}</color>");
+        //Debug.Log($"<color=#30ffae>Added Listener ({listener.Method.Name}) on {eventName}</color>");
     }
 
     public void RemoveListener(string eventName, Action<object> targetListener)
