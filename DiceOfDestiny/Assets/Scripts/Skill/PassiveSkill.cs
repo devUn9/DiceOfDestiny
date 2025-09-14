@@ -392,6 +392,7 @@ public class PassiveSkill : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
     }
 
+    // 도둑 패시브 스킬 : 보물 훔치기
     public IEnumerator Steal()
     {
         SkillManager.Instance.DelayTime = 2f;
@@ -422,8 +423,8 @@ public class PassiveSkill : MonoBehaviour
         yield return new WaitForSeconds(1f);
     }
 
-
-    public IEnumerator WoodCutterPassive(PieceController pieceController)
+    // 나무꾼 패시브 스킬 : 전방 1칸에 나무 또는 나무상자가 있으면 제거
+    public IEnumerator CutDownTree(PieceController pieceController)
     {
         // 전방 한칸 타일 위치 가져오기
         Vector2Int forwardPos = BoardManager.Instance.GetTilePositions(DirectionType.ForwardOne, pieceController.gridPosition)[0];
@@ -432,11 +433,24 @@ public class PassiveSkill : MonoBehaviour
         // 나무 또는 나무상자가 있는 경우
         if (targetObstacle != null &&
             targetObstacle.obstacleType == ObstacleType.Tree)
-
         {
-            // 이펙트 생성
+            // 마지막 이동 방향 가져오기
+            Vector2Int lastMoveDirection = PieceManager.Instance.currentPiece.GetLastMoveDirection();
+
+            // 이동 방향에 따라 회전 각도 설정
+            float rotationAngle = 0f;
+            if (lastMoveDirection == Vector2Int.left)
+                rotationAngle = 90f;
+            else if (lastMoveDirection == Vector2Int.down)
+                rotationAngle = 180f;
+            else if (lastMoveDirection == Vector2Int.right)
+                rotationAngle = 270f;
+            else if (lastMoveDirection == Vector2Int.up)
+                rotationAngle = 0f;
+
+            // 이펙트 생성 (회전 적용)
             Vector3 effectPos = forwardPos + new Vector2(-6f, -6f);
-            GameObject skillEffect = Instantiate(woodCutterPassiveEffect, effectPos, Quaternion.identity);
+            GameObject skillEffect = Instantiate(woodCutterPassiveEffect, effectPos, Quaternion.Euler(0f, 0f, rotationAngle));
 
             // 나무 또는 나무상자 제거
             if (targetObstacle.obstacleType == ObstacleType.Tree)
@@ -445,7 +459,7 @@ public class PassiveSkill : MonoBehaviour
                 Debug.Log($"나무 제거됨: ({forwardPos.x}, {forwardPos.y})");
                 RuleEvents.TriggerRule("Demon_Active_ObstacleMove");
             }
-            
+
             // 이펙트 지속 시간 대기 후 제거
             yield return new WaitForSeconds(0.5f);
             if (skillEffect != null)

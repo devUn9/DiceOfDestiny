@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e494b535558a694aaf0df1132571600, type: 3}
-  m_Name: WoodCutter
+  m_Name: Logger
   m_EditorClassIdentifier: 
-  className: WoodCutter
-  sprite: {fileID: 21300000, guid: 160ddfb5a608abd479be425bbefeb6f3, type: 3}
+  className: Logger
+  sprite: {fileID: -9021329051632076906, guid: a3323fe30cf469d468f4c26d8d73bb9a, type: 3}
   isCombatClass: 0

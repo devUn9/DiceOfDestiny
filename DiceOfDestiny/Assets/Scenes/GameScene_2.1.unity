@@ -1925,6 +1925,8 @@ MonoBehaviour:
   painterSkillEffect: {fileID: 846397696588369162, guid: f7df4b42d5b448747a1db5e3181794da, type: 3}
   fanaticSkillEffect: {fileID: 8301357996556643184, guid: 81f74734435b88a4c8c84b73f8b6d86a, type: 3}
   priestSkillEffect: {fileID: 5770720890533067149, guid: fea0a462d8377824dafad442c933594a, type: 3}
+  woodCutterSkillEffect: {fileID: 754205121722061333, guid: 12fef93bd83ff2640ab9be402b01735d, type: 3}
+  wizardSkillEffect: {fileID: 4704439823726491303, guid: 3619083d04575944793649ab3a332ce4, type: 3}
 --- !u!114 &830614874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1961,6 +1963,7 @@ MonoBehaviour:
   fanaticPassiveEffect: {fileID: 3347284115625885614, guid: 5d29921e938fa1847b4a1e27b16e0390, type: 3}
   priestPassiveEffect: {fileID: 5289000743379248508, guid: 9b6c560882bfbdd4ab5fcdf0116860e8, type: 3}
   thiefPassiveEffect: {fileID: 6707930388800200877, guid: 705f124155aedf24cb5e614485381d10, type: 3}
+  woodCutterPassiveEffect: {fileID: 3954795626616449932, guid: 946739ec6ef11b4469fc0b909981cbe4, type: 3}
 --- !u!114 &830614876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1992,6 +1995,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieceSelectButton: {fileID: 5233864642296173606, guid: 01092873cfd3c7044917ca679163010c, type: 3}
   canvas: {fileID: 1222871037}
+  firstSelectedPiece: {fileID: 0}
+  isPieceSelected: 0
 --- !u!1 &847223742
 GameObject:
   m_ObjectHideFlags: 0
@@ -2577,6 +2582,7 @@ MonoBehaviour:
   pawnPrefab: {fileID: 2465335938598337309, guid: a3f4b156df2deab45a8922a6cb66fd15, type: 3}
   rookPrefab: {fileID: 7333959039673425380, guid: 4cfce03f186a4804bb8bd2a119a13311, type: 3}
   knightPrefab: {fileID: 2465335938598337309, guid: ad21db2e9fbf33a448528293fc89fa22, type: 3}
+  woodBoxPrefab: {fileID: 6768811535270072887, guid: bdd5772e7901c604f842195bca90c834, type: 3}
   housePrefab: {fileID: 482704282773460569, guid: a7bb776fc68a5684bbcf996fc2deb747, type: 3}
   grayGarassAnimator: {fileID: 9100000, guid: b9a4a399ab190b943ac3829eeeddc51b, type: 2}
   grayTreeAnimator: {fileID: 9100000, guid: 786b7fb7d1e46894b9cb3ff74b7709d4, type: 2}
@@ -3811,7 +3817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageIndex: 0
   stageProfiles:
-  - {fileID: 11400000, guid: e6bc396f73ec24d4e994565faa0a4493, type: 2}
+  - {fileID: 11400000, guid: c2c391696bc63994b898d9be7e4a7456, type: 2}
   - {fileID: 11400000, guid: cfd912d1b69670743b9bd885b9536f75, type: 2}
   - {fileID: 11400000, guid: b26056c0ff2e47f4f8a28a2f987ba875, type: 2}
   - {fileID: 11400000, guid: 6828c2986df7d6e4aabc87941897539e, type: 2}

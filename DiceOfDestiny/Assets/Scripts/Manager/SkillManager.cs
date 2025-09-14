@@ -80,9 +80,9 @@ public class SkillManager : Singletone<SkillManager>
 
                 break;
 
-            case "WoodCutter":
+            case "Logger":
                 // 나무꾼 패시브 로직
-                StartCoroutine(passiveSkill.WoodCutterPassive(piece));
+                StartCoroutine(passiveSkill.CutDownTree(piece));
                 
                 break;
             default:
@@ -215,7 +215,7 @@ public class SkillManager : Singletone<SkillManager>
 
                 break;
 
-            case "WoodCutter":
+            case "Logger":
                 // 나무꾼 스킬 : 주변 8칸 중 한 칸에 나무 장애물을 만듬
                 StartCoroutine(activeSkill.CreateWoodBox());
                 ToastManager.Instance.ShowToast("나무꾼 스킬 발동! 원하는 보드 한 칸에 나무 장애물을 만듭니다.", currentPiece.transform, 0f);

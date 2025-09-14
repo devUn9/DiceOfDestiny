@@ -279,14 +279,14 @@ public class PieceController : MonoBehaviour
 
                 FindAnyObjectByType<TutorialS1Director>()?.OnTileMoved();
             }
-            if (SkillManager.Instance != null)
-            {
-                if (gridPosition.y != 0 && gridPosition.y != BoardManager.Instance.boardSizeY - 1)
-                {
-                    SkillManager.Instance.TrySkill(gridPosition, this);
-                    MissionManager.Instance.CheckPassiveSkillUse();
-                }
-            }
+            //if (SkillManager.Instance != null)
+            //{
+            //    if (gridPosition.y != 0 && gridPosition.y != BoardManager.Instance.boardSizeY - 1)
+            //    {
+            //        SkillManager.Instance.TrySkill(gridPosition, this);
+            //        MissionManager.Instance.CheckPassiveSkillUse();
+            //    }
+            //}
             else
             {
                 Debug.LogWarning($"Invalid move to position: {newPosition}");
@@ -375,11 +375,14 @@ public class PieceController : MonoBehaviour
                 case "Fanatic":
                     animationName = "Fanatic_Idle";
                     break;
-                case "WoodCutter":
-                    animationName = "Woodcutter_Idle";
+                case "Logger":
+                    animationName = "Logger_Idle";
                     break;
                 case "Wizard":
                     animationName = "Wizard_Idle";
+                    break;
+                case "Berserker":
+                    animationName = "Berserker_Idle";
                     break;
 
                 default:

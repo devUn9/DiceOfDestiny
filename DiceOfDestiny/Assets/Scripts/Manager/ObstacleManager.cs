@@ -63,7 +63,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
             { ObstacleType.Pawn, pawnPrefab },
             { ObstacleType.Rook, rookPrefab },
             { ObstacleType.Knight, knightPrefab },
-            { ObstacleType.WoodBox, woodBoxPrefab }
+            { ObstacleType.WoodBox, woodBoxPrefab },
             { ObstacleType.House, housePrefab },
         };
 

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Wizard
   m_EditorClassIdentifier: 
   className: Wizard
-  sprite: {fileID: 21300000, guid: eb06e84f54b99d345b8da35e019f59fc, type: 3}
+  sprite: {fileID: 8159891127022863514, guid: 1dbf8f9c0f538d64196d40d8f88ac46a, type: 3}
   isCombatClass: 0
