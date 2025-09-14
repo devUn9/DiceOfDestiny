@@ -62,9 +62,17 @@ public class MainController : MonoBehaviour
     [Header("씬 설정")]
     [SerializeField] string gamePlayScene;
     [SerializeField] string createItemScene;
+    [SerializeField] string tutorialScene;
+
+    [Header("튜토리얼 확인 모달")]
+    [SerializeField] private GameObject tutorialChoicePanel;
+    [SerializeField] private Button tutorialProceedButton;
+    [SerializeField] private Button tutorialSkipButton;
+    [SerializeField] private Toggle dontAskAgainToggle;
 
     private const string KeyLastScene = "LastScene";
     private const string DefaultScene = "GameScene_2.1";
+    private const string KeyFirstRun = "IsFirstRun"; // 추가: 최초 실행 키
     #endregion
 
     private void OnEnable()
@@ -116,7 +124,57 @@ public class MainController : MonoBehaviour
         StartCoroutine(StartBigDiceAnimation());
         StartCoroutine(StartSmallDiceAnimation());
         AudioManager.Instance.PlayBGM("MainBGM");
-    }    
+
+        // 튜토리얼 확인 모달 버튼 바인딩
+        if (tutorialProceedButton != null) tutorialProceedButton.onClick.AddListener(OnChooseTutorialProceed);
+        if (tutorialSkipButton != null) tutorialSkipButton.onClick.AddListener(OnChooseTutorialSkip);
+    }
+
+    private void ShowTutorialChoicePanel()
+    {
+        if (tutorialChoicePanel == null)
+        {
+            Debug.LogError("tutorialChoicePanel is not assigned!");
+            // 폴백: 기존 흐름 유지
+            ShowPieceSelectPanel(); // 기존 패널 오픈 로직  :contentReference[oaicite:6]{index=6}
+            return;
+        }
+        tutorialChoicePanel.SetActive(true);
+    }
+
+    private void CloseTutorialChoicePanel()
+    {
+        if (tutorialChoicePanel != null)
+            tutorialChoicePanel.SetActive(false);
+    }
+
+    private void SaveDontAskAgainIfChecked()
+    {
+        if (dontAskAgainToggle != null && dontAskAgainToggle.isOn)
+        {
+            PlayerPrefs.SetInt(KeyFirstRun, 0); // 다음부터 묻지 않기
+        }
+    }
+
+    private void OnChooseTutorialProceed()
+    {
+        SaveDontAskAgainIfChecked();
+        if (string.IsNullOrEmpty(tutorialScene))
+        {
+            Debug.LogError("튜토리얼 씬 이름이 설정되지 않았습니다!");
+            CloseTutorialChoicePanel();
+            ShowPieceSelectPanel();
+            return;
+        }
+        SceneManager.LoadScene(tutorialScene); // S1 씬 이름을 할당해 주세요.
+    }
+
+    private void OnChooseTutorialSkip()
+    {
+        SaveDontAskAgainIfChecked();
+        CloseTutorialChoicePanel();
+        ShowPieceSelectPanel(); // 기존 기물 선택 패널 열기  :contentReference[oaicite:7]{index=7}
+    }
 
     private void SetButton(Button btn, UnityAction e)//버튼과 이벤트가 비어있는지 확인하고 문제 없다면 설정
     {
@@ -237,13 +295,22 @@ public class MainController : MonoBehaviour
     private void OnPlayGameButton()
     {
         Debug.Log("게임 시작");
-        if (gamePlayScene == "")
+        // 최초 실행이면 '확인 모달'을 띄우고, 선택에 따라 진행/스킵
+        if (PlayerPrefs.GetInt(KeyFirstRun, 1) == 1)
         {
-            Debug.LogError("게임 시작을 눌렀을때 바뀔 씬의 이름이 설정되지 않았습니다!!");
+            ShowTutorialChoicePanel();
+            return;
+        }
+
+        // 최초 실행이 아니면 기존 흐름
+        if (string.IsNullOrEmpty(gamePlayScene))
+        {
+            Debug.LogError("게임 시작 씬 이름이 비어있습니다!!");
             return;
         }
         ShowPieceSelectPanel();
     }//게임 시작
+
     private void OnContinueGameButton()
     {
         string lastScene = PlayerPrefs.GetString(KeyLastScene, DefaultScene);

@@ -115,10 +115,19 @@ public class ActiveSkill : MonoBehaviour
 
         if (!hasObstacle)
         {
+            Obstacle obstacle = BoardManager.Instance.ReturnObstacleByPosition(newPos);
+
             if (BoardManager.Instance.Board[newPos.x, newPos.y].Obstacle == ObstacleType.Pawn)
             {
-                Obstacle pawn = BoardManager.Instance.ReturnObstacleByPosition(newPos);
-                ObstacleManager.Instance.RemovePawnToList(pawn.gameObject);
+                ObstacleManager.Instance.RemovePawnToList(obstacle.gameObject);
+            }
+            else if (BoardManager.Instance.Board[newPos.x, newPos.y].Obstacle == ObstacleType.Knight)
+            {
+                ObstacleManager.Instance.RemoveKnightToList(obstacle.gameObject);
+            }
+            else if (BoardManager.Instance.Board[newPos.x, newPos.y].Obstacle == ObstacleType.House)
+            {
+                ObstacleManager.Instance.RemoveHouseToList(obstacle.gameObject);
             }
 
             BoardManager.Instance.RemoveObstacleAtPosition(newPos);

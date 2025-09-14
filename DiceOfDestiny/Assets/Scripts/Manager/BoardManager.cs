@@ -25,7 +25,7 @@ public enum DirectionType
 public class BoardManager : Singletone<BoardManager>
 {
     [Header("Board Size Settings")]
-    [SerializeField] public int boardSize { get; private set; } = 13;
+    [SerializeField] public int boardSize = 13;
     public int boardSizeY;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] public GameObject boardPosParent;
@@ -322,13 +322,15 @@ public class BoardManager : Singletone<BoardManager>
                 // 장애물 생성
                 if (obstacleIndices[idx] != ObstacleType.None)
                 {
-                    //Debug.Log(ObstacleManager.Instance);
                     GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
                         new Vector3(boardTransform.position.x + y, boardTransform.position.y + x, 0), Quaternion.identity, boardTransform);
                     obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(y, x);
                     ObstacleManager.Instance.SetObstacle(obstacle);
 
                     Board[y, x].isWalkable = obstacle.GetComponent<Obstacle>().isWalkable;
+
+                    if (obstacleIndices[idx] == ObstacleType.House)
+                        ObstacleManager.Instance.AddHouseToList(obstacle);
                 }
                 idx++;
                 yield return new WaitForSeconds(0.01f); // 장애물 설정 간 약간의 지연
@@ -936,7 +938,6 @@ public class BoardManager : Singletone<BoardManager>
                 obstacleComp.obstacleType == ObstacleType.Grass &&
                 grayGrassCount > 0)
             {
-                Debug.Log("풀 회색화");
                 obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayGrassAnimator();
                 grayGrassCount--;
             }
@@ -945,7 +946,6 @@ public class BoardManager : Singletone<BoardManager>
                 obstacleComp.obstacleType == ObstacleType.Tree &&
                 grayTreeCount > 0)
             {
-                Debug.Log("나무 회색화");
                 obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayTreeAnimator();
                 grayTreeCount--;
             }
@@ -954,7 +954,6 @@ public class BoardManager : Singletone<BoardManager>
                 obstacleComp.obstacleType == ObstacleType.PoisonousHerb &&
                 grayPoisonousherbCount > 0)
             {
-                Debug.Log("독초 회색화");
                 obstacle.GetComponent<Animator>().runtimeAnimatorController = ObstacleManager.Instance.GetGrayPoisonousHerbAnimator();
                 grayPoisonousherbCount--;
             }
@@ -1014,11 +1013,40 @@ public class BoardManager : Singletone<BoardManager>
                 continue;
 
             RemoveObstacleAtPosition(knightPos);
-            CreateObstacle(knightPos, ObstacleType.Knight);
+            GameObject obstacle = CreateObstacle(knightPos, ObstacleType.Knight);
+
+            ObstacleManager.Instance.AddKnightToList(obstacle);
 
             ++count;
 
             if (count >= 2)
+                break;
+        }
+    }
+
+    public void SetHouse()
+    {
+        int count = 0;
+
+        while (true)
+        {
+            int randX = Random.Range(1, boardSize - 1);
+            int randY = Random.Range(3, boardSizeY - 2);
+
+            Vector2Int housePos = new Vector2Int(randX, randY);
+
+            // 이미 집이 있으면 스킵
+            if (Board[housePos.x, housePos.y].Obstacle == ObstacleType.House)
+                continue;
+
+            RemoveObstacleAtPosition(housePos);
+            GameObject obstacle = CreateObstacle(housePos, ObstacleType.House);
+
+            ObstacleManager.Instance.AddHouseToList(obstacle);
+
+            ++count;
+
+            if (count >= 5)
                 break;
         }
     }
@@ -1248,5 +1276,43 @@ public class BoardManager : Singletone<BoardManager>
             SetRook();
             SetKnight();
         }
+        if (stageData.stageNumber == 10)
+        {
+            SetHouse();
+        }
+    }
+
+    public void ClearBoard()
+    {
+        // 모든 타일 오브젝트 제거
+        if (Board != null)
+        {
+            for (int x = 0; x < boardSize; x++)
+            {
+                for (int y = 0; y < boardSizeY; y++)
+                {
+                    if (Board[x, y] != null)
+                    {
+                        Destroy(Board[x, y].gameObject);
+                        Board[x, y] = null;
+                    }
+                }
+            }
+        }
+
+        // boardTransform의 모든 자식 오브젝트 제거
+        if (boardTransform != null)
+        {
+            for (int i = boardTransform.childCount - 1; i >= 0; i--)
+            {
+                Destroy(boardTransform.GetChild(i).gameObject);
+            }
+        }
+
+        // 경계/배경 제거
+        DestroyBorder();
+        DestroyBackGround();
+        Board = null;
+        TempBoard = null;
     }
 }

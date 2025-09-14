@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b2505132fde72345af474f8fca00a1a, type: 3}
+  m_Name: Stage_10_AshVillage
+  m_EditorClassIdentifier: 
+  <StageName>k__BackingField: "\uC7AC\uAC00 \uB41C \uB9C8\uC744"
+  stageNumber: 10
+  missions:
+  - {fileID: 11400000, guid: 1e140154655a1b44c86ce3b6a9fc02ed, type: 2}
+  - {fileID: 11400000, guid: 4fb308dbab58d654ea79a510a4681821, type: 2}
+  maxTurn: 30
+  grayGrassCount: {x: 10, y: 15}
+  grayTreeCount: {x: 10, y: 15}
+  grayPoisonousherbCount: {x: 10, y: 15}
+  grayTileCount: 30
+  minimumColorEnsure: 0
+  weightPower: 10
+  redWeight: 1
+  greenWeight: 1
+  blueWeight: 1
+  yellowWeight: 1
+  purpleWeight: 1
+  orangeWeight: 1
+  availableObstacle:
+  - type: 7
+    weight: 3
+  - type: 1
+    weight: 3
+  - type: 6
+    weight: 3
+  - type: 2
+    weight: 5
+  - type: 4
+    weight: 3
+  exactObstacle:
+  - type: 5
+    weight: 5
+  obstacleDensity: 0.2

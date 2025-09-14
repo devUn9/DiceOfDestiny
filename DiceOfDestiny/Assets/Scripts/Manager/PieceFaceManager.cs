@@ -100,4 +100,11 @@ public class PieceFaceManager : Singletone<PieceFaceManager>
             }
         }
     }
+
+    // Clear saved face snapshots
+    public void ClearPieceFaceData()
+    {
+        pieceFaceData.Clear();
+        Debug.Log("PieceFaceManager: Cleared saved piece face data.");
+    }
 }

@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4884155722157820919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1619728452439345016}
+  - component: {fileID: 2591897168813343749}
+  m_Layer: 0
+  m_Name: TutorialS1Director
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1619728452439345016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4884155722157820919}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 955.6222, y: 413.05807, z: 0.73979807}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2591897168813343749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4884155722157820919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26592aa44681dea4c9b0e68ddf51eed8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputRouter: {fileID: 0}
+  highlight: {fileID: 0}
+  sceneRouter: {fileID: 0}
+  tutorialText: {fileID: 0}
+  nextButton: {fileID: 0}
+  skipToggle: {fileID: 0}
+  rollDiceButton: {fileID: 0}
+  boardFocus: {fileID: 0}
+  pieceButtons:
+  - {fileID: 0}
+  pointer: {fileID: 0}
+  boardOrigin: {fileID: 0}
+  mainCamera: {fileID: 0}
+  minX: 0
+  maxX: 13
+  minY: 0
+  maxY: 0
+  clampToBoardBounds: 1
+  autoNextOnPlacement: 1
+  autoNextOnDice: 1
+  autoNextOnMove: 1
+  resolveUIAtRuntime: 1
+  gameUiRootName: GameUI(Clone)
+  backpackPath: BackpackUI/InventoryPanel/ChoiceTopFace/TopFace/SpawnPieceColor
+  diceButtonName: DiceRollButton

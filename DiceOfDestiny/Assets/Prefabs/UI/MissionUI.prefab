@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 139, y: -70}
+  m_AnchoredPosition: {x: 135, y: -67}
   m_SizeDelta: {x: 80, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5497083512347430841
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0 / 3
+  m_text: 0 / 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a22eb4cb13469e44dbaab3e071b6cf54, type: 2}
   m_sharedMaterial: {fileID: -8984440737036626692, guid: a22eb4cb13469e44dbaab3e071b6cf54, type: 2}
@@ -214,7 +214,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7012714660426381153
 RectTransform:
   m_ObjectHideFlags: 0
@@ -290,7 +290,9 @@ MonoBehaviour:
   MissionImagePrefab: {fileID: 6491700872639325226, guid: ab26d69ef49b3bc4586b78385f9ce026, type: 3}
   ProgressText: {fileID: 4660989795884663218}
   sprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 446568746212952993, guid: 0eb1f5cc7e3dd564dac13af0e8434c03, type: 3}
+  - {fileID: -244150867003875714, guid: 2554f2026585ad1419cea58220ef147a, type: 3}
+  - {fileID: -1181462254548681441, guid: 182354cd5d041b14a99bdc6db18b2364, type: 3}
+  - {fileID: -564201037, guid: 2a8c2784be9c78b42a59ab03e6eb6c09, type: 3}
+  - {fileID: -1669720151, guid: c99fabd47bad9a04ea3f6aaf0de3cccd, type: 3}
+  - {fileID: 6453603175865779455, guid: d6cda57b25c7ffa4a9a11679cf3b42d2, type: 3}

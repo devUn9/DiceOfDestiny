@@ -1,9 +1,7 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 
 public class PieceController : MonoBehaviour
 {
@@ -42,6 +40,7 @@ public class PieceController : MonoBehaviour
 
     void Update()
     {
+        if (!canControl) return;
         TestInput();
     }
 
@@ -96,6 +95,14 @@ public class PieceController : MonoBehaviour
 
     public void MoveToDirection(Vector2Int moveDirection)
     {
+        // Null checks for required singletons
+        if (PieceManager.Instance == null || BoardManager.Instance == null || MissionManager.Instance == null || SkillManager.Instance == null)
+        {
+            Debug.LogWarning("MoveToDirection: Required singleton is null.");
+            return;
+        }
+        if (!canControl) return;
+        if (moveDirection == Vector2Int.zero) return;
         if (moveDirection != Vector2Int.zero)
         {
             Vector2Int newPosition = gridPosition + moveDirection;
@@ -257,6 +264,7 @@ public class PieceController : MonoBehaviour
 
                 // 도착점 체크
                 MissionManager.Instance.CheckStageClearAfterMove(newPosition);
+
                 // 모든 미션완료 상태 체크
                 StartCoroutine(MissionManager.Instance.IsAllMissionCompleted(this));
 
@@ -264,7 +272,20 @@ public class PieceController : MonoBehaviour
                 ObstacleManager.Instance.UpdateObstacleStep();
 
                 //// 스킬 발동
-                StartCoroutine(SkillCoroutine());
+                //StartCoroutine(SkillCoroutine());
+
+                // 튜토리얼 이동 미션 체크
+                MissionManager.Instance.CheckMoveMission();
+
+                FindAnyObjectByType<TutorialS1Director>()?.OnTileMoved();
+            }
+            if (SkillManager.Instance != null)
+            {
+                if (gridPosition.y != 0 && gridPosition.y != BoardManager.Instance.boardSizeY - 1)
+                {
+                    SkillManager.Instance.TrySkill(gridPosition, this);
+                    MissionManager.Instance.CheckPassiveSkillUse();
+                }
             }
             else
             {
@@ -304,7 +325,6 @@ public class PieceController : MonoBehaviour
             return;
         }
 
-
         // 움직이거나 컨트롤 불가능하면 무시
         if (isMoving || SkillManager.Instance.IsSelectingProgress || !canControl)
         {
@@ -324,41 +344,36 @@ public class PieceController : MonoBehaviour
         }
 
         // 클릭 시 애니메이션 트리거 실행
-        if (animator != null && !animPlaying && uiFollow.IsUIActive())
+        if (animator != null && !animPlaying && uiFollow != null && uiFollow.IsUIActive())
         {
-
             string animationName = "";
-
-
+            if (piece.faces == null || piece.faces.Length < 3 || piece.faces[2].classData == null)
+            {
+                Debug.LogWarning("piece.faces[2] or its classData is null. Animation cannot be played.");
+                return;
+            }
             switch (piece.faces[2].classData.className)
             {
                 case "Knight":
                     animationName = "Knight_Idle";
-
                     break;
                 case "Priest":
                     animationName = "Priest_Idle";
-
                     break;
                 case "Demon":
                     animationName = "Demon_Idle";
-
                     break;
                 case "Thief":
                     animationName = "Thief_Idle";
-
                     break;
                 case "Baby":
                     animationName = "Baby_Idle";
-
                     break;
                 case "Painter":
                     animationName = "Painter_Idle";
-
                     break;
                 case "Fanatic":
                     animationName = "Fanatic_Idle";
-
                     break;
                 case "WoodCutter":
                     animationName = "Woodcutter_Idle";
@@ -369,17 +384,17 @@ public class PieceController : MonoBehaviour
 
                 default:
                     Debug.LogWarning($"Unknown class: {piece.faces[2].classData.className}");
-
                     break;
             }
-
+            if (classRenderer == null || animationRenderer == null)
+            {
+                Debug.LogWarning("classRenderer or animationRenderer is null.");
+                return;
+            }
             classRenderer.gameObject.SetActive(false);
             animationRenderer.gameObject.SetActive(true);
             animator.enabled = true; // Animator 활성화
             animator.Play(animationName, 0, 0f); // 애니메이션 재생
-
-
-
             // currentPiece일 경우 루프 애니메이션 시작
             if (PieceManager.Instance.currentPiece == this)
             {
@@ -390,7 +405,6 @@ public class PieceController : MonoBehaviour
                 animator.Play(animationName, 0, 0f); // 한 번만 재생
                 StartCoroutine(EndAnimation(animationName));
             }
-
         }
     }
 
@@ -643,9 +657,22 @@ public class PieceController : MonoBehaviour
 
 
         CheckOutStartingLine();
-
-
-     
+             
+        // 스킬 발동
+        if (SkillManager.Instance != null)
+        {
+            // y값이 0이나 14가 아니면
+            if (PieceManager.Instance.currentPiece.gridPosition.y != 0 && PieceManager.Instance.currentPiece.gridPosition.y != 14)
+            {
+                SkillManager.Instance.TrySkill(gridPosition, this);
+                //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+                MissionManager.Instance.CheckPassiveSkillUse();
+            }
+        }
+        else
+        {
+            Debug.LogError("SkillManager.Instance is null!");
+        }
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
@@ -721,8 +748,7 @@ public class PieceController : MonoBehaviour
                 : Mathf.SmoothStep(1f, 0f, (t - 0.3f) / (0.7f));         // 천천히 복귀 (0.3~1)
 
             float inflate = Mathf.Sin(ease * Mathf.PI) * inflateAmount;
-            float totalScale = 1f + inflate;
-
+            float totalScale = 1f + inflateAmount * Mathf.Sin(Mathf.PI * ease);
             float scaleOld = (1f - ease) * totalScale;
             float scaleNew = ease * totalScale;
 
@@ -766,18 +792,10 @@ public class PieceController : MonoBehaviour
         isMoving = false;
     }
 
-    // public IEnumerator CheckStageClearAfterMove(Vector2Int newPosition)
-    // {
-    //     // 이동 애니메이션이 끝날 때까지 대기
-    //     while (isMoving)
-    //         yield return null;
-
-    //     // 도착 지점이라면
-    //     if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
-    //     {
-    //         StageManager.Instance.StageClear();
-    //     }
-    // }
+    public Vector2Int GetLastMoveDirection()
+    {
+        return lastMoveDirection;
+    }
 
     public Face GetFace(int index)
     {
@@ -799,33 +817,23 @@ public class PieceController : MonoBehaviour
 
     public void SetTopFace()
     {
+        if (classRenderer == null || colorRenderer == null || piece.faces == null || piece.faces.Length < 3 || piece.faces[2].classData == null)
+        {
+            Debug.LogWarning("SetTopFace: classRenderer, colorRenderer, or piece.faces[2].classData is null.");
+            return;
+        }
         classRenderer.sprite = piece.faces[2].classData.sprite;
         colorRenderer.color = BoardManager.Instance.tileColors[(int)piece.faces[2].color];
     }
 
-    //public Vector2Int GetGridPosition()
-    //{
-    //    return gridPosition;
-    //}
-
-    //public Vector2Int SetGridPosition(Vector2Int newPosition)
-    //{
-    //    gridPosition = newPosition;
-    //}
-
-    public Vector2Int GetLastMoveDirection()
-    {
-        return lastMoveDirection;
-    }
-
     private bool isInGame;
-    public bool IsinGame => IsinGame;
+    public bool IsinGame => isInGame;
 
 
     public void Init(Piece piece)
     {
         gridPosition = new Vector2Int(0, 0);
-        this.piece = piece;
+        SetPiece(piece);
     }
 
     public void SetInGame(bool value)
@@ -868,7 +876,7 @@ public class PieceController : MonoBehaviour
             return;
         }
 
-        // 해당 면의 클래스 데이터 변경
+        // 해당 면의 클래스 데이터 변경 (runtime only)
         piece.faces[faceIndex].classData = newClassData;
 
         // 윗면(인덱스 2)이라면 렌더러 업데이트
@@ -885,9 +893,7 @@ public class PieceController : MonoBehaviour
             Debug.LogError($"Invalid face index: {faceIndex}");
             return;
         }
-        // 해당 면의 색상 변경
         piece.faces[faceIndex].color = color;
-        // 윗면(인덱스 2)이라면 색상 렌더러 업데이트
         if (faceIndex == 2)
         {
             colorRenderer.color = BoardManager.Instance.tileColors[(int)color];

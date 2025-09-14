@@ -117,4 +117,18 @@ public class PieceManager : Singletone<PieceManager>
         // 현재 선택 피스 null
         SetCurrentPiece(null);
     }
+
+    public void ClearPieces()
+    {
+        // 모든 기물 오브젝트 제거 및 리스트 초기화
+        foreach (var piece in new List<PieceController>(Pieces))
+        {
+            if (piece != null)
+            {
+                Destroy(piece.gameObject);
+            }
+        }
+        Pieces.Clear();
+        SetCurrentPiece(null);
+    }
 }

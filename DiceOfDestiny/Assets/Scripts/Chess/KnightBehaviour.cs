@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Random = UnityEngine.Random;
-using System.Collections;
 
 public class KnightBehaviour : Obstacle, IObstacleBehaviour
 {
@@ -21,6 +20,7 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
     [SerializeField] private float duration = 0.4f;
 
     private List<KnightNextStep> randNextStep = new();
+    private bool playerTriggered;
     private bool isMoving = false;
 
     public void DoLogic()
@@ -29,12 +29,19 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
         if (isMoving || DOTween.IsTweening(transform)) return;
 
         randNextStep.Clear();
+        playerTriggered = false;
 
         // 8 방향 중에 이동 가능한 방향을 리스트에 추가
         foreach (KnightNextStep step in Enum.GetValues(typeof(KnightNextStep)))
         {
             if (CanNextStep(step))
                 randNextStep.Add(step);
+
+            if (playerTriggered)
+            {
+                MoveKnight(step);
+                return;
+            }
         }
 
         if (randNextStep.Count > 0)
@@ -67,12 +74,20 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
         Vector2Int nextPosition = obstaclePosition + direction;
         Tile nextTile = BoardManager.Instance.GetTile(nextPosition);
 
+        // 보드 안밖인지
         if (nextTile == null)
             return false;
 
-        // 보드 안밖인지
+        // 보드 시작점 도착점 이동 막기
         if (!BoardManager.Instance.IsMovementArea(nextPosition))
             return false;
+
+        // 기물 포착 !
+        if (nextTile.GetPiece() != null)
+        {
+            playerTriggered = true;
+            return false;
+        }
 
         // 룩 제외 모든 장애물 부술 수 있음
         if (nextTile.Obstacle == ObstacleType.Rook || nextTile.Obstacle == ObstacleType.Knight)
@@ -129,5 +144,15 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
 
             isMoving = false;
         });
+    }
+
+    void OnDestroy()
+    {
+        ObstacleManager.Instance.RemoveKnightToList(gameObject);
+
+        GameObject pawn = BoardManager.Instance.CreateObstacle(obstaclePosition, ObstacleType.Pawn);
+        ObstacleManager.Instance.AddPawnToList(pawn);
+
+        UIManager.Instance.UpdateMissionUI();
     }
 }
