@@ -54,6 +54,21 @@ public class StickerDetailUI : MonoBehaviour
             classNameText.text = "직업 : 화가";
             classDescriptionText.text = "설명 : 그림을 그리는 예술가.\n패시브 : -\n스킬 : 게임판에서 한 칸을 선택하여 원하는 색으로 칠할 수 있다.";
         }
+        else if(classSticker.classData.className == "Berserker")
+        {
+            classNameText.text = "직업 : 광전사";
+            classDescriptionText.text = "설명 : 전투에 능하지만 어리석음.\n패시브 : 주변 8칸의 적을 공격하고 처치 시 돌진함.\n스킬 : 한 턴 동안 기절함.";
+        }
+        else if(classSticker.classData.className == "Logger")
+        {
+            classNameText.text = "직업 : 나무꾼";
+            classDescriptionText.text = "설명 : 나무를 베는 사람.\n패시브 : 전방 1칸의 나무를 부숨.\n스킬 : 원하는 한 칸에 나무 방벽을 설치함.";
+        }
+        else if (classSticker.classData.className == "Wizard")
+        {
+            classNameText.text = "직업 : 마법사";
+            classDescriptionText.text = "설명 : 시공간 마법을 깨우친 자.\n패시브 : -\n스킬 : 자신을 포함한 두 기물의 위치를 뒤바꾸고, 다른 직업의 스킬을 사용할 수 있음.";
+        }
     }
 
     public void SetLocked()
