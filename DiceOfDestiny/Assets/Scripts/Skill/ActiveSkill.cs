@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditorInternal.VersionControl.ListControl;
 
 public class ActiveSkill : MonoBehaviour
 {
@@ -9,11 +10,14 @@ public class ActiveSkill : MonoBehaviour
     [SerializeField] private GameObject painterSkillEffect;
     [SerializeField] private GameObject fanaticSkillEffect;
     [SerializeField] private GameObject priestSkillEffect;
+    [SerializeField] private GameObject woodCutterSkillEffect;
+    [SerializeField] private GameObject wizardSkillEffect;
 
     private PainterActiveSkillUI painterActiveSkillUI;
     private MoveSkillUI moveSkillUI;
     private PieceSelectUI pieceSelectUI;
     private int fanaticPoint = 0;
+    private bool isPieceSelected = false;
 
     private void Awake()
     {
@@ -25,7 +29,8 @@ public class ActiveSkill : MonoBehaviour
     // 기사 스킬: 앞으로 이동
     public IEnumerator KnightMoveForward(PieceController pieceController, Vector2Int moveDirection)
     {
-        PieceManager.Instance.SetCurrentPieceControl(false);
+
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -88,7 +93,7 @@ public class ActiveSkill : MonoBehaviour
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 60f);
             }
-        }   
+        }
         else
         {
             Debug.LogWarning("Skill effect prefab is not assigned!");
@@ -105,7 +110,7 @@ public class ActiveSkill : MonoBehaviour
 
         pieceController.transform.position = endPos;
 
-        
+
 
         bool hasObstacle = BoardManager.Instance.IsEmptyTile(newPos);
 
@@ -143,8 +148,11 @@ public class ActiveSkill : MonoBehaviour
             Destroy(skillEffect, 0.5f);
         }
 
+        yield return new WaitForSeconds(0.4f);
+
         BoardSelectManager.Instance.PieceHighlightTiles(newPos);
-        PieceManager.Instance.SetCurrentPieceControl(true);
+
+        GameManager.Instance.IsLockCursor = false;
 
         // 도착점 체크
         MissionManager.Instance.CheckStageClearAfterMove(newPos);
@@ -155,8 +163,9 @@ public class ActiveSkill : MonoBehaviour
     // 악마 스킬: 독초 심기
     public IEnumerator Plant(PieceController pieceController)
     {
-        PieceManager.Instance.SetCurrentPieceControl(false);
-        
+
+        GameManager.Instance.IsLockCursor = true;
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         BoardSelectManager.Instance.HighlightTiles();
@@ -190,14 +199,16 @@ public class ActiveSkill : MonoBehaviour
         BoardManager.Instance.CreateObstacle(selectPos, ObstacleType.PoisonousHerb);
         SkillManager.Instance.IsSelectingProgress = false;
 
-        PieceManager.Instance.SetCurrentPieceControl(true);
-        
+
+        GameManager.Instance.IsLockCursor = false;
+
     }
 
     // 화가 스킬: 색칠하기
     public IEnumerator Paint(PieceController pieceController)
     {
-        PieceManager.Instance.SetCurrentPieceControl(false);
+
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -244,7 +255,8 @@ public class ActiveSkill : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             BoardManager.Instance.SetTileColor(gridPos, selectedColor);
             SkillManager.Instance.IsSelectingProgress = false;
-            PieceManager.Instance.SetCurrentPieceControl(true);
+
+            GameManager.Instance.IsLockCursor = false;
         }
         else
         {
@@ -254,9 +266,11 @@ public class ActiveSkill : MonoBehaviour
 
     }
 
+    // 광신도 스킬 : 사제를 광신도로 바꾼다. (3스택 시 히든 스킬 발동) 
     public IEnumerator ConvertToFanatic(PieceController piece)
     {
-        PieceManager.Instance.SetCurrentPieceControl(false);
+
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -293,7 +307,7 @@ public class ActiveSkill : MonoBehaviour
                             Destroy(effect, 0.5f);
                         }
                         fanaticPoint++;
-                        if( fanaticPoint == 3)
+                        if (fanaticPoint == 3)
                         {
                             SkillManager.Instance.FanaticMeteor();
                         }
@@ -312,13 +326,15 @@ public class ActiveSkill : MonoBehaviour
             //ToastManager.Instance.ShowToast("성공", piece.transform);
         }
 
-        PieceManager.Instance.SetCurrentPieceControl(true);
+  
+        GameManager.Instance.IsLockCursor = false;
     }
 
     // 사제 스킬
     public IEnumerator HealAP()
     {
-        PieceManager.Instance.SetCurrentPieceControl(false);
+
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -341,14 +357,16 @@ public class ActiveSkill : MonoBehaviour
 
         }
 
-        PieceManager.Instance.SetCurrentPieceControl(true);
+
+        GameManager.Instance.IsLockCursor = false;
 
     }
 
     // 도적 스킬 : 이동 UI 띄우기
     public IEnumerator FastMove(PieceController piece)
     {
-        PieceManager.Instance.SetCurrentPieceControl(false);
+
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
         moveSkillUI.Initialize(piece); // 추가
@@ -396,27 +414,21 @@ public class ActiveSkill : MonoBehaviour
         }
 
         pieceController.transform.position = endPos;
-        
+
 
         // 보드 
         Vector2Int PiecePosition = PieceManager.Instance.currentPiece.gridPosition;
         Vector2Int lastPosition = PieceManager.Instance.currentPiece.gridPosition - moveDirection;
+
+       
+        BoardManager.Instance.Board[lastPosition.x, lastPosition.y].SetPiece(null);
+        BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
 
         // 기존 SetPiece 코드 위에 타일 색상 처리 추가
         BoardManager.Instance.Board[lastPosition.x, lastPosition.y].TileColor = pieceController.lastTileColor;
         pieceController.lastTileColor = BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].TileColor;
         BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].TileColor = pieceController.GetPiece().faces[2].color;
 
-        BoardManager.Instance.Board[lastPosition.x, lastPosition.y].SetPiece(null);
-        BoardManager.Instance.Board[PiecePosition.x, PiecePosition.y].SetPiece(pieceController);
-
-
-        //bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
-
-        //if (!hasObstacle)
-        //{
-        //    BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
-        //}
 
         if (SkillManager.Instance != null)
         {
@@ -436,13 +448,15 @@ public class ActiveSkill : MonoBehaviour
 
         ObstacleManager.Instance.UpdateObstacleStep();
 
-        PieceManager.Instance.SetCurrentPieceControl(true);
+
+        GameManager.Instance.IsLockCursor = false;
     }
 
     // 아기 스킬 : 다른 기물 이동
     public IEnumerator HelpBaby(PieceController pieceController)
     {
-        PieceManager.Instance.SetCurrentPieceControl(false);
+
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -479,7 +493,8 @@ public class ActiveSkill : MonoBehaviour
         {
             Debug.Log("아기 스킬 썼지만 발동 가능한 기물이 없네");
             ToastManager.Instance.ShowToast("아기쪽으로 이동 가능한 기물이 없습니다.", pieceController.transform, 1.5f);
-            PieceManager.Instance.SetCurrentPieceControl(true);
+
+            GameManager.Instance.IsLockCursor = false;
             yield break;
         }
 
@@ -497,7 +512,7 @@ public class ActiveSkill : MonoBehaviour
         }
 
         // 기물 선택 UI 생성
-        pieceSelectUI.CreateButtonsForPieces();
+        pieceSelectUI.CreateButtonsForMoveSkill();
 
 
         // 화살표 클릭 대기
@@ -506,13 +521,195 @@ public class ActiveSkill : MonoBehaviour
         // 기물 선택 UI 종료
         pieceSelectUI.ClearButtons();
 
-       
-        
+
+
         // 하이라이트 타일 제거 및 현재 기물 위치 하이라이트
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
         PieceManager.Instance.currentPiece = pieceController;
         BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
 
-        PieceManager.Instance.SetCurrentPieceControl(true);
+
+        GameManager.Instance.IsLockCursor = false;
     }
+
+    // 나무꾼 스킬 : 나무 방벽 설치
+    public IEnumerator CreateWoodBox()
+    {
+
+
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        BoardSelectManager.Instance.HighlightTiles();
+        yield return BoardSelectManager.Instance.WaitForTileClick();
+
+        SkillManager.Instance.IsSelectingProgress = true;
+        Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
+
+        Vector3 effectPosition = new Vector3(
+                   selectPos.x - 6f,
+                   selectPos.y - 6f,
+                   0f
+               );
+
+        if (woodCutterSkillEffect != null)
+        {
+            GameObject effect = Instantiate(
+                woodCutterSkillEffect,
+                effectPosition,
+                Quaternion.identity,
+                BoardManager.Instance.boardTransform
+            );
+            Destroy(effect, 0.5f);
+        }
+        else
+        {
+            Debug.LogWarning("나무꾼 스킬 할당 안됨");
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        BoardManager.Instance.CreateObstacle(selectPos, ObstacleType.WoodBox);
+        SkillManager.Instance.IsSelectingProgress = false;
+
+        GameManager.Instance.IsLockCursor = false;
+
+    }
+
+    // 마법사 스킬 : 본인을 제외한 기물간 위치 변경
+    public IEnumerator SwapPieces(PieceController pieceController)
+    {
+
+        GameManager.Instance.IsLockCursor = true;
+
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        // 기물들 중 이동 가능한 타일이 있는지 확인
+        bool hasOtherPiece = false;
+        foreach (PieceController targetPiece in PieceManager.Instance.Pieces)
+        {
+            if (targetPiece == null || targetPiece == PieceManager.Instance.currentPiece) // null 기물과 본인을 제외한
+                continue;
+            hasOtherPiece = true;
+            break; // 기물이 하나라도 있으면 루프 종료
+        }
+
+        // 이동 가능한 기물이 없으면 코루틴 종료
+        if (!hasOtherPiece)
+        {
+            Debug.Log("마법사 스킬 썼지만 발동 가능한 기물이 없네");
+            ToastManager.Instance.ShowToast("마법사쪽으로 위치변환 가능한 기물이 없습니다.", pieceController.transform, 1.5f);
+
+            GameManager.Instance.IsLockCursor = false;
+            yield break;
+        }
+
+        // 기존 하이라이트 타일 제거
+        BoardSelectManager.Instance.DestroyPieceHighlightTile();
+
+        // 모든 유효한 기물 위치에 하이라이트 타일 생성 (본인 포함)
+        foreach (PieceController p in PieceManager.Instance.Pieces)
+        {
+            if (p == null)
+                continue;
+            // 하이라이트 타일 생성
+            BoardSelectManager.Instance.PieceHighLightTilesMulty(p.gridPosition);
+        }
+
+        // 기물 선택 UI 생성
+        pieceSelectUI.CreateButtonsForSwapSkill();
+
+        // 두 기물 선택 대기
+        yield return StartCoroutine(pieceSelectUI.WaitForArrowClick(pieceController));
+
+        // 위치 교환 후 이펙트 생성
+        if (pieceSelectUI.firstSelectedPiece != null && pieceSelectUI.isPieceSelected)
+        {
+            PieceController secondSelectedPiece = PieceManager.Instance.currentPiece;
+            if (secondSelectedPiece != null)
+            {
+                // 현재 타일 색상 저장
+                TileColor firstPieceColor = BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor;
+                TileColor secondPieceColor = BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor;
+
+                // 첫 번째 기물 위치에 이펙트 생성
+                if (wizardSkillEffect != null)
+                {
+                    GameObject effect1 = Instantiate(
+                        wizardSkillEffect,
+                        pieceSelectUI.firstSelectedPiece.transform.position,
+                        Quaternion.identity,
+                        BoardManager.Instance.boardTransform
+                    );
+                    Destroy(effect1, 1f);
+                }
+
+                // 두 번째 기물 위치에 이펙트 생성
+                if (wizardSkillEffect != null)
+                {
+                    GameObject effect2 = Instantiate(
+                        wizardSkillEffect,
+                        secondSelectedPiece.transform.position,
+                        Quaternion.identity,
+                        BoardManager.Instance.boardTransform
+                    );
+                    Destroy(effect2, 1f);
+                }
+                // 위치 교환
+                Vector2Int tempPosition = pieceSelectUI.firstSelectedPiece.gridPosition;
+                pieceSelectUI.firstSelectedPiece.gridPosition = secondSelectedPiece.gridPosition;
+                secondSelectedPiece.gridPosition = tempPosition;
+
+                // 보드 색상 교환 (temp 변수를 사용한 스왑)
+                TileColor tempColor = BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor;
+                BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor = BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor;
+                BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor = tempColor;
+
+                Vector3 tempWorldPosition = pieceSelectUI.firstSelectedPiece.transform.position;
+                pieceSelectUI.firstSelectedPiece.transform.position = secondSelectedPiece.transform.position;
+                secondSelectedPiece.transform.position = tempWorldPosition;
+
+                Debug.Log($"Swapped {pieceSelectUI.firstSelectedPiece.name} and {secondSelectedPiece.name}");
+
+                if (SkillManager.Instance != null)
+                {
+                    SkillManager.Instance.TrySkill(secondSelectedPiece.gridPosition, secondSelectedPiece);
+                    SkillManager.Instance.TrySkill(pieceSelectUI.firstSelectedPiece.gridPosition, pieceSelectUI.firstSelectedPiece);
+                }
+                else
+                {
+                    Debug.LogError("SkillManager.Instance is null!");
+                }
+            }
+            else
+            {
+                Debug.Log("유효하지 않은 기물 선택");
+                ToastManager.Instance.ShowToast("유효하지 않은 기물 선택입니다.", pieceController.transform, 1.5f);
+            }
+        }
+
+        // UI 버튼 제거
+        pieceSelectUI.ClearButtons();
+
+
+
+        // 하이라이트 타일 제거 및 현재 기물 위치 하이라이트
+        BoardSelectManager.Instance.DestroyPieceHighlightTile();
+        PieceManager.Instance.currentPiece = pieceController;
+        BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
+
+
+        GameManager.Instance.IsLockCursor = false;
+    }
+
+    public IEnumerator SelfStun(PieceController pieceController)
+    {
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        var stunTurns = 1;
+        pieceController.statusEffectController.SetStatus(PieceStatus.Stun, stunTurns);
+
+        ToastManager.Instance.ShowToast($"자신을 {stunTurns}턴간 기절시킵니다.", pieceController.transform, 1.5f);
+
+        GameManager.Instance.IsLockCursor = false;
+    }
+
 }

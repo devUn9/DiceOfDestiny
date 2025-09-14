@@ -65,7 +65,7 @@ public sealed class StageManager : Singletone<StageManager>
         {
             DiceValue = value;
             ActionPointManager.Instance.AddAP(value);
-            Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
+            //Debug.Log($"주사위를 굴려서 {value}가 나왔습니다.");
             GameState = GameState.PlayerAction;
             UIManager.Instance.UpdateActionPointUI();
         });

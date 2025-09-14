@@ -227,7 +227,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
 
         lastClickedPosition = position;
         isWaitingForClick = false;
-        Debug.Log($"클릭된 타일 위치 저장: {lastClickedPosition}");
+        
         ClearAllEffects();
     }
 

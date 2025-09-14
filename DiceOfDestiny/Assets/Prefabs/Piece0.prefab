@@ -399,7 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37d694702f3c42428861002076ba292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  piece: {fileID: 0}
+  piece: {fileID: 11400000, guid: 415a8b24e9575d542845ce328401ac29, type: 2}
   lastMoveDirection: {x: 0, y: 0}
   gridPosition: {x: 0, y: 0}
   classRenderer: {fileID: 6441678837052477297}

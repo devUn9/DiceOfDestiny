@@ -20,6 +20,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
     [SerializeField] private GameObject pawnPrefab;
     [SerializeField] private GameObject rookPrefab;
     [SerializeField] private GameObject knightPrefab;
+    [SerializeField] private GameObject woodBoxPrefab;
 
     [SerializeField] private GameObject housePrefab;
 
@@ -62,6 +63,7 @@ public class ObstacleManager : Singletone<ObstacleManager>
             { ObstacleType.Pawn, pawnPrefab },
             { ObstacleType.Rook, rookPrefab },
             { ObstacleType.Knight, knightPrefab },
+            { ObstacleType.WoodBox, woodBoxPrefab },
             { ObstacleType.House, housePrefab },
         };
 
