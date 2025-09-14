@@ -271,11 +271,10 @@ public class PieceController : MonoBehaviour
                 // 모든 장애물 기믹 동작
                 ObstacleManager.Instance.UpdateObstacleStep();
 
-                //// 스킬 발동
-                //StartCoroutine(SkillCoroutine());
+                // 스킬 발동
+                StartCoroutine(SkillCoroutine());
 
-                // 튜토리얼 이동 미션 체크
-                MissionManager.Instance.CheckMoveMission();
+
 
                 FindAnyObjectByType<TutorialS1Director>()?.OnTileMoved();
             }
@@ -305,6 +304,9 @@ public class PieceController : MonoBehaviour
             {
                 SkillManager.Instance.TrySkill(gridPosition, this);
                 //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+
+                // 미션 발동
+                MissionManager.Instance.CheckPassiveSkillUse();
             }
 
 
@@ -318,6 +320,9 @@ public class PieceController : MonoBehaviour
     // 기물 눌렀을 때 호출, BoardSelectManager에 저장
     private void OnMouseUp()
     {
+        if (GameManager.Instance.IsLockCursor)
+            return; // 커서 잠금 상태면 무시
+
         Debug.Log("Piece clicked: " + piece);
         // UI 위 클릭이면 무시
         if (IsPointerOnLayer("BlockUI"))
@@ -531,6 +536,7 @@ public class PieceController : MonoBehaviour
 
     public IEnumerator RotateToTopFaceCoroutine(Vector2Int moveDirection)
     {
+        GameManager.Instance.IsLockCursor = true;
         isMoving = true; // 이동 중 입력받지 아니함. 
 
         int nextfaceIndex = 3; // 다음 윗면 인덱스
@@ -546,6 +552,8 @@ public class PieceController : MonoBehaviour
         else
         {
             Debug.LogWarning($"Invalid move direction for rotation: {moveDirection}");
+
+            GameManager.Instance.IsLockCursor = false;
             isMoving = false;
             yield break;
         }
@@ -656,26 +664,27 @@ public class PieceController : MonoBehaviour
 
         BoardSelectManager.Instance.PieceHighlightTiles(gridPosition);
 
+        GameManager.Instance.IsLockCursor = false;
         isMoving = false;
 
 
         CheckOutStartingLine();
-             
+
         // 스킬 발동
-        if (SkillManager.Instance != null)
-        {
-            // y값이 0이나 14가 아니면
-            if (PieceManager.Instance.currentPiece.gridPosition.y != 0 && PieceManager.Instance.currentPiece.gridPosition.y != 14)
-            {
-                SkillManager.Instance.TrySkill(gridPosition, this);
-                //SkillManager.Instance.TryActiveSkill(gridPosition, this);
-                MissionManager.Instance.CheckPassiveSkillUse();
-            }
-        }
-        else
-        {
-            Debug.LogError("SkillManager.Instance is null!");
-        }
+        //if (SkillManager.Instance != null)
+        //{
+        //    // y값이 0이나 14가 아니면
+        //    if (PieceManager.Instance.currentPiece.gridPosition.y != 0 && PieceManager.Instance.currentPiece.gridPosition.y != 14)
+        //    {
+        //        SkillManager.Instance.TrySkill(gridPosition, this);
+        //        //SkillManager.Instance.TryActiveSkill(gridPosition, this);
+        //        MissionManager.Instance.CheckPassiveSkillUse();
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.LogError("SkillManager.Instance is null!");
+        //}
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
@@ -694,6 +703,7 @@ public class PieceController : MonoBehaviour
 
     IEnumerator RotateHalfBackCoroutine(Vector2Int moveDirection)
     {
+        GameManager.Instance.IsLockCursor = true;
         isMoving = true;
 
         float overshoot = 0.3f; // 진행 정도
@@ -792,6 +802,7 @@ public class PieceController : MonoBehaviour
         Destroy(newClassObj);
         Destroy(newColorObj);
 
+        GameManager.Instance.IsLockCursor = false;
         isMoving = false;
     }
 

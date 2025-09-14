@@ -15,6 +15,8 @@ public class GameManager : Singletone<GameManager>
     public Piece[] selectedPieces = new Piece[4];
     public bool isPaused { get; private set; }
 
+    [SerializeField] public bool IsLockCursor { get; set; } = false;
+
     private void Update()
     {
         if (SceneManager.GetActiveScene().name == "GameScene_2.1")

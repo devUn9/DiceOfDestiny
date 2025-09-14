@@ -9,7 +9,8 @@ public class PassiveSkill : MonoBehaviour
     [SerializeField] private GameObject fanaticPassiveEffect;
     [SerializeField] private GameObject priestPassiveEffect;
     [SerializeField] private GameObject thiefPassiveEffect;
-    [SerializeField] private GameObject woodCutterPassiveEffect;
+    [SerializeField] private GameObject loggerPassiveEffect;
+    [SerializeField] private GameObject berserkerPassiveEffect;
 
 
     // 기사 공격 스킬
@@ -83,7 +84,13 @@ public class PassiveSkill : MonoBehaviour
                 }
             }
 
+            GameManager.Instance.IsLockCursor = true;
+
+            // 이펙트 지속 시간 대기
             yield return new WaitForSeconds(0.5f);
+
+            GameManager.Instance.IsLockCursor = false;
+
             foreach (var skillEffect in skillEffects)
             {
                 if (skillEffect != null)
@@ -181,8 +188,12 @@ public class PassiveSkill : MonoBehaviour
                 }
             }
 
+            GameManager.Instance.IsLockCursor = true;
+
             // 이펙트 지속 시간 대기
             yield return new WaitForSeconds(0.5f);
+
+            GameManager.Instance.IsLockCursor = false;
 
             // 모든 이펙트 제거
             foreach (var skillEffect in skillEffects)
@@ -274,7 +285,13 @@ public class PassiveSkill : MonoBehaviour
                 }
             }
 
+            GameManager.Instance.IsLockCursor = true;
+
+            // 이펙트 지속 시간 대기
             yield return new WaitForSeconds(0.5f);
+
+            GameManager.Instance.IsLockCursor = false;
+
             foreach (var skillEffect in skillEffects)
             {
                 if (skillEffect != null)
@@ -450,7 +467,7 @@ public class PassiveSkill : MonoBehaviour
 
             // 이펙트 생성 (회전 적용)
             Vector3 effectPos = forwardPos + new Vector2(-6f, -6f);
-            GameObject skillEffect = Instantiate(woodCutterPassiveEffect, effectPos, Quaternion.Euler(0f, 0f, rotationAngle));
+            GameObject skillEffect = Instantiate(loggerPassiveEffect, effectPos, Quaternion.Euler(0f, 0f, rotationAngle));
 
             // 나무 또는 나무상자 제거
             if (targetObstacle.obstacleType == ObstacleType.Tree)
@@ -461,10 +478,109 @@ public class PassiveSkill : MonoBehaviour
             }
 
             // 이펙트 지속 시간 대기 후 제거
+
+            GameManager.Instance.IsLockCursor = true;
+
+            // 이펙트 지속 시간 대기
             yield return new WaitForSeconds(0.5f);
+
+            GameManager.Instance.IsLockCursor = false;
+
             if (skillEffect != null)
             {
                 Destroy(skillEffect);
+            }
+        }
+        else
+        {
+            yield return null;
+        }
+    }
+
+    // 광전사 패시브 : 주변 8칸의 적을 찾아서 랜덤 공격 (돌진)
+    public IEnumerator BerserkerAttack(PieceController pieceController)
+    {
+        if (pieceController == null || berserkerPassiveEffect == null)
+        {
+            Debug.LogWarning("PieceController or BerserkerPassiveEffect is null.");
+            yield break;
+        }
+
+        //상하좌우 칸에 있는 슬라임과 좀비 장애물 제거
+        List<Vector2Int> searchList = BoardManager.Instance.GetTilePositions(DirectionType.Eight, PieceManager.Instance.GetCurrentPiece().gridPosition);
+
+        bool hasTarget = false;
+        for (int i = 0; i < searchList.Count; i++)
+        {
+            var obstacle = BoardManager.Instance.ReturnObstacleByPosition(searchList[i]);
+            if (obstacle != null &&
+                (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie ||
+                    obstacle.obstacleType == ObstacleType.Pawn || obstacle.obstacleType == ObstacleType.Knight ||
+                    obstacle.obstacleType == ObstacleType.House))
+            {
+                hasTarget = true;
+                
+                break;
+            }
+        }
+
+        if (hasTarget)
+        {
+            List<GameObject> skillEffects = new List<GameObject>();
+            (Vector2Int direction, float rotationZ)[] directions = new[]
+            {
+                (new Vector2Int(0, 1), 0f),   // 상 
+                (new Vector2Int(0, -1), 180f), // 하
+                (new Vector2Int(-1, 0), 90f),  // 좌
+                (new Vector2Int(1, 0), -90f)   // 우
+            };
+
+            ToastManager.Instance.ShowToast("광전사 패시브 발동! 주변 8방향의 적을 찾아 공격합니다.", pieceController.transform, 0f);
+
+            foreach (var (dir, rotationZ) in directions)
+            {
+                Vector2Int targetPos = pieceController.gridPosition + dir;
+                Vector3 effectPos = pieceController.transform.position;
+                Quaternion rotation = Quaternion.Euler(0f, 0f, rotationZ);
+                GameObject skillEffect = Instantiate(
+                    berserkerPassiveEffect,
+                    effectPos,
+                    rotation
+                );
+                skillEffects.Add(skillEffect);
+
+                var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(targetPos);
+                if (targetObstacle != null &&
+                    (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie ||
+                     targetObstacle.obstacleType == ObstacleType.Knight))
+                {
+                    BoardManager.Instance.RemoveObstacleAtPosition(targetPos);
+
+                    RuleEvents.TriggerRule("Knight_Active_ObstacleMove");
+                }
+                else if (targetObstacle != null && targetObstacle.obstacleType == ObstacleType.Pawn)
+                {
+                    ObstacleManager.Instance.HitPawn(targetPos);
+                }
+                else if (targetObstacle != null && targetObstacle.obstacleType == ObstacleType.House)
+                {
+                    ObstacleManager.Instance.HitHouse(targetPos);
+                }
+            }
+
+            GameManager.Instance.IsLockCursor = true;
+
+            // 이펙트 지속 시간 대기
+            yield return new WaitForSeconds(0.5f);
+
+            GameManager.Instance.IsLockCursor = false;
+
+            foreach (var skillEffect in skillEffects)
+            {
+                if (skillEffect != null)
+                {
+                    Destroy(skillEffect);
+                }
             }
         }
         else

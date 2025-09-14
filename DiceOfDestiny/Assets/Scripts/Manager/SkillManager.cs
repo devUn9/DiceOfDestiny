@@ -85,6 +85,13 @@ public class SkillManager : Singletone<SkillManager>
                 StartCoroutine(passiveSkill.CutDownTree(piece));
                 
                 break;
+
+            case "Berserker":
+                // 광전사 패시브 로직
+                StartCoroutine(passiveSkill.BerserkerAttack(piece));
+
+                break;
+
             default:
                 break;
         }
@@ -111,9 +118,8 @@ public class SkillManager : Singletone<SkillManager>
     // 스킬 사용 가능한지 판단하는 코루틴
     public IEnumerator TryActiveSkillCoroutine(Vector2Int position, PieceController piece)
     {
-        //yield return new WaitForSeconds(0.1f); // 패시브 스킬이 완료될 때까지 잠시 대기
-        yield return new WaitForSeconds(0f); // DelayTime을 사용하여 대기
-        
+
+
         bool isDdongBlind = false;
 
         // 주변 8칸 중 상단 컬러와 일치하는 칸 수 확인
@@ -129,11 +135,12 @@ public class SkillManager : Singletone<SkillManager>
             StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile,piece));
 
             DoActiveSkill(piece.GetTopFace().classData);
+
+            yield return new WaitForSeconds(blinkTime);
+           
         }
-        else
-        {
-            
-        }
+
+
     }
 
     // 스킬 발동
@@ -227,6 +234,10 @@ public class SkillManager : Singletone<SkillManager>
                 StartCoroutine(activeSkill.SwapPieces(currentPiece));
                 break;
 
+            case "Berserker":
+                // 광전사 스킬 : 기절하기
+                //
+                break;
             default:
                 Debug.LogError($"알 수 없는 클래스 : {classData.className}");
 
@@ -243,9 +254,6 @@ public class SkillManager : Singletone<SkillManager>
             Debug.LogError("PieceManager or Piece is null!");
             yield break;
         }
-
-         
-        
 
         // 스킬이 발동된 타일과 매칭된 타일들의 SpriteRenderer 수집
         List<(SpriteRenderer renderer, Color originalColor)> renderers = new List<(SpriteRenderer, Color)>();

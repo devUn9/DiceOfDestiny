@@ -30,6 +30,7 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator KnightMoveForward(PieceController pieceController, Vector2Int moveDirection)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -147,8 +148,11 @@ public class ActiveSkill : MonoBehaviour
             Destroy(skillEffect, 0.5f);
         }
 
+        yield return new WaitForSeconds(0.5f);
+
         BoardSelectManager.Instance.PieceHighlightTiles(newPos);
         PieceManager.Instance.SetCurrentPieceControl(true);
+        GameManager.Instance.IsLockCursor = false;
 
         // 도착점 체크
         MissionManager.Instance.CheckStageClearAfterMove(newPos);
@@ -160,6 +164,7 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator Plant(PieceController pieceController)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -195,6 +200,7 @@ public class ActiveSkill : MonoBehaviour
         SkillManager.Instance.IsSelectingProgress = false;
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+        GameManager.Instance.IsLockCursor = false;
 
     }
 
@@ -202,6 +208,7 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator Paint(PieceController pieceController)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -249,6 +256,7 @@ public class ActiveSkill : MonoBehaviour
             BoardManager.Instance.SetTileColor(gridPos, selectedColor);
             SkillManager.Instance.IsSelectingProgress = false;
             PieceManager.Instance.SetCurrentPieceControl(true);
+            GameManager.Instance.IsLockCursor = false;
         }
         else
         {
@@ -261,6 +269,7 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator ConvertToFanatic(PieceController piece)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -317,12 +326,14 @@ public class ActiveSkill : MonoBehaviour
         }
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+        GameManager.Instance.IsLockCursor = false;
     }
 
     // 사제 스킬
     public IEnumerator HealAP()
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -346,6 +357,7 @@ public class ActiveSkill : MonoBehaviour
         }
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+        GameManager.Instance.IsLockCursor = false;
 
     }
 
@@ -353,6 +365,7 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator FastMove(PieceController piece)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
         moveSkillUI.Initialize(piece); // 추가
@@ -435,12 +448,14 @@ public class ActiveSkill : MonoBehaviour
         ObstacleManager.Instance.UpdateObstacleStep();
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+        GameManager.Instance.IsLockCursor = false;
     }
 
     // 아기 스킬 : 다른 기물 이동
     public IEnumerator HelpBaby(PieceController pieceController)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+        GameManager.Instance.IsLockCursor = true;
 
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
@@ -478,6 +493,7 @@ public class ActiveSkill : MonoBehaviour
             Debug.Log("아기 스킬 썼지만 발동 가능한 기물이 없네");
             ToastManager.Instance.ShowToast("아기쪽으로 이동 가능한 기물이 없습니다.", pieceController.transform, 1.5f);
             PieceManager.Instance.SetCurrentPieceControl(true);
+            GameManager.Instance.IsLockCursor = false;
             yield break;
         }
 
@@ -512,6 +528,7 @@ public class ActiveSkill : MonoBehaviour
         BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+        GameManager.Instance.IsLockCursor = false;
     }
 
     // 나무꾼 스킬 : 나무 방벽 설치
@@ -553,6 +570,7 @@ public class ActiveSkill : MonoBehaviour
         SkillManager.Instance.IsSelectingProgress = false;
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+        GameManager.Instance.IsLockCursor = false;
 
     }
 
@@ -560,6 +578,8 @@ public class ActiveSkill : MonoBehaviour
     public IEnumerator SwapPieces(PieceController pieceController)
     {
         PieceManager.Instance.SetCurrentPieceControl(false);
+        GameManager.Instance.IsLockCursor = true;
+
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         // 본인을 제외한 기물들 중 이동 가능한 타일이 있는지 확인
@@ -578,6 +598,7 @@ public class ActiveSkill : MonoBehaviour
             Debug.Log("마법사 스킬 썼지만 발동 가능한 기물이 없네");
             ToastManager.Instance.ShowToast("마법사쪽으로 위치변환 가능한 기물이 없습니다.", pieceController.transform, 1.5f);
             PieceManager.Instance.SetCurrentPieceControl(true);
+            GameManager.Instance.IsLockCursor = false;
             yield break;
         }
 
@@ -670,6 +691,7 @@ public class ActiveSkill : MonoBehaviour
         BoardSelectManager.Instance.PieceHighlightTiles(pieceController.gridPosition);
 
         PieceManager.Instance.SetCurrentPieceControl(true);
+        GameManager.Instance.IsLockCursor = false;
     }
 
    
