@@ -26,7 +26,7 @@ public class HouseBehaviour : Obstacle, IObstacleBehaviour
     }
 
     private List<SponObstacleDir> randObstacleDir = new();
-    [SerializeField] private int life = 5;
+    [SerializeField] public int life = 5;
     [SerializeField] private int sponTurn = 0;
 
     public void DoLogic()

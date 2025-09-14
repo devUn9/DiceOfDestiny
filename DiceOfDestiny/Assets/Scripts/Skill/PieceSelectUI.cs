@@ -1,12 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class PieceSelectUI : MonoBehaviour
 {
-    [SerializeField] private GameObject pieceSelectButton;
+    [SerializeField] private GameObject pieceSelectButton; // MoveSkill용 버튼 프리팹
+
     [SerializeField] private Canvas canvas;
-        
+
     private Dictionary<GameObject, PieceController> buttonToPieceMap = new Dictionary<GameObject, PieceController>();
     private List<GameObject> buttons = new List<GameObject>();
     private PieceController selectedPiece;
@@ -15,24 +17,25 @@ public class PieceSelectUI : MonoBehaviour
     private Camera mainCamera;
     private Vector3 baseUIScale;
 
+    public PieceController firstSelectedPiece = null;
+    public bool isPieceSelected = false;
+
     private void Awake()
     {
         mainCamera = Camera.main;
-
         moveSkillUI = GetComponentInParent<MoveSkillUI>();
-        mainCamera = Camera.main;
         cameraController = mainCamera.GetComponent<CameraController>();
     }
 
     private void Start()
     {
-        baseUIScale = pieceSelectButton.transform.localScale;
+        baseUIScale = pieceSelectButton.transform.localScale; // Move 버튼 기준으로 스케일 초기화
     }
 
     private void LateUpdate()
     {
         UpdateUIScale();
-        UpdateButtonPositions(); // 버튼 위치 갱신 추가
+        UpdateButtonPositions();
     }
 
     private void UpdateUIScale()
@@ -43,7 +46,6 @@ public class PieceSelectUI : MonoBehaviour
         float currentZoom = mainCamera.orthographicSize;
         float scaleFactor = baseZoom / currentZoom;
 
-        // 모든 버튼의 스케일 조정
         foreach (var button in buttons)
         {
             button.transform.localScale = baseUIScale * scaleFactor;
@@ -54,18 +56,18 @@ public class PieceSelectUI : MonoBehaviour
     {
         if (mainCamera == null) return;
 
-        // 각 버튼의 위치를 대응하는 기물의 화면 좌표로 갱신
         foreach (var button in buttons)
         {
             if (buttonToPieceMap.TryGetValue(button, out PieceController piece))
             {
                 Vector3 screenPos = mainCamera.WorldToScreenPoint(piece.transform.position);
-                button.transform.position = screenPos; // 버튼 위치 업데이트
+                button.transform.position = screenPos;
             }
         }
     }
 
-    public void CreateButtonsForPieces()
+    // MoveSkill용 버튼 생성
+    public void CreateButtonsForMoveSkill()
     {
         ClearButtons();
 
@@ -76,22 +78,79 @@ public class PieceSelectUI : MonoBehaviour
             Vector3 screenPos = mainCamera.WorldToScreenPoint(piece.transform.position);
             GameObject button = Instantiate(pieceSelectButton, screenPos, Quaternion.identity, canvas.transform);
             buttons.Add(button);
-            buttonToPieceMap.Add(button, piece); // 버튼과 기물 매핑
+            buttonToPieceMap.Add(button, piece);
 
             Button uiButton = button.GetComponent<Button>();
             uiButton.GetComponent<Image>().color = new Color(1, 1, 1, 0f);
-            uiButton.onClick.AddListener(() => OnPieceButtonClick(piece));
+            uiButton.onClick.AddListener(() => OnPieceButtonClickMove(piece));
         }
     }
 
-    public void OnPieceButtonClick(PieceController piece)
+    // SwapSkill용 버튼 생성
+    public void CreateButtonsForSwapSkill()
+    {
+        ClearButtons();
+
+        foreach (var piece in PieceManager.Instance.Pieces)
+        {
+            //if (piece == PieceManager.Instance.currentPiece) continue;
+
+            Vector3 screenPos = mainCamera.WorldToScreenPoint(piece.transform.position);
+            GameObject button = Instantiate(pieceSelectButton, screenPos, Quaternion.identity, canvas.transform);
+            buttons.Add(button);
+            buttonToPieceMap.Add(button, piece);
+
+            Button uiButton = button.GetComponent<Button>();
+            uiButton.GetComponent<Image>().color = new Color(1, 1, 1, 0f);
+            uiButton.onClick.AddListener(() => OnPieceButtonClickSwap(piece));
+        }
+    }
+
+    // MoveSkill용 버튼 클릭 처리
+    public void OnPieceButtonClickMove(PieceController piece)
     {
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
         BoardSelectManager.Instance.PieceHighLightTilesMulty(piece.gridPosition);
-        PieceManager.Instance.currentPiece = piece;
         selectedPiece = piece;
+        PieceManager.Instance.currentPiece = piece;
 
+        // MoveSkill 관련 초기화
         moveSkillUI.Initialize(selectedPiece);
+    }
+
+    // SwapSkill용 버튼 클릭 처리
+    public void OnPieceButtonClickSwap(PieceController piece)
+    {
+        //BoardSelectManager.Instance.DestroyPieceHighlightTile();
+        //BoardSelectManager.Instance.PieceHighLightTilesMulty(piece.gridPosition);
+        selectedPiece = piece;
+        PieceManager.Instance.currentPiece = piece;
+
+        if (firstSelectedPiece == null)
+        {
+            // 첫 번째 기물 선택
+            firstSelectedPiece = selectedPiece;
+            Debug.Log($"First piece selected: {selectedPiece.name}");
+        }
+        else if (firstSelectedPiece != selectedPiece)
+        {
+            // 두 번째 기물 선택
+            PieceManager.Instance.currentPiece = selectedPiece;
+            isPieceSelected = true;
+            Debug.Log($"Second piece selected: {selectedPiece.name}");
+        }
+    }
+
+    // SwapSkill용 대기 코루틴
+    public IEnumerator WaitForArrowClick(PieceController originalPiece)
+    {
+        isPieceSelected = false;
+        firstSelectedPiece = null;
+
+        while (!isPieceSelected)
+        {
+            yield return null;
+        }
     }
 
     public void ClearButtons()
@@ -101,7 +160,7 @@ public class PieceSelectUI : MonoBehaviour
             Destroy(button);
         }
         buttons.Clear();
-        buttonToPieceMap.Clear(); // 매핑도 정리
+        buttonToPieceMap.Clear();
     }
 
     private void OnDisable()

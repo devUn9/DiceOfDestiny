@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAvailable: 1
   faces:
-  - classData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
-    color: 0
-  - classData: {fileID: 11400000, guid: 384c756a026c75446866dfb53aa3372d, type: 2}
-    color: 1
-  - classData: {fileID: 11400000, guid: 2d6146874d908d64c9510daae785a67b, type: 2}
-    color: 2
   - classData: {fileID: 11400000, guid: ba1dd072c7a6dc44e8c1b1993c1736b1, type: 2}
     color: 3
-  - classData: {fileID: 11400000, guid: c46d4b0574e7b9b42a12e7262c15b141, type: 2}
-    color: 4
+  - classData: {fileID: 11400000, guid: 2d6146874d908d64c9510daae785a67b, type: 2}
+    color: 2
+  - classData: {fileID: 11400000, guid: 052019ffdc2acc141a5ece9260ff21ec, type: 2}
+    color: 1
+  - classData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
+    color: 0
   - classData: {fileID: 11400000, guid: 6e7c4891a27f85a4fbc9a095d863d071, type: 2}
     color: 5
+  - classData: {fileID: 11400000, guid: c46d4b0574e7b9b42a12e7262c15b141, type: 2}
+    color: 4

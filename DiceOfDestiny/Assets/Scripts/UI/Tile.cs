@@ -48,6 +48,10 @@ public class Tile : MonoBehaviour
     // 타일 눌렀을 때 호출, BoardSelectManager에 저장
     private void OnMouseUp()
     {
+        //Debug.Log(GameManager.Instance.IsLockCursor);
+        //if (GameManager.Instance.IsLockCursor)
+        //    return; // 커서 잠금 상태면 무시
+
         // UI 위 클릭이면 무시
         if (IsPointerOnLayer("BlockUI"))
             return;
