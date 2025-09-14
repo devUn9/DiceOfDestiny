@@ -17,6 +17,14 @@ public class HouseBehaviour : Obstacle, IObstacleBehaviour
         DownRight
     }
 
+    enum SpawnTable // 0 ~ 9 좀비 10 ~ 19 슬라임 20 ~ 23 폰 24 나이트
+    {
+        Zombie = 9,
+        Slime = 19,
+        Pawn = 23,
+        Knight
+    }
+
     private List<SponObstacleDir> randObstacleDir = new();
     [SerializeField] public int life = 5;
     [SerializeField] private int sponTurn = 0;
@@ -95,19 +103,27 @@ public class HouseBehaviour : Obstacle, IObstacleBehaviour
 
         Vector2Int nextPosition = obstaclePosition + direction;
 
-        int randNum = Random.Range(0, 11); // 0 ~ 4 좀비 5 ~ 9 슬라임 10 폰
+        int randNum = Random.Range(0, 24); // 0 ~ 9 좀비 10 ~ 19 슬라임 20 ~ 23 폰 24 나이트
 
         ObstacleType obstacleType;
 
-        if (randNum <= 4)
+        if (randNum <= (int)SpawnTable.Zombie)
             obstacleType = ObstacleType.Zombie;
-        else if (randNum <= 9)
+        else if (randNum <= (int)SpawnTable.Slime)
             obstacleType = ObstacleType.Slime;
-        else
+        else if (randNum <= (int)SpawnTable.Pawn)
         {
             obstacleType = ObstacleType.Pawn;
             GameObject pawn = BoardManager.Instance.CreateObstacle(nextPosition, obstacleType);
             ObstacleManager.Instance.AddPawnToList(pawn);
+
+            return;
+        }
+        else
+        {
+            obstacleType = ObstacleType.Knight;
+            GameObject knight = BoardManager.Instance.CreateObstacle(nextPosition, obstacleType);
+            ObstacleManager.Instance.AddKnightToList(knight);
 
             return;
         }

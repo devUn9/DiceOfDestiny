@@ -154,7 +154,10 @@ public class MissionManager : Singletone<MissionManager>
     {
         aliveHouseCount++;
 
-        isDestroyHouse = true;
+        if (aliveHouseCount >= 2)
+        {
+            isDestroyHouse = true;
+        }
     }
     public void CheckMoveMission()
     {

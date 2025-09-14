@@ -90,7 +90,8 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
         }
 
         // 룩 제외 모든 장애물 부술 수 있음
-        if (nextTile.Obstacle == ObstacleType.Rook || nextTile.Obstacle == ObstacleType.Knight)
+        if (nextTile.Obstacle == ObstacleType.Rook || nextTile.Obstacle == ObstacleType.Knight ||
+            nextTile.Obstacle == ObstacleType.House || nextTile.Obstacle == ObstacleType.Pawn)
             return false;
 
         return true;
@@ -103,7 +104,8 @@ public class KnightBehaviour : Obstacle, IObstacleBehaviour
         Vector2Int nextPosition = obstaclePosition + direction;
         Tile nextTile = BoardManager.Instance.GetTile(nextPosition);
 
-        if (nextTile.Obstacle != ObstacleType.None && nextTile.Obstacle != ObstacleType.Knight)
+        if (nextTile.Obstacle != ObstacleType.None && nextTile.Obstacle != ObstacleType.Knight &&
+            nextTile.Obstacle != ObstacleType.House && nextTile.Obstacle != ObstacleType.Pawn)
         {
             // 장애물 부수기
             BoardManager.Instance.RemoveObstacleAtPosition(nextPosition);

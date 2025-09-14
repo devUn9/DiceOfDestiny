@@ -181,7 +181,6 @@ public class PawnBehaviour : Obstacle, IObstacleBehaviour
     {
         if (obstaclePosition.y <= 1)
         {
-            PieceManager.Instance.ResetPieces();
             UIManager.Instance.ShowStageFailedUI();
         }
     }
