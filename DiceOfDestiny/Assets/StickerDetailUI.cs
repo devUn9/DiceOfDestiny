@@ -6,6 +6,7 @@ using static UnityEditor.Progress;
 public class StickerDetailUI : MonoBehaviour
 {
     public Image classSprite;
+    public Image lockImage;
     public TextMeshProUGUI classNameText;
     public TextMeshProUGUI classDescriptionText;
 
@@ -19,6 +20,8 @@ public class StickerDetailUI : MonoBehaviour
     public void SetDetail(ClassSticker classSticker)
     {
         classSprite.sprite = classSticker.classData.sprite;
+        lockImage.gameObject.SetActive(false);
+        classDescriptionText.alignment = TextAlignmentOptions.TopLeft;
         if (classSticker.classData.className == "Knight")
         {
             classNameText.text = "직업 : 기사";
@@ -74,7 +77,10 @@ public class StickerDetailUI : MonoBehaviour
     public void SetLocked()
     {
         classSprite.sprite = null;
+        lockImage.gameObject.SetActive(true);
         classNameText.text = "직업 : ???";
-        classDescriptionText.text = "설명 : ???????\n패시브 : ?????\n스킬 : ?????";
+        classDescriptionText.text = "해금이 필요합니다.";
+        classDescriptionText.alignment = TextAlignmentOptions.Center;
+        classDescriptionText.alignment = TextAlignmentOptions.Midline;
     }
 }
