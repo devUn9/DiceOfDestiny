@@ -1920,7 +1920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f156c1b43ec7c4c4e8bb1c1f68f9f297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knightSkillEffect: {fileID: 2847281042695623499, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+  knightSkillEffect: {fileID: 5378339639449710635, guid: 3fd5f58bfddfe5a47a1006164d7f95db, type: 3}
   demonSkillEffect: {fileID: 8546471297454802166, guid: 6cf9d3419d8d3e14989491b6e6491ce4, type: 3}
   painterSkillEffect: {fileID: 846397696588369162, guid: f7df4b42d5b448747a1db5e3181794da, type: 3}
   fanaticSkillEffect: {fileID: 8301357996556643184, guid: 81f74734435b88a4c8c84b73f8b6d86a, type: 3}
@@ -1964,7 +1964,7 @@ MonoBehaviour:
   priestPassiveEffect: {fileID: 5289000743379248508, guid: 9b6c560882bfbdd4ab5fcdf0116860e8, type: 3}
   thiefPassiveEffect: {fileID: 6707930388800200877, guid: 705f124155aedf24cb5e614485381d10, type: 3}
   loggerPassiveEffect: {fileID: 3954795626616449932, guid: 946739ec6ef11b4469fc0b909981cbe4, type: 3}
-  berserkerPassiveEffect: {fileID: 3954795626616449932, guid: 946739ec6ef11b4469fc0b909981cbe4, type: 3}
+  berserkerPassiveEffect: {fileID: 1602109793750480376, guid: 047cebbf76a00314cbad00b08fbc7d81, type: 3}
 --- !u!114 &830614876
 MonoBehaviour:
   m_ObjectHideFlags: 0

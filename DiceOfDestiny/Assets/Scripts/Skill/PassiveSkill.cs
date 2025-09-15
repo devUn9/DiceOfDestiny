@@ -543,14 +543,14 @@ public class PassiveSkill : MonoBehaviour
         // 방향과 회전 각도 설정
         Vector2Int direction = targetPos - pieceController.gridPosition;
         float rotationZ = 0f;
-        if (direction == new Vector2Int(0, 1)) rotationZ = 270f;    // 상
-        else if (direction == new Vector2Int(0, -1)) rotationZ = 90f; // 하
-        else if (direction == new Vector2Int(-1, 0)) rotationZ = 0f;  // 좌
-        else if (direction == new Vector2Int(1, 0)) rotationZ = 180f;  // 우
-        else if (direction == new Vector2Int(-1, 1)) rotationZ = -45f;  // 좌상
-        else if (direction == new Vector2Int(1, 1)) rotationZ = -45f;  // 우상
-        else if (direction == new Vector2Int(-1, -1)) rotationZ = 135f; // 좌하
-        else if (direction == new Vector2Int(1, -1)) rotationZ = -135f; // 우하
+        if (direction == new Vector2Int(0, 1)) rotationZ = 180f;    // 상
+        else if (direction == new Vector2Int(0, -1)) rotationZ = 0f; // 하
+        else if (direction == new Vector2Int(-1, 0)) rotationZ = 270f;  // 좌
+        else if (direction == new Vector2Int(1, 0)) rotationZ = 90f;  // 우
+        else if (direction == new Vector2Int(-1, 1)) rotationZ = 225f;  // 좌상
+        else if (direction == new Vector2Int(1, 1)) rotationZ = 135f;  // 우상
+        else if (direction == new Vector2Int(-1, -1)) rotationZ = 315f; // 좌하
+        else if (direction == new Vector2Int(1, -1)) rotationZ = 45f; // 우하
 
         // 토스트 메시지 표시
         ToastManager.Instance.ShowToast("광전사 패시브 발동! 랜덤 타겟을 공격합니다.", pieceController.transform, 0f);

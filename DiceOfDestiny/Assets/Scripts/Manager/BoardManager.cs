@@ -108,10 +108,12 @@ public class BoardManager : Singletone<BoardManager>
     {
         int stageNum = StageManager.Instance.currentStage.stageNumber;
 
+        // 6 : 돌 판
         if (stageNum == 6)
             borderRenderer.sprite = borderSprites[1];
 
-        else
+        // 1~5, 7~ : 나무판
+        else 
             borderRenderer.sprite = borderSprites[0];
     }
 
@@ -131,25 +133,31 @@ public class BoardManager : Singletone<BoardManager>
     {
 
         int stageNum = StageManager.Instance.currentStage.stageNumber;
-        //backGroundRenderer.sprite = backGroundSprites[stageNum - 1];
-        // 1~2
+        
+        // 1~2 : 평원
         if (stageNum < 2)
         {
             backGroundRenderer.sprite = backGroundSprites[0];
         }
-        // 2~3
+        // 2~3 : 숲
         else if (stageNum >= 2 && stageNum < 4)
         {
             backGroundRenderer.sprite = backGroundSprites[1];
         }
-        // 4~5
+        // 4~5 : 강
         else if (stageNum >= 4 && stageNum < 6)
         {
             backGroundRenderer.sprite = backGroundSprites[2];
         }
-        else if (stageNum >= 6)
+        // 6 : 사원
+        else if (stageNum == 6)
         {
             backGroundRenderer.sprite = backGroundSprites[3];
+        }
+        // 7~ : 숲
+        else
+        {
+            backGroundRenderer.sprite = backGroundSprites[1];
         }
     }
 

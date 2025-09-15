@@ -247,10 +247,35 @@ public class PieceController : MonoBehaviour
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
                 BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
 
-                // 현재 타일에 색 적용
-                BoardManager.Instance.Board[gridPosition.x, gridPosition.y].TileColor = lastTileColor;
+                //// 현재 타일에 색 적용
+                //BoardManager.Instance.Board[gridPosition.x, gridPosition.y].TileColor = lastTileColor;
+                //lastTileColor = BoardManager.Instance.Board[newPosition.x, newPosition.y].TileColor;
+                //BoardManager.Instance.Board[newPosition.x, newPosition.y].TileColor = piece.faces[2].color;
+
+                BoardManager.Instance.Board[gridPosition.x, gridPosition.y].TileColor = lastTileColor; // 기존 타일이 가지고 있던 색
+                // 이전 타일 색상 저장
                 lastTileColor = BoardManager.Instance.Board[newPosition.x, newPosition.y].TileColor;
-                BoardManager.Instance.Board[newPosition.x, newPosition.y].TileColor = piece.faces[2].color;
+
+                // 다음 윗면의 인덱스 계산
+                int nextFaceIndex2 = -1;
+                if (moveDirection == Vector2Int.up)
+                    nextFaceIndex2 = upTransition[2];
+                else if (moveDirection == Vector2Int.down)
+                    nextFaceIndex2 = downTransition[2];
+                else if (moveDirection == Vector2Int.left)
+                    nextFaceIndex2 = leftTransition[2];
+                else if (moveDirection == Vector2Int.right)
+                    nextFaceIndex2 = rightTransition[2];
+
+                // 다음 윗면의 색상을 보드 타일에 할당
+                if (nextFaceIndex2 != -1) // 유효한 인덱스인지 확인
+                {
+                    BoardManager.Instance.Board[newPosition.x, newPosition.y].TileColor = piece.faces[nextFaceIndex2].color;
+                }
+                else
+                {
+                    Debug.LogError("유효하지 않은 이동 방향입니다.");
+                }
 
 
 
@@ -307,8 +332,6 @@ public class PieceController : MonoBehaviour
                 // 미션 발동
                 MissionManager.Instance.CheckPassiveSkillUse();
             }
-
-
         }
         else
         {
