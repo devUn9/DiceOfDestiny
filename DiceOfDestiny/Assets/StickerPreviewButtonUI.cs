@@ -28,12 +28,14 @@ public class StickerPreviewButtonUI : MonoBehaviour
             InventoryManager.Instance.classStickers.TryGetValue(classSticker.classData, out count);
             countText.text = "x" + count;
             classImage.sprite = classSticker.classData.sprite;
+            classImage.color = Color.white;
         }
         else
         {
             lockImage.gameObject.SetActive(true);
             countText.gameObject.SetActive(false);
             classImage.sprite = null;
+            classImage.color = Color.gray;
         }
     }
 }
