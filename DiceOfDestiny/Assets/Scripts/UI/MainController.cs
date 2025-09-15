@@ -314,7 +314,7 @@ public class MainController : MonoBehaviour
     private void OnContinueGameButton()
     {
         string lastScene = PlayerPrefs.GetString(KeyLastScene, DefaultScene);
-        SceneManager.LoadScene(lastScene);    
+        SceneManager.LoadScene(lastScene);
     }
 
     private void OnCreateItemButton()

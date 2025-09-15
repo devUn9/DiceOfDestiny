@@ -18,7 +18,6 @@ public class StickerPreviewButtonUI : MonoBehaviour
     public void Initialize(bool isUnlock, ClassSticker classSticker, UnityAction onClick)
     {
         this.isUnlock = isUnlock;
-        classImage.sprite = classSticker.classData.sprite;
         this.classSticker = classSticker;
         button.onClick.AddListener(onClick);
 
@@ -28,11 +27,15 @@ public class StickerPreviewButtonUI : MonoBehaviour
             countText.gameObject.SetActive(true);
             InventoryManager.Instance.classStickers.TryGetValue(classSticker.classData, out count);
             countText.text = "x" + count;
+            classImage.sprite = classSticker.classData.sprite;
+            classImage.color = Color.white;
         }
         else
         {
             lockImage.gameObject.SetActive(true);
             countText.gameObject.SetActive(false);
+            classImage.sprite = null;
+            classImage.color = Color.gray;
         }
     }
 }

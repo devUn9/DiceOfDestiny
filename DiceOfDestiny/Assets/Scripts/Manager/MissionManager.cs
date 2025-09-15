@@ -34,9 +34,16 @@ public class MissionManager : Singletone<MissionManager>
 
     public void Start()
     {
+        ResetMission();
+    }
+
+    public void ResetMission()
+    {
         killEnemyCount = 0;
         findGrayGrassCount = 0;
         alivePawnCount = 0;
+        aliveKnightCount = 0;
+        aliveHouseCount = 0;
 
         isFinishLine = false;
         isFindGrayGrass = false;

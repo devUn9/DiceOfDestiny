@@ -18,5 +18,6 @@ public class StageFailedUI : MonoBehaviour
         ObstacleManager.Instance.RemoveAllObstacle(); // 장애물 제거
         PieceManager.Instance.ResetPieces();
         BoardSelectManager.Instance.DestroyPieceHighlightTile();
+        MissionManager.Instance.ResetMission();
     }
 }

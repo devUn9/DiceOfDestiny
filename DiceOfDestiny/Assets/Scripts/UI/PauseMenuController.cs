@@ -21,6 +21,7 @@ public class PauseMenuController : MonoBehaviour
             ObstacleManager.Instance.RemoveAllObstacle(); // 장애물 제거
             PieceManager.Instance.ResetPieces();
             BoardSelectManager.Instance.DestroyPieceHighlightTile();
+            MissionManager.Instance.ResetMission();
         }); // 현재 스테이지 초기화}); // 메인씬 이동.
         exitButton.onClick.AddListener(() => Application.Quit()); // 프로그램 종료    
     }

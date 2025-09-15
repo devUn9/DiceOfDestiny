@@ -16,6 +16,9 @@ public class InventoryManager : Singletone<InventoryManager>
     public ClassData thiefClassData;
     public ClassData preistClassData;
     public ClassData painterClassData;
+    public ClassData berserkerClassData;
+    public ClassData loggerClassData;
+    public ClassData wizardClassData;
 
     [HideInInspector] public List<ClassData> classDataList;
 
@@ -24,7 +27,6 @@ public class InventoryManager : Singletone<InventoryManager>
         base.Awake();
         SetClassDataList();
         TestInitialize();
-
     }
 
     private void SetClassDataList()
@@ -37,15 +39,20 @@ public class InventoryManager : Singletone<InventoryManager>
             fanaticClassData,
             thiefClassData,
             preistClassData,
-            painterClassData
+            painterClassData,
+            berserkerClassData,
+            loggerClassData,
+            wizardClassData
         };
 
         foreach (var classData in classDataList)
         {
+            Debug.Log($"ClassData 추가: {classData}");
             if (!classUnlockStatus.ContainsKey(classData))
             {
                 classUnlockStatus[classData] = false; // 기본적으로 잠금 상태로 설정
             }
+            
         }
     }
 
@@ -126,6 +133,14 @@ public class InventoryManager : Singletone<InventoryManager>
             testSticker.classData = fanaticClassData;
             AddSticker(testSticker);
         }
+        for (int i = 0; i < 5; i++)
+        {
+            ClassSticker testSticker = new ClassSticker();
+            testSticker.classData = berserkerClassData;
+            AddSticker(testSticker);
+        }
+
+
 
     }
 
@@ -241,6 +256,18 @@ public class InventoryManager : Singletone<InventoryManager>
             {
                 className = "화가";
             }
+            else if (item.classData == berserkerClassData)
+            {
+                className = "광전사";
+            }
+            else if (item.classData == loggerClassData)
+            {
+                className = "나무꾼";
+            }
+            else if (item.classData == wizardClassData)
+            {
+                className = "마법사";
+            }
 
             return $"{className} 스티커를 얻었습니다.";
         }
@@ -256,7 +283,10 @@ public class InventoryManager : Singletone<InventoryManager>
             fanaticClassData,
             thiefClassData,
             preistClassData,
-            painterClassData
+            painterClassData,
+            berserkerClassData,
+            loggerClassData,
+            wizardClassData
         };
         int randomIndex = Random.Range(0, classDataList.Count);
         ClassSticker sticker = new ClassSticker { classData = classDataList[randomIndex] };
