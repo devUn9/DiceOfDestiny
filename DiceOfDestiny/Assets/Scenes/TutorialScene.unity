@@ -317,6 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c16fdf1bb19ef6409f457b60f5af1f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionPoint: 0
 --- !u!4 &298298334
 Transform:
   m_ObjectHideFlags: 0
@@ -1954,6 +1955,8 @@ MonoBehaviour:
   pawnPrefab: {fileID: 2465335938598337309, guid: a3f4b156df2deab45a8922a6cb66fd15, type: 3}
   rookPrefab: {fileID: 7333959039673425380, guid: 4cfce03f186a4804bb8bd2a119a13311, type: 3}
   knightPrefab: {fileID: 2465335938598337309, guid: ad21db2e9fbf33a448528293fc89fa22, type: 3}
+  woodBoxPrefab: {fileID: 6768811535270072887, guid: bdd5772e7901c604f842195bca90c834, type: 3}
+  housePrefab: {fileID: 482704282773460569, guid: a7bb776fc68a5684bbcf996fc2deb747, type: 3}
   grayGarassAnimator: {fileID: 9100000, guid: b9a4a399ab190b943ac3829eeeddc51b, type: 2}
   grayTreeAnimator: {fileID: 9100000, guid: 786b7fb7d1e46894b9cb3ff74b7709d4, type: 2}
   grayPoisonousHerbAnimator: {fileID: 9100000, guid: e6db9b90f357be34e883bcf8f14c1887, type: 2}
@@ -2343,6 +2346,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieceSelectButton: {fileID: 5233864642296173606, guid: 01092873cfd3c7044917ca679163010c, type: 3}
   canvas: {fileID: 2051985679}
+  firstSelectedPiece: {fileID: 0}
+  isPieceSelected: 0
 --- !u!114 &1262046117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2377,6 +2382,8 @@ MonoBehaviour:
   fanaticPassiveEffect: {fileID: 3347284115625885614, guid: 5d29921e938fa1847b4a1e27b16e0390, type: 3}
   priestPassiveEffect: {fileID: 5289000743379248508, guid: 9b6c560882bfbdd4ab5fcdf0116860e8, type: 3}
   thiefPassiveEffect: {fileID: 6707930388800200877, guid: 705f124155aedf24cb5e614485381d10, type: 3}
+  loggerPassiveEffect: {fileID: 0}
+  berserkerPassiveEffect: {fileID: 0}
 --- !u!114 &1262046119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2413,6 +2420,8 @@ MonoBehaviour:
   painterSkillEffect: {fileID: 846397696588369162, guid: f7df4b42d5b448747a1db5e3181794da, type: 3}
   fanaticSkillEffect: {fileID: 8301357996556643184, guid: 81f74734435b88a4c8c84b73f8b6d86a, type: 3}
   priestSkillEffect: {fileID: 5770720890533067149, guid: fea0a462d8377824dafad442c933594a, type: 3}
+  woodCutterSkillEffect: {fileID: 0}
+  wizardSkillEffect: {fileID: 0}
 --- !u!114 &1262046121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3605,7 +3614,6 @@ MonoBehaviour:
   stageIndex: 0
   stageProfiles:
   - {fileID: 11400000, guid: 1ec8eec57524b7c4d9d8bb5685244a92, type: 2}
-  isFirstCreatePiece: 0
 --- !u!4 &2024398445
 Transform:
   m_ObjectHideFlags: 0
