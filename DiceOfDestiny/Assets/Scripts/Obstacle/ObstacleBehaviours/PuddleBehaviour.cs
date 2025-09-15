@@ -37,7 +37,7 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
         if (className == "Baby")
         {
             Debug.Log("아기가 물에 빠져서 패로 돌아갑니다.");
-            ToastManager.Instance.ShowToast($"응애! <color=blue>(퐁당)</color>", piece.transform, 1f);
+            ToastManager.Instance.ShowToast($"응애! <color=blue>(퐁당)</color>", piece.transform, 0f);
             StartCoroutine(GoHand(piece));
             return;
         }

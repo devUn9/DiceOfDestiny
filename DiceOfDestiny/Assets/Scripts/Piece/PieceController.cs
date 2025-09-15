@@ -332,26 +332,6 @@ public class PieceController : MonoBehaviour
                 // 미션 발동
                 MissionManager.Instance.CheckPassiveSkillUse();
             }
-
-            // 스킬 사용할 때 직업 애니메이션 재생
-            if (piece.faces[2].classData.className == "Logger")
-            {
-                classRenderer.gameObject.SetActive(false);
-                animationRenderer.gameObject.SetActive(true);
-                animator.enabled = true; // Animator 활성화
-                animator.Play("Logger_Skill", 0, 0f); // 애니메이션 재생
-                                                      // currentPiece일 경우 루프 애니메이션 시작
-                if (PieceManager.Instance.currentPiece == this)
-                {
-                    StartCoroutine(LoopAnimation("Logger_Skill"));
-                }
-                else
-                {
-                    animator.Play("Logger_Skill", 0, 0f); // 한 번만 재생
-                    StartCoroutine(EndAnimation("Logger_Skill"));
-                }
-            }
-
         }
         else
         {

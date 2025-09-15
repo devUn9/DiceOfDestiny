@@ -650,12 +650,6 @@ public class ActiveSkill : MonoBehaviour
                     Destroy(effect2, 1f);
                 }
 
-                // 보드 색상 교환 (제대로 된 스왑)
-                TileColor tempColor = BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor;
-                BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor =
-                    BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor;
-                BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor = tempColor;
-
                 // 위치 교환
                 Vector2Int tempPosition = pieceSelectUI.firstSelectedPiece.gridPosition;
                 pieceSelectUI.firstSelectedPiece.gridPosition = secondSelectedPiece.gridPosition;
@@ -666,13 +660,28 @@ public class ActiveSkill : MonoBehaviour
                 pieceSelectUI.firstSelectedPiece.transform.position = secondSelectedPiece.transform.position;
                 secondSelectedPiece.transform.position = tempWorldPosition;
 
-                // 위치 교환 후 lastTileColor 갱신 (자기 위치 기준)
-                pieceSelectUI.firstSelectedPiece.lastTileColor =
-                    BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor;
+                // 타일에 Piece 설정
+                BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].SetPiece(pieceSelectUI.firstSelectedPiece);
+                BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].SetPiece(secondSelectedPiece);
 
-                secondSelectedPiece.lastTileColor =
-                    BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor;
+                // 타일의 색상값 교환
+                TileColor tempColor = BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor;
+                BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor =
+                   BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor;
+                BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor = tempColor;
 
+
+                // 타일의 렌더링 색상 교환
+                Color tempColor2 = BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].GetComponent<SpriteRenderer>().color;
+                BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].SetTileColor(
+                    BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].GetComponent<SpriteRenderer>().color);
+                BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].SetTileColor(tempColor2);
+
+                // lastTileColor 갱신
+                //pieceSelectUI.firstSelectedPiece.lastTileColor =
+                //    BoardManager.Instance.Board[pieceSelectUI.firstSelectedPiece.gridPosition.x, pieceSelectUI.firstSelectedPiece.gridPosition.y].TileColor;
+                //secondSelectedPiece.lastTileColor =
+                //    BoardManager.Instance.Board[secondSelectedPiece.gridPosition.x, secondSelectedPiece.gridPosition.y].TileColor;
 
                 //Debug.Log($"Swapped {pieceSelectUI.firstSelectedPiece.name} and {secondSelectedPiece.name}");
 

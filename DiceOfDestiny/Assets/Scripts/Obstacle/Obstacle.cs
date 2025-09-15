@@ -50,6 +50,8 @@ public class Obstacle : MonoBehaviour
 
     protected IEnumerator GoHand(PieceController pieceController, float duration = 1.5f)
     {
+        GameManager.Instance.IsLockCursor = true;
+
         // 약간의 연출 대기 (예: 1.5초)
         yield return new WaitForSeconds(duration);
 
@@ -82,5 +84,7 @@ public class Obstacle : MonoBehaviour
                 break;
             }
         }
+
+        GameManager.Instance.IsLockCursor = false;
     }
 }
